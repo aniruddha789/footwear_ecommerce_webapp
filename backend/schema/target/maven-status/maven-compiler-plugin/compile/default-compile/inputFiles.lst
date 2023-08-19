@@ -1,0 +1,8 @@
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\authentication\admin\request\LoginRequest.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\authentication\user\request\LoginRequest.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\authentication\admin\request\SignupRequest.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\authentication\user\request\SignupRequest.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\authentication\admin\response\MessageResponse.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\authentication\admin\response\AdminInfoResponse.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\SchemaApplication.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\schema\src\main\java\com\footwear\webapp\schema\authentication\user\response\MessageResponse.java

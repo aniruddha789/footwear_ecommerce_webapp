@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/footwear_ecommerce_webapp.iml" filepath="$PROJECT_DIR$/.idea/footwear_ecommerce_webapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/serviceregistry/serviceregistry.iml" filepath="$PROJECT_DIR$/backend/serviceregistry/serviceregistry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backend/user/user.iml" filepath="$PROJECT_DIR$/backend/user/user.iml" />
+    </modules>
+  </component>
+</project>
