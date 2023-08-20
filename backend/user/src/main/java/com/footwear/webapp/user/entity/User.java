@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "user",
+@Table(name = "web_user",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
                 @UniqueConstraint(columnNames = "email")
@@ -40,6 +40,8 @@ public class User {
         this.password = password;
         this.email = email;
     }
+
+    public User() {}
 
     public String getFirstName() {
         return firstName;

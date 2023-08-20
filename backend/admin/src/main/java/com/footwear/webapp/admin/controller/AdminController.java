@@ -1,5 +1,6 @@
 package com.footwear.webapp.admin.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.footwear.webapp.admin.entity.Admin;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @EnableAutoConfiguration
@@ -46,7 +44,22 @@ public class AdminController {
         }
 
 
+        @GetMapping("/getAdmin")
+        public ArrayList<Admin> getAdmin(){
+            return this.adminServiceImpl.getAdmins();
+        }
 
+        @GetMapping("/getAdmin/{username}")
+        public Admin getAdmin(@PathVariable String username){
+            return this.adminServiceImpl.getAdmin(username);
+        }
+
+        @GetMapping("/deleteAdmin/{username}")
+    public ResponseEntity<String> deleteAdmin(@PathVariable String username){
+            String result = this.adminServiceImpl.deleteAdmin(username);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
+        }
         @GetMapping("/login")
         public String login() {
         	return "login";

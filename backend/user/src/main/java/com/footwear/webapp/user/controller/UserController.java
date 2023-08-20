@@ -8,18 +8,17 @@ import com.footwear.webapp.user.entity.User;
 import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 public class UserController {
 
     @Autowired
-    UserServiceImpl userService;
+    UserServiceImpl userServiceImpl;
 
-    @GetMapping("/addUser")
+    @PostMapping("/addUser")
     public @ResponseBody MessageResponse addUser(@RequestBody SignupRequest user) throws Exception{
 
         String firstName = user.getFirstName();
@@ -28,8 +27,8 @@ public class UserController {
         String email = user.getEmail();
         String password = user.getPassword();
 
-        User newUser = new User(firstName, lastName, userName, email, password);
-        String status = this.userService.adduser(newUser);
+        User newUser = new User(firstName, lastName, userName, password, email);
+        String status = this.userServiceImpl.adduser(newUser);
 
         return new MessageResponse(status);
     }
@@ -39,10 +38,19 @@ public class UserController {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
-        String result = this.userService.validateCredentials(username,password);
+        String result = this.userServiceImpl.validateCredentials(username,password);
 
         return new MessageResponse(result);
     }
 
+    @GetMapping("/getUser")
+    public ArrayList<User> getUser(){
+        return this.userServiceImpl.getUsers();
+    }
+
+    @GetMapping("/getUser/{username}")
+    public User getUser(@PathVariable String username) {
+        return this.userServiceImpl.getUser(username);
+    }
 
 }

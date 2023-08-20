@@ -15,4 +15,6 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     Boolean existsByEmail(String email);
 
+    Boolean deleteByUsername(String username);
+
 }

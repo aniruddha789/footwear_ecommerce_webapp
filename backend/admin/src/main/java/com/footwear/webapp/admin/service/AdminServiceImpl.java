@@ -6,6 +6,8 @@ import com.footwear.webapp.admin.repository.AdminRepository;
 import com.footwear.webapp.admin.util.AdminException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
@@ -58,6 +60,21 @@ public class AdminServiceImpl implements AdminService{
 
     }
 
+    public ArrayList<Admin> getAdmins(){
+        return (ArrayList<Admin>) this.adminRepository.findAll();
+    }
+
+    public Admin getAdmin(String username){
+        return this.adminRepository.findByUsername(username).get();
+    }
+
+    public String deleteAdmin(String username){
+        if(this.adminRepository.existsByUsername(username)){
+            this.adminRepository.deleteByUsername(username);
+            return "Successful";
+        }
+        return "Unsuccessful";
+    }
 
 
 }

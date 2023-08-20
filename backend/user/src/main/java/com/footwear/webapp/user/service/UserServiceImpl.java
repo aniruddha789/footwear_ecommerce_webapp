@@ -9,13 +9,11 @@ import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class UserServiceImpl implements UserService{
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
 
     @Autowired
@@ -34,10 +32,10 @@ public class UserServiceImpl implements UserService{
                 throw new UserException("No details provided for user, NULL!");
 
             if (userRepository.existsByUsername(user.getUsername()))
-                throw new UserException("Username already exist!");
+                throw new UserException("Username " + user.getUsername() + " already exist!");
 
             if (userRepository.existsByEmail(user.getEmail()))
-                throw new UserException("Email already exist!");
+                throw new UserException("Email " + user.getEmail() + " already exist!");
 
             usr = userRepository.save(user);
 
@@ -69,6 +67,19 @@ public class UserServiceImpl implements UserService{
 
         return status;
 
+    }
+
+    public ArrayList<User> getUsers(){
+        return (ArrayList<User>) userRepository.findAll();
+    }
+
+    public User getUser(String username){
+
+        User user = userRepository.findByUsername(username).get();
+        if(user != null)
+            return user;
+        else
+            return null;
     }
     
 

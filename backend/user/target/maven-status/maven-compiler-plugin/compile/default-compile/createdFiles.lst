@@ -1,0 +1,7 @@
+com\footwear\webapp\user\repository\UserRepository.class
+com\footwear\webapp\user\service\UserServiceImpl.class
+com\footwear\webapp\user\service\UserService.class
+com\footwear\webapp\user\UserApplication.class
+com\footwear\webapp\user\exception\UserException.class
+com\footwear\webapp\user\controller\UserController.class
+com\footwear\webapp\user\entity\User.class
