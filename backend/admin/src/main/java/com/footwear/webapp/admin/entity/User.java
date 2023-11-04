@@ -1,4 +1,4 @@
-package com.footwear.webapp.user.entity;
+package com.footwear.webapp.admin.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

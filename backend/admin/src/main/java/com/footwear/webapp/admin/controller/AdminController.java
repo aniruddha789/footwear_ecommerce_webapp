@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.footwear.webapp.admin.entity.Admin;
+import com.footwear.webapp.admin.entity.User;
 import com.footwear.webapp.admin.service.AdminServiceImpl;
 import com.footwear.webapp.schema.authentication.admin.request.LoginRequest;
 import com.footwear.webapp.schema.authentication.admin.request.SignupRequest;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @EnableAutoConfiguration
@@ -20,6 +22,9 @@ public class AdminController {
 
         @Autowired
         AdminServiceImpl adminServiceImpl;
+
+        @Autowired
+        RestTemplate restTemplate;
 		
 	
         @GetMapping("/register")
@@ -46,6 +51,10 @@ public class AdminController {
 
         @GetMapping("/getAdmin")
         public ArrayList<Admin> getAdmin(){
+//            User usr = restTemplate.getForEntity("http://localhost:8082/getUser/aniruddha", User.class).getBody();
+//            System.out.println(" DEBUG admin" + usr.getEmail());
+//            System.out.println(" DEBUG admin" + usr.getUsername());
+//            System.out.println(" DEBUG admin" + usr.getPassword());
             return this.adminServiceImpl.getAdmins();
         }
 
