@@ -1,0 +1,41 @@
+
+
+.carousel {
+    max-height:380px;
+    max-width:400px; 
+    width: 80% !important;
+    height: 100%; 
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-bottom: 60px; */
+    /* margin-top: 50px; */
+    position: relative;
+  
+  }
+
+/* .carousel.slide {
+    width: 50%;
+} */
+
+.carousel-inner {
+    width: 100% ;
+    max-height: 800px !important;
+}
+
+.carousel-indicators {
+
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    
+}
+
+.carousel > .carousel-indicators {
+    
+    
+    
+}
+
+.img-fluid {
+    max-height: 300px !important;
+}
