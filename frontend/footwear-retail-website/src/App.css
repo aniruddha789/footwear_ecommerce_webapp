@@ -1,7 +1,8 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1920px; */
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; */
   text-align: center;
   background-color: rgb(255, 255, 255);
 }
@@ -44,18 +45,25 @@
   color: #888;
 }
 
-.imgList {
+.imgList{
   
-  display:inline;
+  /* display:inline;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 100vh; */
+  padding: 2rem;
+
 
 }
+
 
 .dog {
   display:flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.row {
+  margin: 150px;
 }

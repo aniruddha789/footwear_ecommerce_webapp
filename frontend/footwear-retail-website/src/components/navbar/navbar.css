@@ -1,0 +1,120 @@
+.navbar > .brand {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
+.navbar {
+  
+    border-width: 20px;  
+    margin-bottom: 20px;
+   
+}
+
+.header {
+    background-color: rgb(255, 255, 255);
+    width:100%;
+    text-align: left;
+    padding-left: 0px;
+    position: relative;
+    /* height: fit-content !important; */
+    /* max-height: 50px !important; */
+    height: 58.57px;
+
+}
+
+
+
+.bg-body-tertiary {
+    border-color: aqua;
+}
+
+.nav {
+    background-color: rgb(255, 255, 255);
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(0, 0, 0, 0.273);
+    border-bottom-style: solid;
+    width:100%;
+    /* text-align: left; */
+    /* padding-left: 0px; */
+    position: relative;
+    /* height: fit-content !important; */
+    /* max-height: 50px !important; */
+    height: 58.57px;
+    
+}
+
+.navbar-brand {
+    /* position: absolute; */
+    left: 2%;
+    /* top: 25%;  */
+    /* margin-left: 20px; */
+    font-size:xx-large;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.childContainer {
+   position: absolute;
+   /* width:100%; */
+   /* margin-left: 20px; */
+    align-items: center;
+   text-align: center; 
+   /* justify-content:end; */
+   inset: 0;
+   margin:auto;
+  
+
+}
+
+.headerContainer {
+    display: flex;
+    /* width: 1920px !important;
+    margin-left:0px; */
+
+   
+ }
+
+.brandLogo {
+    width: 20%;
+}
+
+
+
+.nav-link {
+    margin: 0 auto;
+}
+
+.me-auto {
+    /* position: absolute; */
+    /* inset:0; */
+    left: 0px;
+    right: 0px;
+    margin: auto;
+    /* margin-left: 400px; */
+  
+}
+
+.companyBrand{
+
+    flex: 1;
+    /* margin-left: 100px; */
+}
+
+.dummy1 {
+    flex: 2;
+    
+}
+
+.searchBar {
+    flex: 3;
+    
+}
+
+.dummy2 {
+    flex: 2;
+    
+}
+
+.opts {
+    flex:1
+    
+}
