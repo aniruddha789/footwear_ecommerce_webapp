@@ -9,24 +9,24 @@ function App() {
   return (
     <>
     <NavBar/>
-    <div className="imgList">
+    <div className="container">
     
       
-      <div className='row'>
+      <div className='row '>
         
-      <div className = "col">
+      <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
 
-      <div className = "col">
+      <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
 
-      <div className = "col">
+      <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
 
-      <div className = "col">
+      <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
 
@@ -34,19 +34,19 @@ function App() {
 
        <div className='row'>
 
-       <div className = "col">
+       <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
 
-      <div className = "col">
+      <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
 
-      <div className = "col">
+      <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
       
-      <div className = "col">
+      <div className = "col-lg-3 col-6">
       <ProductCard name="StudioFit" text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt" price={1299}/>
       </div>
         

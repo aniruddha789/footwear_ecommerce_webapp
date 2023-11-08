@@ -26,13 +26,22 @@
     max-height: 800px !important;
 } */
 
-/* .carousel-indicators {
+.carousel .carousel-indicators button {
 
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
+    /* position: absolute; */
+    /* bottom: 0px;
+    left: 0px; */
+
+    width: 6px;
+    height: 6px; 
     
-} */
+}
+
+
+
+.carousel .carousel-indicators {
+    margin-bottom: 5px;
+}
 
 /* .carousel > .carousel-indicators {
     
