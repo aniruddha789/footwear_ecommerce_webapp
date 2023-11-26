@@ -73,15 +73,48 @@
    
  }
 
+ .headerIcons {
+    display:flex;
+    justify-content: center;
+}
+
+
  
 .brandLogo {
     width: 20%;
 }
 
+.wishlistLogo {
+    width: 15%;
+    margin-right: 5px; 
+    flex: 1;
+}
 
+.cartLogo {
+    width: 15%;
+    flex: 1;
+    margin-right: 5px;
+}
+
+.headerIcons .img-fluid {
+    /* width: 15% !important; */
+    /* width: 30px; */
+    width: 80%;
+    /* max-height: 100px !important; */
+    margin-right: 5px;
+}
+
+.signInLink {
+    font-size:small;
+    flex:1;
+    margin-right: 5px;
+    text-wrap:nowrap;
+
+}
 
 .nav-link {
     margin: 0 auto;
+    color: black;
 }
 
 .me-auto {
@@ -107,6 +140,9 @@
 
 .searchBar {
     flex: 3;
+    border-radius: 20px!important;
+    width: 25% !important;
+
     
 }
 
@@ -118,4 +154,14 @@
 .opts {
     flex:1
     
+}
+
+.navLink {
+    font-style: normal;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color:black;
+    opacity: 40%;
+    margin-top: 10px;
+    padding-right: 10px;
+    text-decoration: none !important;
 }
