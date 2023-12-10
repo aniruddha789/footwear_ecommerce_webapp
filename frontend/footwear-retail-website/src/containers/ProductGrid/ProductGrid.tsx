@@ -3,7 +3,7 @@ import offwhite2 from '../../../src/assets/300952867OFFWHITE_2.webp';
 import offwhite3 from '../../../src/assets/300952867OFFWHITE_3.webp';
 import ProductCard from '../../components/ProductCard/ProductCard';
 
-function ProductGrid({showProductFun}) {
+function ProductGrid() {
   return (
     <div className="productGrid">
       <div className="container">
@@ -16,7 +16,6 @@ function ProductGrid({showProductFun}) {
               img1={offwhite1}
               img2={offwhite2}
               img3={offwhite3}
-              onClick={showProductFun}
             />
           </div>
 

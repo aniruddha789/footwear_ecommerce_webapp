@@ -1,6 +1,7 @@
 import React from 'react'
+import ProductPage from '../ProductPage/ProductPage'
 
-const Home = () => {
+function Home() {
   return (
     <div>Home</div>
   )

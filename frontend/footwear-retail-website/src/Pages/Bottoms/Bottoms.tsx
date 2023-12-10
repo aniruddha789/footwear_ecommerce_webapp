@@ -1,8 +1,10 @@
+import ProductGrid from "../../containers/ProductGrid/ProductGrid";
+
 function Bottoms() {
 
     return (
         <div>
-            <h1>Bottoms</h1>
+            <ProductGrid />
         </div>
     );
 }

@@ -1,10 +1,9 @@
 import ProductGrid from "../../containers/ProductGrid/ProductGrid";
 
-function Tops({showProductButton}) {
+function Tops() {
   return (
     <div>
-      <ProductGrid showProductFun={showProductButton} ></ProductGrid>
-    
+      <ProductGrid />    
     </div>
   );
 }
