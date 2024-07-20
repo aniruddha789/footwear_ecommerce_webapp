@@ -1,11 +1,12 @@
 package com.footwear.webapp.user.controller;
 
 
-import com.footwear.webapp.schema.authentication.user.request.*;
-import com.footwear.webapp.schema.authentication.user.response.MessageResponse;
+
+import com.footwear.webapp.user.schema.request.LoginRequest;
+import com.footwear.webapp.user.schema.request.SignupRequest;
+import com.footwear.webapp.user.schema.response.MessageResponse;
 import com.footwear.webapp.user.service.UserServiceImpl;
 import com.footwear.webapp.user.entity.User;
-import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -51,6 +53,11 @@ public class UserController {
     @GetMapping("/getUser/{username}")
     public User getUser(@PathVariable String username) {
         return this.userServiceImpl.getUser(username);
+    }
+
+    @GetMapping("/getMemory")
+    public long getMemory(){
+        return Runtime.getRuntime().maxMemory() / 1024 / 1024;
     }
 
 }

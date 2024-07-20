@@ -1,0 +1,18 @@
+.cartItem {
+
+    margin: 80px auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-height: 200px;
+
+}
+
+.Table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.productImage {
+  width: 100%;
+  height: auto;
+}

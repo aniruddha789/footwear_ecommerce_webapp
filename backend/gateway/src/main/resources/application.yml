@@ -24,8 +24,19 @@ spring:
         locator:
           enabled: true
       routes:
-        - id: ADMIN-SERVICE
-          uri: lb://ADMIN-SERVICE
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
           predicates:
-            - Path=/admin/**
-
+            - Path=/user/**
+        - id: CART-SERVICE
+          uri: lb://CART-SERVICE
+          predicates:
+            - Path=/cart/**
+        - id: PRODUCT-SERVICE
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/product/**
+        - id: PAYMENT-SERVICE
+          uri: lb://PAYMENT-SERVICE
+          predicates:
+            - Path=/payment/**

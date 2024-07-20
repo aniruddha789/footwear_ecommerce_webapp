@@ -1,8 +1,0 @@
-com\footwear\webapp\schema\authentication\admin\response\AdminInfoResponse.class
-com\footwear\webapp\schema\authentication\admin\request\SignupRequest.class
-com\footwear\webapp\schema\authentication\admin\response\MessageResponse.class
-com\footwear\webapp\schema\authentication\admin\request\LoginRequest.class
-com\footwear\webapp\schema\authentication\user\request\SignupRequest.class
-com\footwear\webapp\schema\authentication\user\request\LoginRequest.class
-com\footwear\webapp\schema\authentication\user\response\MessageResponse.class
-com\footwear\webapp\schema\SchemaApplication.class

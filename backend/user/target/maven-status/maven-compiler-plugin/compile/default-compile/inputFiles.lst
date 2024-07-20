@@ -2,6 +2,9 @@ D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\foo
 D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\service\UserService.java
 D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\service\UserServiceImpl.java
 D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\repository\UserRepository.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\schema\response\MessageResponse.java
 D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\UserApplication.java
 D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\entity\User.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\schema\request\LoginRequest.java
 D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\controller\UserController.java
+D:\Development\Java\footwear_ecommerce_webapp\backend\user\src\main\java\com\footwear\webapp\user\schema\request\SignupRequest.java

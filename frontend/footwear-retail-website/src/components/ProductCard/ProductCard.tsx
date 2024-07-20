@@ -1,5 +1,6 @@
 import "./ProductCard.css";
 import ImageSlider from "../ImageSlider/ImageSlider";
+import Quantity from "../Quantity/Quantity";
 
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 
 function ProductCard(props: Props) {
   return (
+    // <a href="https://www.google.com">
     <div className="b">
       <div className="cardProduct">
         <div className="productImg">
@@ -26,6 +28,7 @@ function ProductCard(props: Props) {
         </div>
       </div>
     </div>
+    // </a>
   );
 }
 
