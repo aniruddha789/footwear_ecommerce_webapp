@@ -1,17 +1,27 @@
-# Start with a base image containing Java runtime
+# Stage 1: Build the application
+FROM maven:3.8.5-openjdk-17 AS builder
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the pom.xml and the source code to the container
+COPY pom.xml .
+COPY src ./src
+
+# Package the application
+RUN mvn clean install
+
+# Stage 2: Run the application
 FROM openjdk:17-jdk-slim
 
-# Add a volume pointing to /tmp
-VOLUME /tmp
+# Set the working directory in the container
+WORKDIR /app
 
-# Make port 8090 available to the world outside this container
+# Copy the JAR file from the builder stage
+COPY --from=builder /app/target/*.jar app.jar
+
+# Expose port 8090
 EXPOSE 8090
-
-# The application's JAR file
-ARG JAR_FILE=target/*.jar
-
-# Add the application's JAR file to the container
-ADD ${JAR_FILE} app.jar
 
 # Run the JAR file
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
