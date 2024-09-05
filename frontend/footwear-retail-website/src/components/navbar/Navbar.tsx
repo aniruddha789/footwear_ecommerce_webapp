@@ -7,14 +7,11 @@ import ukLogo from "../../assets/UK logo png black.png";
 import cartLogo from "../../assets/shopping-bag (1).png";
 import wishlistLogo from "../../assets/wishlist.png";
 import { Image } from "react-bootstrap";
-import {Button} from "react-bootstrap";
+//import {Button} from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function NavBar() {
 
-  const signin = () => {
-    return "Hello";
-  };
 
   return (
     <>

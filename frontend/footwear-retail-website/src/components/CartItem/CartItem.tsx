@@ -1,4 +1,4 @@
-import { Dropdown, DropdownItem, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import "./CartItem.css";
 import Quantity from "../Quantity/Quantity";
 import { useCallback, useState } from "react";

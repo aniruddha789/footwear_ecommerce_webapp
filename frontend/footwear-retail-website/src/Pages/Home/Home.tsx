@@ -1,9 +1,12 @@
-import React from 'react'
-import ProductPage from '../ProductPage/ProductPage'
+// import React from 'react'
+// import ProductPage from '../ProductPage/ProductPage'
+import ProductGrid from "../../containers/ProductGrid/ProductGrid";
 
 function Home() {
   return (
-    <div>Home</div>
+    <div>
+      <ProductGrid />    
+    </div>
   )
 }
 

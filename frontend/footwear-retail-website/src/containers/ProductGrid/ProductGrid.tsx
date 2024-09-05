@@ -1,7 +1,7 @@
 import offwhite1 from '../../../src/assets/300952867OFFWHITE_1.webp';
 import offwhite2 from '../../../src/assets/300952867OFFWHITE_2.webp';
 import offwhite3 from '../../../src/assets/300952867OFFWHITE_3.webp';
-import CartItem from '../../components/CartItem/CartItem';
+//import CartItem from '../../components/CartItem/CartItem';
 import ProductCard from '../../components/ProductCard/ProductCard';
 
 function ProductGrid() {

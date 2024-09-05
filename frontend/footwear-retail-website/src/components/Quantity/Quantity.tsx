@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import ReactDOM from 'react-dom';
+//import ReactDOM from 'react-dom';
 
 interface QuantityProps {
     onDecrease: () => void;
