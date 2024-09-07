@@ -1,11 +1,12 @@
-import ProductGrid from "../../containers/ProductGrid/ProductGrid";
+import React from 'react';
+import PaginatedProductGrid from '../../containers/PaginatedProductGrid/PaginatedProductGrid';
 
 function Bottoms() {
-
-    return (
-        <div>
-            <ProductGrid />
-        </div>
-    );
+  return (
+    <div>
+      <PaginatedProductGrid productType="pant" />
+    </div>
+  );
 }
+
 export default Bottoms;

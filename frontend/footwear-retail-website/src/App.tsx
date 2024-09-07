@@ -7,33 +7,30 @@ import {
   BrowserRouter as Router,
   Route,
   Routes
-  //useAsyncError,
-  //Link,
 } from "react-router-dom";
 import Home from "./Pages/Home/Home";
 import Shoes from "./Pages/Shoes/Shoes";
 import Accessories from "./Pages/Accessories/Accessories";
+import { Container } from "react-bootstrap";
+import FilterSortBreadcrumb from "./components/FilterSortBreadcrumb/FilterSortBreadcrumb";
 
 function App() {
-
-
   return (
-    <>
-
-      <Router >
+    <Router>
       <NavBar />
-        {/* <div className="container"> */}
+      <Container>
+        <FilterSortBreadcrumb />
+        <div className="content-container">
           <Routes>
-            <Route path="/" element = {<Home />} /> 
-            <Route path="/tops" element = {<Tops />} />
-            <Route path="/bottoms" element = {<Bottoms />} />
-            <Route path="/shoes" element = {<Shoes />} />
-            <Route path="/accessories" element = {<Accessories />}/>  
+            <Route path="/" element={<Home />} />
+            <Route path="/tops" element={<Tops />} />
+            <Route path="/bottoms" element={<Bottoms />} />
+            <Route path="/shoes" element={<Shoes />} />
+            <Route path="/accessories" element={<Accessories />} />
           </Routes>
-          
-      
-      </Router>
-    </>
+        </div>
+      </Container>
+    </Router>
   );
 }
 

@@ -1,10 +1,12 @@
-import ProductGrid from "../../containers/ProductGrid/ProductGrid";
+import React from 'react';
+import PaginatedProductGrid from '../../containers/PaginatedProductGrid/PaginatedProductGrid';
 
 function Tops() {
   return (
     <div>
-      <ProductGrid />    
+      <PaginatedProductGrid productType="tops" />
     </div>
   );
 }
+
 export default Tops;

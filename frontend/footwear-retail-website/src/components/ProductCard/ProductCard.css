@@ -9,7 +9,7 @@
 .cardProduct {
     padding-left: 0px;
     padding-right: 0px;          
-    background-color: rgba(202, 198, 198, 0.2);
+    /* background-color: rgba(202, 198, 198, 0.2); */
     transition: 0.3s;
     border-radius: 0%;
     width: 20rem;
@@ -110,3 +110,33 @@
    width: 20px;
    height: 20px;
  }
+
+ .content-container {
+   margin-top: 2rem; /* Adjust this value as needed */
+ }
+
+.productImg {
+  width: 100%;
+  height: 0;
+  padding-top: 133.33%; /* Maintains the 3:4 aspect ratio */
+  position: relative;
+  overflow: hidden;
+}
+
+.productImg > div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.product-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}

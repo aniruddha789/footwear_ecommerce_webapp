@@ -1,107 +1,37 @@
-import offwhite1 from '../../../src/assets/300952867OFFWHITE_1.webp';
-import offwhite2 from '../../../src/assets/300952867OFFWHITE_2.webp';
-import offwhite3 from '../../../src/assets/300952867OFFWHITE_3.webp';
-//import CartItem from '../../components/CartItem/CartItem';
+import React from 'react';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import { Product } from '../../types/Product';
 
-function ProductGrid() {
+interface ProductGridProps {
+  products: Product[];
+}
+
+const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
+  if (!products) {
+    return <div>No products found.</div>;
+  }
+
   return (
     <div className="productGrid">
       <div className="container">
-        <div className="row ">
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />  
-          </div>
-
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-          </div>
-
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-          </div>
-
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-          </div>
-        </div>
-
         <div className="row">
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-          </div>
-
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-          </div>
-
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-          </div>
-
-          <div className="col-lg-3 col-6">
-            <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-          </div>
+          {products.map((product) => (
+            <div key={product.id} className="col-lg-3 col-6">
+              <ProductCard
+                name={product.name}
+                desc={product.description}
+                brandid={product.brandid}
+                price={product.listprice}
+                img1={product.image}
+                img2={product.image}
+                img3={product.image}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
-}
-
+};
+  
 export default ProductGrid;

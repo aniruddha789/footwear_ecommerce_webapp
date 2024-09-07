@@ -1,9 +1,12 @@
-import ProductGrid from '../../containers/ProductGrid/ProductGrid'
+import React from 'react';
+import PaginatedProductGrid from '../../containers/PaginatedProductGrid/PaginatedProductGrid';
 
-function Shoes(){
+function Shoes() {
   return (
-    <ProductGrid />
-  )
-}
+    <div>
+      <PaginatedProductGrid productType="shoe" />
+    </div>
+  );
+}   
 
 export default Shoes;

@@ -30,7 +30,7 @@
 
 .nav {
     background-color: rgb(255, 255, 255);
-    border-bottom-width: 2px;
+    border-bottom-width: 1px;
     border-bottom-color: rgba(0, 0, 0, 0.273);
     border-bottom-style: solid;
     width:100%;

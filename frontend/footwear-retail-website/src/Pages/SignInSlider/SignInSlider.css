@@ -1,0 +1,57 @@
+.sign-in-slider {
+  position: fixed;
+  top: 0;
+  right: -400px;
+  width: 400px;
+  height: 100%;
+  background-color: #f9f9f9;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.sign-in-slider.show {
+  right: 0;
+}
+
+.sign-in-content {
+  padding: 20px;
+  margin-top: 75px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.3s ease;
+}
+
+.close-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.close-button:hover {
+  transform: rotate(90deg);
+}
+
+.sign-in-content h2 {
+  margin-bottom: 20px;
+}
+
+.sign-in-content form {
+  display: flex;
+  flex-direction: column;
+}
+
+.sign-in-content .form-group {
+  margin-bottom: 15px;
+}
+
+.sign-in-content button[type="submit"] {
+  margin-top: 10px;
+}

@@ -1,0 +1,50 @@
+.filter-sort-breadcrumb {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .filter-sort-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.375rem 0.75rem;
+  border-color: rgba(255, 255, 255, 0);
+}
+
+.button-icon {
+  width: 20px;
+  height: 20px;
+  margin-left: 0.5rem;
+}
+
+.filter-sort-item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+  }
+  
+  .clickable-text {
+    color: #6c757d;
+    text-decoration: underline;
+    transition: color 0.15s ease-in-out;
+  }
+  
+  .clickable-text:hover {
+    color: #5a6268;
+    text-decoration: underline;
+  }
+  
+  .button-icon {
+    width: 20px;
+    height: 20px;
+    margin-left: 0px;
+  }

@@ -1,13 +1,12 @@
-// import React from 'react'
-// import ProductPage from '../ProductPage/ProductPage'
-import ProductGrid from "../../containers/ProductGrid/ProductGrid";
+import React from 'react';
+import PaginatedProductGrid from '../../containers/PaginatedProductGrid/PaginatedProductGrid';
 
 function Home() {
   return (
     <div>
-      <ProductGrid />    
+      <PaginatedProductGrid />
     </div>
-  )
+  );
 }
 
 export default Home;
