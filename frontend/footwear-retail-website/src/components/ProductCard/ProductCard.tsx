@@ -3,8 +3,10 @@ import "./ProductCard.css";
 import quickViewIcon from "../../assets/magnifying-glass.png";
 import addToCartIcon from "../../assets/add-to-cart (1).png";
 import ImageSlider from '../ImageSlider/ImageSlider';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
+  id: number;
   name: string;
   desc: string;
   brandid: string;
@@ -14,14 +16,21 @@ interface Props {
   img3: string;
 }
 
+
 function ProductCard(props: Props) {
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/product/${props.id}`);
+  };
 
   return (
     <div
       className="b"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleCardClick}
     >
       <div className="cardProduct">
         <div className="productImg">
@@ -34,14 +43,14 @@ function ProductCard(props: Props) {
             <p className="card-price">₹ {props.price}</p>
             {isHovered && (
               <div className="card-actions">
-                <button className="quick-view-btn">
+                <button className="quick-view-btn" onClick={(e) => e.stopPropagation()}>
                   <img
                     src={quickViewIcon}
                     alt="Quick View"
                     className="quick-view-icon"
                   />
                 </button>
-                <button className="add-to-cart-btn">
+                <button className="add-to-cart-btn" onClick={(e) => e.stopPropagation()}>
                   <img
                     src={addToCartIcon}
                     alt="Add to Cart"
@@ -56,5 +65,4 @@ function ProductCard(props: Props) {
     </div>
   );
 }
-
 export default ProductCard;

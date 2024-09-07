@@ -13,6 +13,7 @@ import Shoes from "./Pages/Shoes/Shoes";
 import Accessories from "./Pages/Accessories/Accessories";
 import { Container } from "react-bootstrap";
 import FilterSortBreadcrumb from "./components/FilterSortBreadcrumb/FilterSortBreadcrumb";
+import ProductPage from './Pages/ProductPage/ProductPage';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/bottoms" element={<Bottoms />} />
             <Route path="/shoes" element={<Shoes />} />
             <Route path="/accessories" element={<Accessories />} />
+            <Route path="/product/:id" element={<ProductPage />} />
           </Routes>
         </div>
       </Container>

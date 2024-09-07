@@ -8,8 +8,6 @@ function Accessories() {
     <div>
     Accessories
     
-    <CartItem title="StudioFit Tee" price={999} img1={url}  />
-    
     </div>
   
   )

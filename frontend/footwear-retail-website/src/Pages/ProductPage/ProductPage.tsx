@@ -1,56 +1,41 @@
-import { Navbar, Form, Container, Image } from "react-bootstrap";
-import ukLogo from "../../assets/UK logo png black.png";
-import wishlistLogo from "../../assets/love.png";
-import cartLogo from "../../assets/shopping-bag (1).png";
-import ProductCard from "../../components/ProductCard/ProductCard";
-import offwhite1 from '../../../src/assets/300952867OFFWHITE_1.webp';
-import offwhite2 from '../../../src/assets/300952867OFFWHITE_2.webp';
-import offwhite3 from '../../../src/assets/300952867OFFWHITE_3.webp';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import ImageSlider from '../../components/ImageSlider/ImageSlider';
+import './ProductPage.css';
 
-function ProductPage() {
-  return (
-    <>
-      <Navbar className="headerContainer">
-        <Navbar.Brand href="#home" className="companyBrand">
-          {" "}
-          <img src={ukLogo} className="brandLogo"></img> Urban Kicks{" "}
-        </Navbar.Brand>
-        <div className="dummy1"></div>
-        <Form.Control
-          type="text"
-          placeholder="Search on Urban Kicks"
-          className="searchBar"
-        />
-        <div className="dummy2"></div>
-        <div className="opts">
-          <div className="headerIcons">
-            <Container>
-              <Image src={wishlistLogo} fluid></Image>
-            </Container>
-            <Container>
-              <Image src={cartLogo} fluid></Image>
-            </Container>
-            <Container>
-              <text className="signInLink ">Sign In</text>
-            </Container>
-          </div>
-        </div>
-      </Navbar>
-
-      <Container>
-      <ProductCard
-              name="StudioFit"
-              text="Studiofit Off White Relaxed Fit Hoodie Sweatshirt"
-              price={1299}
-              img1={offwhite1}
-              img2={offwhite2}
-              img3={offwhite3}
-            />
-                
-      </Container>
-
-
-    </>
-  );
+interface ProductPageProps {
+  // You might want to fetch the product data based on the ID
 }
+
+const ProductPage: React.FC<ProductPageProps> = () => {
+  const { id } = useParams<{ id: string }>();
+
+  // Fetch product data based on the ID
+  // For now, let's use dummy data
+  const product = {
+    name: 'Sample Product',
+    brandid: 'Sample Brand',
+    price: 1000,
+    description: 'This is a sample product description.',
+    img1: 'path/to/image1.jpg',
+    img2: 'path/to/image2.jpg',
+    img3: 'path/to/image3.jpg',
+  };
+
+  return (
+    <div className="product-page">
+      <div className="product-image">
+        <ImageSlider img1={product.img1} img2={product.img2} img3={product.img3} />
+      </div>
+      <div className="product-details">
+        <h2>{product.brandid}</h2>
+        <h1>{product.name}</h1>
+        <p className="price">₹ {product.price}</p>
+        <p className="description">{product.description}</p>
+        <button className="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+  );
+};
+
 export default ProductPage;

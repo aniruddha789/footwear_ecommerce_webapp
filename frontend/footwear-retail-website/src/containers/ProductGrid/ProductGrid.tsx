@@ -7,7 +7,7 @@ interface ProductGridProps {
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
-  if (!products) {
+  if (!products || products.length === 0) {
     return <div>No products found.</div>;
   }
 
@@ -15,9 +15,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
     <div className="productGrid">
       <div className="container">
         <div className="row">
-          {products.map((product) => (
-            <div key={product.id} className="col-lg-3 col-6">
+          {products.map((product, index) => (
+            <div key={`${product.id}-${index}`} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 fade-in" style={{animationDelay: `${index * 0.1}s`}}>
               <ProductCard
+                id={product.id}
                 name={product.name}
                 desc={product.description}
                 brandid={product.brandid}
@@ -33,5 +34,5 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
     </div>
   );
 };
-  
+
 export default ProductGrid;

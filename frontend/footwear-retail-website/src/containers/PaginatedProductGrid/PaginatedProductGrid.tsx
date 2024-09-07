@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Pagination } from 'react-bootstrap';
+import "./PaginatedProductGrid.css"
+import React, { useState, useEffect, useCallback } from 'react';
+import { Container } from 'react-bootstrap';
 import ProductGrid from '../ProductGrid/ProductGrid';
 import { getAllProducts, getProductsByType } from '../../services/api';
 import { Product } from '../../types/Product';
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 interface PaginatedProductGridProps {
   productType?: string;
@@ -10,69 +13,61 @@ interface PaginatedProductGridProps {
 
 const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = ({ productType }) => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const pageSize = 8; // Number of products per page
+  const pageSize = 12;
 
-  useEffect(() => {
-    fetchProducts();
-  }, [currentPage, productType]);
-
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
+    if (isLoading) return;
     setIsLoading(true);
     setError(null);
     try {
       let response;
       if (productType) {
-        response = await getProductsByType(productType, currentPage, pageSize);
+        console.log("Page: " + page + " Size: " + pageSize);
+        response = await getProductsByType(productType, page, pageSize);
       } else {
-        response = await getAllProducts(currentPage, pageSize);
+        response = await getAllProducts(page, pageSize);
       }
-      setProducts(response);
-      // setTotalPages(response.totalPages);
-        console.log('products: ' + products + '\n')
+
+      console.log("response length: " + response.length);
+      
+      if (response.length === 0) {
+        setHasMore(false);
+      } else {
+        setProducts([...products, ...response]);
+        setPage(page + 1);
+      }
     } catch (error) {
       console.error('Error fetching products:', error);
       setError('Failed to fetch products. Please try again later.');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, productType, isLoading, pageSize]);
 
-  const handlePageChange = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
+  useEffect(() => {
+    fetchProducts();
+  }, [productType]);
   if (error) {
     return <div>{error}</div>;
   }
 
   return (
     <Container>
-      <ProductGrid products={products} />
-      {totalPages > 1 && (
-        <Pagination className="justify-content-center mt-4">
-          <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
-          <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
-          {[...Array(totalPages)].map((_, index) => (
-            <Pagination.Item
-              key={index + 1}
-              active={index + 1 === currentPage}
-              onClick={() => handlePageChange(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} />
-          <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
-        </Pagination>
-      )}
+      <InfiniteScroll
+        dataLength={products.length}
+        next={fetchProducts}
+        hasMore={hasMore}
+        loader={<h4>Loading...</h4>}
+        endMessage={<p>No more products to load.</p>}
+      >
+        <div className="fade-in">
+          <ProductGrid products={products} />
+        </div>
+      </InfiniteScroll>
     </Container>
   );
 };
