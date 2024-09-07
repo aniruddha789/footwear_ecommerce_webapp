@@ -21,6 +21,7 @@
     text-align: left;
     color: rgba(103, 99, 99, 0.499);
     font: normal;
+    font-size: medium;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     vertical-align: text-top;
     margin: 0px;
@@ -28,12 +29,17 @@
 }
 
 .card-text {
-    text-align: left;
-    margin: 0px;
-    margin-top: 5px;
-    margin-left: 5px;
-    font-weight: 400;
-    color: black;
+  text-align: left;
+  margin: 5px 0 0 5px;
+  font-weight: 400;
+  color: black;
+  font-size: 1rem;
+  line-height: 1.2;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-price {
