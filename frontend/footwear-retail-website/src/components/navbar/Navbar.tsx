@@ -21,7 +21,7 @@ function NavBar() {
   return (
     <>
       <Navbar className="headerContainer">
-        <Navbar.Brand href="#home" className="companyBrand">
+        <Navbar.Brand href="/" className="companyBrand">
           {" "}
           <img src={ukLogo} className="brandLogo" alt="Urban Kicks Logo"></img> Urban Kicks{" "}
         </Navbar.Brand>
@@ -30,10 +30,16 @@ function NavBar() {
         <div className="dummy2"></div>
         <div className="opts">
           <div className="headerIcons">
-            <Container><Image src={wishlistLogo} fluid alt="Wishlist"></Image></Container>
-            <Container><Image src={cartLogo} fluid alt="Cart"></Image></Container>
             <Container>
-              <Button variant="link" className="signInLink" onClick={handleSignIn}>Sign In</Button>
+              <Image src={wishlistLogo} className="wishilistLogo" fluid alt="Wishlist"></Image>
+            </Container>
+            <Container>
+              <Image src={cartLogo} className="cartLogo" fluid alt="Cart"></Image>
+            </Container>
+            <Container>
+              <p className="signInLink" onClick={handleSignIn}>
+               Sign In
+              </p>
             </Container>
           </div>
         </div>

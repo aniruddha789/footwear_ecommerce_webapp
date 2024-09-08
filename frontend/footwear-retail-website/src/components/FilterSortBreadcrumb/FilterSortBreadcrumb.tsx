@@ -9,13 +9,18 @@ const FilterSortBreadcrumb: React.FC = () => {
   return (
     <div className="filter-sort-breadcrumb">
       <div className="breadcrumb">
-        <Link to="/" className="breadcrumb-item">Home</Link>
+        {pathnames.length > 0 && (
+          <>
+            <Link to="/" className="breadcrumb-item">Home</Link>
+            <span className="breadcrumb-separator"> &gt; </span>
+          </>
+        )}
         {pathnames.map((name, index) => {
           const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
           const isLast = index === pathnames.length - 1;
           return (
             <React.Fragment key={name}>
-              <span className="breadcrumb-separator"> &gt; </span>
+              {index > 0 && <span className="breadcrumb-separator"> &gt; </span>}
               <Link 
                 to={routeTo}
                 className={`breadcrumb-item ${isLast ? 'current' : ''}`}
