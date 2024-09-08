@@ -4,9 +4,12 @@ import { Product } from '../../types/Product';
 
 interface ProductGridProps {
   products: Product[];
+  parentBreadcrumb: string;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ products , parentBreadcrumb}) => {
+
+  console.log("Inside ProductGrid:\ncategory: " + parentBreadcrumb + "\nProducts: " + products.length);
   if (!products || products.length === 0) {
     return <div>No products found.</div>;
   }
@@ -26,6 +29,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
                 img1={product.image}
                 img2={product.image}
                 img3={product.image}
+                parentBreadcrumb={parentBreadcrumb}
               />
             </div>
           ))}

@@ -4,7 +4,7 @@ import PaginatedProductGrid from '../../containers/PaginatedProductGrid/Paginate
 function Shoes() {
   return (
     <div>
-      <PaginatedProductGrid productType="shoe" />
+      <PaginatedProductGrid />
     </div>
   );
 }   

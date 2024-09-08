@@ -14,6 +14,7 @@ import Accessories from "./Pages/Accessories/Accessories";
 import { Container } from "react-bootstrap";
 import FilterSortBreadcrumb from "./components/FilterSortBreadcrumb/FilterSortBreadcrumb";
 import ProductPage from './Pages/ProductPage/ProductPage';
+import PaginatedProductGrid from "./containers/PaginatedProductGrid/PaginatedProductGrid";
 
 function App() {
   return (
@@ -24,11 +25,8 @@ function App() {
         <div className="content-container">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/tops" element={<Tops />} />
-            <Route path="/bottoms" element={<Bottoms />} />
-            <Route path="/shoes" element={<Shoes />} />
-            <Route path="/accessories" element={<Accessories />} />
-            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/:category" element={<PaginatedProductGrid />} />
+            <Route path="/:category/:id" element={<ProductPage />} />
           </Routes>
         </div>
       </Container>

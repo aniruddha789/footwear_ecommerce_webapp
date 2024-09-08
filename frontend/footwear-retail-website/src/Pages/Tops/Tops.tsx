@@ -4,7 +4,7 @@ import PaginatedProductGrid from '../../containers/PaginatedProductGrid/Paginate
 function Tops() {
   return (
     <div>
-      <PaginatedProductGrid productType="tops" />
+      <PaginatedProductGrid />
     </div>
   );
 }

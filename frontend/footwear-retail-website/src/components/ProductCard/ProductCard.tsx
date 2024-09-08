@@ -14,15 +14,15 @@ interface Props {
   img1: string;
   img2: string;
   img3: string;
+  parentBreadcrumb: string;
 }
-
 
 function ProductCard(props: Props) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/product/${props.id}`);
+    navigate(`/${props.parentBreadcrumb}/${props.id}`);
   };
 
   return (

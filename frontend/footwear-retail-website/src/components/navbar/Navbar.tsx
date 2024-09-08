@@ -41,10 +41,10 @@ function NavBar() {
       <Navbar className="nav">
         <Container className="childContainer">
           <Nav className="me-auto">
-            <Link className="navLink" to="/tops">Tops</Link>
-            <Link className="navLink" to="/bottoms">Bottoms</Link>
-            <Link className="navLink" to="/shoes">Shoes</Link>
-            <Link className="navLink" to="/accessories">Accessories</Link>
+            <Link to="/tops">Tops</Link>
+            <Link to="/bottoms">Bottoms</Link>
+            <Link to="/shoe">Shoes</Link>
+            <Link to="/accessories">Accessories</Link>
           </Nav>
         </Container>
       </Navbar>
