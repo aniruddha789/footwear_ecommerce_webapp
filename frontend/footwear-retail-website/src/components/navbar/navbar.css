@@ -193,3 +193,36 @@
     padding-right: 10px;
     text-decoration: none !important;
 }
+
+.user-greeting {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Adds space between "Hi" and the name */
+    cursor: pointer;
+    margin: 0;
+}
+
+.user-greeting span {
+    white-space: nowrap;
+}
+
+.user-menu-container {
+    position: relative;
+}
+
+.user-menu {
+    position: absolute;
+    top: 100%; /* Position right below the greeting */
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-menu p {
+    margin: 5px 0;
+    white-space: nowrap;
+}

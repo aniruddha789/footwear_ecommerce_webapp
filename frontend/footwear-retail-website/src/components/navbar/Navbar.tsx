@@ -76,7 +76,7 @@ function NavBar() {
               {isLoggedIn ? (
                 <div className="user-menu-container">
                   <p className="user-greeting" onClick={toggleUserMenu}>
-                    Hi {firstname}
+                    <span>Hi</span> {firstname}
                   </p>
                   {showUserMenu && (
                     <div className="user-menu">
