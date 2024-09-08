@@ -31,10 +31,28 @@ interface RegisterResponse {
   code: string;
 }
 
-export const registerUser = async (username: string, email: string, password: string): Promise<RegisterResponse> => {
+export const registerUser = async (username: string, email: string, password: string, firstname: string, lastname: string): Promise<RegisterResponse> => {
   const response = await axios.post(`${BASE_URL}/user/register`, {
     username,
     email,
+    password,
+    firstname,
+    lastname
+  });
+  return response.data;
+};
+
+interface LoginResponse {
+  token: string | null;
+  status: string;
+  message: string;
+  username: string;
+  firstname: string;
+}
+
+export const loginUser = async (username: string, password: string): Promise<LoginResponse> => {
+  const response = await axios.post(`${BASE_URL}/user/login`, {
+    username,
     password
   });
   return response.data;

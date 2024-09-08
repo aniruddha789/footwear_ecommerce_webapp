@@ -179,3 +179,32 @@
     padding-right: 10px;
     text-decoration: none !important;
 }
+
+.user-menu-container {
+  position: relative;
+}
+
+.user-greeting {
+  cursor: pointer;
+  margin: 0;
+}
+
+.user-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.user-menu p {
+  cursor: pointer;
+  margin: 5px 0;
+}
+
+.user-menu p:hover {
+  text-decoration: underline;
+}

@@ -8,14 +8,50 @@ import cartLogo from "../../assets/travel.png";
 import wishlistLogo from "../../assets/wishlist.png";
 import { Image, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
 
 function NavBar() {
   const [showSignIn, setShowSignIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [firstname, setFirstname] = useState('');
+
+
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    const storedFirstname = localStorage.getItem('firstname');
+    if (storedUsername && storedFirstname) {
+      setIsLoggedIn(true);
+      setUsername(storedUsername);
+      setFirstname(storedFirstname);
+    }
+  }, []);
 
   const handleSignIn = () => {
     setShowSignIn(true);
+  };
+
+  const handleLoginSuccess = (loggedInUsername: string, loggedInFirstname: string) => {
+    setIsLoggedIn(true);
+    setUsername(loggedInUsername);
+    setFirstname(loggedInFirstname);
+    setShowSignIn(false);
+  };
+
+  const handleSignOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    localStorage.removeItem('firstname');
+    setIsLoggedIn(false);
+    setUsername('');
+    setFirstname('');
+    setShowUserMenu(false);
+  };
+
+  const toggleUserMenu = () => {
+    setShowUserMenu(!showUserMenu);
   };
 
   return (
@@ -37,9 +73,24 @@ function NavBar() {
               <Image src={cartLogo} className="cartLogo" fluid alt="Cart"></Image>
             </Container>
             <Container>
-              <p className="signInLink" onClick={handleSignIn}>
-               Sign In
-              </p>
+              {isLoggedIn ? (
+                <div className="user-menu-container">
+                  <p className="user-greeting" onClick={toggleUserMenu}>
+                    Hi {firstname}
+                  </p>
+                  {showUserMenu && (
+                    <div className="user-menu">
+                      <p onClick={() => console.log('View Profile')}>View Profile</p>
+                      <p onClick={() => console.log('Orders')}>Orders</p>
+                      <p onClick={handleSignOut}>Sign Out</p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <p className="signInLink" onClick={handleSignIn}>
+                  Sign In
+                </p>
+              )}
             </Container>
           </div>
         </div>
@@ -54,7 +105,7 @@ function NavBar() {
           </Nav>
         </Container>
       </Navbar>
-      <SignInSlider show={showSignIn} onClose={() => setShowSignIn(false)} />
+      <SignInSlider show={showSignIn} onClose={() => setShowSignIn(false)} onLoginSuccess={handleLoginSuccess} />
     </>
   );
 }
