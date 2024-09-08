@@ -16,7 +16,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
       <div className="container">
         <div className="row">
           {products.map((product, index) => (
-            <div key={`${product.id}-${index}`} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-4 fade-in" style={{animationDelay: `${index * 0.1}s`}}>
+            <div key={`${product.id}-${index}`} className="col-lg-3 col-md-4 col-sm-6 col-6 mb-4 fade-in" style={{animationDelay: `${index * 0.1}s`}}>
               <ProductCard
                 id={product.id}
                 name={product.name}

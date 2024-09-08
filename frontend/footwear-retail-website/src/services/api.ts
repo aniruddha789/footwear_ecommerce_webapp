@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Product } from '../types/Product';
 
-const BASE_URL = 'http://localhost:8082';
+const BASE_URL = 'http://192.168.1.29:8082';
 
 export const getAllProducts = async (page: number, pageSize: number): Promise<{ products: Product[], totalPages: number }> => {
   const response = await axios.get(`${BASE_URL}/product/getProductPaged?page=${page}&size=${pageSize}`);
