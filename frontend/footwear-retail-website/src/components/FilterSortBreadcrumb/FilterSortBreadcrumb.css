@@ -48,3 +48,24 @@
     height: 20px;
     margin-left: 0px;
   }
+
+.breadcrumb-item {
+  color: #808080;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.breadcrumb-item.current {
+  color: #000000;
+  font-weight: bold;
+}
+
+.breadcrumb-item:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  margin: 0 5px;
+  color: #808080;
+  font-size: 14px;
+}
