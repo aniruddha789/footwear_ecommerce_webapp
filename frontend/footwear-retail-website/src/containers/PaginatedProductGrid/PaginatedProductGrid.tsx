@@ -18,7 +18,7 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
-  const pageSize = 12;
+  const pageSize = 8;
 
   const fetchProducts = useCallback(async (resetPage = false) => {
 
