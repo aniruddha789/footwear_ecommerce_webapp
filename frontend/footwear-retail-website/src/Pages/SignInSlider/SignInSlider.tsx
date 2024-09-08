@@ -32,6 +32,7 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
         if (response.status === 'PASS' || response.code === '200') {
           setSuccess('User registered successfully! Please sign in.');
           setIsSignUp(false);
+          setPassword(''); // Clear password field after successful registration
         } else {
           setError(response.message);
         }
@@ -55,12 +56,15 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
         setError('An error occurred. Please try again.');
       }
     }
+    
+    setPassword(''); // Clear password field after form submission
   };
 
   const toggleSignUp = () => {
     setIsSignUp(!isSignUp);
     setError('');
     setSuccess('');
+    setPassword(''); // Clear password when toggling between sign in and sign up
   };
 
   return (

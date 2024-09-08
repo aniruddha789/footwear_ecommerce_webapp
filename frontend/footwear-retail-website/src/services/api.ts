@@ -57,3 +57,18 @@ export const loginUser = async (username: string, password: string): Promise<Log
   });
   return response.data;
 };
+
+export const isTokenValid = async (): Promise<boolean> => {
+  const token = localStorage.getItem('token');
+  if (!token) return false;
+
+  try {
+    const response = await axios.get(`${BASE_URL}/user/validate-token`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data.valid;
+  } catch (error) {
+    console.error('Error validating token:', error);
+    return false;
+  }
+};

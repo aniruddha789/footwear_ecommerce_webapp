@@ -7,9 +7,11 @@ import ukLogo from "../../assets/UK logo png black.png";
 import cartLogo from "../../assets/travel.png";
 import wishlistLogo from "../../assets/wishlist.png";
 import { Image, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
+import { isTokenValid } from '../../services/api';
+import { jwtDecode } from "jwt-decode";
 
 function NavBar() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -17,17 +19,50 @@ function NavBar() {
   const [username, setUsername] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [firstname, setFirstname] = useState('');
+  const location = useLocation();
+  const [isCheckingToken, setIsCheckingToken] = useState(false);
 
+  interface DecodedToken {
+    exp: number;
+    // Add other expected fields here
+  }
+
+  const isTokenExpired = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return true;
+
+    try {
+      const decodedToken = jwtDecode<DecodedToken>(token);
+      const isExpired = decodedToken.exp * 1000 < Date.now() + 5 * 60 * 1000;
+      console.log('Token expiration check:', isExpired ? 'Expired' : 'Valid');
+      return isExpired;
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return true;
+    }
+  };
 
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    const storedFirstname = localStorage.getItem('firstname');
-    if (storedUsername && storedFirstname) {
-      setIsLoggedIn(true);
-      setUsername(storedUsername);
-      setFirstname(storedFirstname);
-    }
-  }, []);
+    const checkTokenValidity = async () => {
+      if (isCheckingToken) return; // Prevent multiple simultaneous checks
+      setIsCheckingToken(true);
+
+      console.log('Checking token validity...');
+      if (isTokenExpired()) {
+        console.log('Token expired, validating with server...');
+        const isValid = await isTokenValid();
+        console.log('Server validation result:', isValid);
+        if (!isValid) {
+          console.log('Token invalid, signing out...');
+          handleSignOut();
+        }
+      }
+
+      setIsCheckingToken(false);
+    };
+
+    checkTokenValidity();
+  }, [location.pathname]);
 
   const handleSignIn = () => {
     setShowSignIn(true);
@@ -41,6 +76,7 @@ function NavBar() {
   };
 
   const handleSignOut = () => {
+    console.log('Signing out...');
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     localStorage.removeItem('firstname');
@@ -48,6 +84,8 @@ function NavBar() {
     setUsername('');
     setFirstname('');
     setShowUserMenu(false);
+    // Instead of reloading, we'll just update the state
+    // window.location.reload();
   };
 
   const toggleUserMenu = () => {
