@@ -49,11 +49,11 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
           setError(response.message);
         }
       }
-    } catch (error: any) {
-      if (error.response) {
-        setError(error.response.data.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
       } else {
-        setError('An error occurred. Please try again.');
+        setError('An unexpected error occurred');
       }
     }
     

@@ -6,9 +6,9 @@ import Form from "react-bootstrap/Form";
 import ukLogo from "../../assets/UK logo png black.png";
 import cartLogo from "../../assets/travel.png";
 import wishlistLogo from "../../assets/wishlist.png";
-import { Image, Button } from "react-bootstrap";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import React, { useState, useEffect } from 'react';
+import { Image } from "react-bootstrap";
+import { Link, useLocation } from "react-router-dom";
+import  { useState, useEffect } from 'react';
 import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
 import { isTokenValid } from '../../services/api';
 import { jwtDecode } from "jwt-decode";
@@ -16,7 +16,6 @@ import { jwtDecode } from "jwt-decode";
 function NavBar() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [firstname, setFirstname] = useState('');
   const location = useLocation();
@@ -27,22 +26,20 @@ function NavBar() {
     // Add other expected fields here
   }
 
-  const isTokenExpired = () => {
-    const token = localStorage.getItem('token');
-    if (!token) return true;
-
-    try {
-      const decodedToken = jwtDecode<DecodedToken>(token);
-      const isExpired = decodedToken.exp * 1000 < Date.now() + 5 * 60 * 1000;
-      console.log('Token expiration check:', isExpired ? 'Expired' : 'Valid');
-      return isExpired;
-    } catch (error) {
-      console.error('Error decoding token:', error);
-      return true;
-    }
-  };
-
   useEffect(() => {
+    const isTokenExpired = () => {
+      const token = localStorage.getItem('token');
+      if (!token) return true;
+
+      try {
+        const decodedToken = jwtDecode<DecodedToken>(token);
+        return decodedToken.exp * 1000 < Date.now() + 5 * 60 * 1000;
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        return true;
+      }
+    };
+
     const checkTokenValidity = async () => {
       if (isCheckingToken) return; // Prevent multiple simultaneous checks
       setIsCheckingToken(true);
@@ -62,15 +59,14 @@ function NavBar() {
     };
 
     checkTokenValidity();
-  }, [location.pathname]);
+  }, [location.pathname, isCheckingToken]);
 
   const handleSignIn = () => {
     setShowSignIn(true);
   };
 
-  const handleLoginSuccess = (loggedInUsername: string, loggedInFirstname: string) => {
+  const handleLoginSuccess = (loggedInFirstname: string) => {
     setIsLoggedIn(true);
-    setUsername(loggedInUsername);
     setFirstname(loggedInFirstname);
     setShowSignIn(false);
   };
@@ -81,7 +77,6 @@ function NavBar() {
     localStorage.removeItem('username');
     localStorage.removeItem('firstname');
     setIsLoggedIn(false);
-    setUsername('');
     setFirstname('');
     setShowUserMenu(false);
     // Instead of reloading, we'll just update the state

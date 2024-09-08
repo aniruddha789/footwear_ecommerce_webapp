@@ -30,7 +30,7 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
     const currentPage = resetPage ? 0 : page;
    
     try {
-      let response;
+      let response ;
       if (category) {
         response = await getProductsByType(category, currentPage, pageSize);
       } else {
