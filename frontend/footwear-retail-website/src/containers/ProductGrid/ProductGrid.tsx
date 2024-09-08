@@ -9,7 +9,6 @@ interface ProductGridProps {
 
 const ProductGrid: React.FC<ProductGridProps> = ({ products , parentBreadcrumb}) => {
 
-  console.log("Inside ProductGrid:\ncategory: " + parentBreadcrumb + "\nProducts: " + products.length);
   if (!products || products.length === 0) {
     return <div>No products found.</div>;
   }

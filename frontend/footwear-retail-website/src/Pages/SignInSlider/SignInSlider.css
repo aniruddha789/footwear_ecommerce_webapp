@@ -55,3 +55,18 @@
 .sign-in-content button[type="submit"] {
   margin-top: 10px;
 }
+
+.alert {
+  margin-bottom: 15px;
+}
+
+.toggle-sign-up {
+  margin-top: 15px;
+  text-align: center;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.toggle-sign-up:hover {
+  text-decoration: underline;
+}
