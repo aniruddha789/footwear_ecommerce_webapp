@@ -8,7 +8,7 @@ import cartLogo from "../../assets/travel.png";
 import wishlistLogo from "../../assets/wishlist.png";
 import { Image } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import  { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
 import { isTokenValid } from '../../services/api';
 import { jwtDecode } from "jwt-decode";
@@ -19,47 +19,55 @@ function NavBar() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [firstname, setFirstname] = useState('');
   const location = useLocation();
-  const [isCheckingToken, setIsCheckingToken] = useState(false);
+  const isCheckingTokenRef = useRef(false); // Use a ref to track checking status
 
   interface DecodedToken {
     exp: number;
     // Add other expected fields here
   }
 
-  useEffect(() => {
-    const isTokenExpired = () => {
-      const token = localStorage.getItem('token');
-      if (!token) return true;
+  const isTokenExpired = (token: string) => {
+    try {
+      const decodedToken = jwtDecode<DecodedToken>(token);
+      return decodedToken.exp * 1000 < Date.now();
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return true;
+    }
+  };
 
-      try {
-        const decodedToken = jwtDecode<DecodedToken>(token);
-        return decodedToken.exp * 1000 < Date.now() + 5 * 60 * 1000;
-      } catch (error) {
-        console.error('Error decoding token:', error);
-        return true;
-      }
-    };
+  const checkTokenValidity = async () => {
+    if (isCheckingTokenRef.current) return; // Prevent multiple simultaneous checks
+    isCheckingTokenRef.current = true;
 
-    const checkTokenValidity = async () => {
-      if (isCheckingToken) return; // Prevent multiple simultaneous checks
-      setIsCheckingToken(true);
-
-      console.log('Checking token validity...');
-      if (isTokenExpired()) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      if (isTokenExpired(token)) {
         console.log('Token expired, validating with server...');
         const isValid = await isTokenValid();
         console.log('Server validation result:', isValid);
         if (!isValid) {
           console.log('Token invalid, signing out...');
           handleSignOut();
+        } else {
+          console.log('Token is valid.');
+          setIsLoggedIn(true); // Update login state if valid
         }
+      } else {
+        console.log('Token is still valid.');
+        setIsLoggedIn(true); // Update login state if valid
       }
+    } else {
+      console.log('No token found, user is not logged in.');
+      handleSignOut();
+    }
 
-      setIsCheckingToken(false);
-    };
+    isCheckingTokenRef.current = false; // Reset the ref
+  };
 
-    checkTokenValidity();
-  }, [location.pathname, isCheckingToken]);
+  useEffect(() => {
+    checkTokenValidity(); // Check token validity on component mount and route change
+  }, [location.pathname]); // Only run when the route changes
 
   const handleSignIn = () => {
     setShowSignIn(true);
