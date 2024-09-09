@@ -37,10 +37,10 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
         response = await getAllProducts(currentPage, pageSize);
       }
 
-      if (response.length === 0) {
+      if (response === null || response.content.length === 0) {
         setHasMore(false);
       } else {
-        setProducts(resetPage  ? response : [...products, ...response]);
+        setProducts(resetPage  ? response.content : [...products, ...response.content]);
         setPage(currentPage + 1);
       }
     } catch (error) {

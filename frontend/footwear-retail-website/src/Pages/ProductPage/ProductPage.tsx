@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import './ProductPage.css';
 import { getProductById } from '../../services/api';
 import { Product } from '../../types/Product';
+import { useParams } from 'react-router-dom';
 
 const ProductPage: React.FC = () => {
-  const { category, id } = useParams<{ category: string; id: string }>();
+  const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +14,7 @@ const ProductPage: React.FC = () => {
     const fetchProduct = async () => {
       try {
         if (id) {
-          const fetchedProduct = await getProductById(parseInt(id, 10));
+          const fetchedProduct = await getProductById(Number(id));
           setProduct(fetchedProduct);
         }
       } catch (err) {

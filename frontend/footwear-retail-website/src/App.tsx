@@ -1,16 +1,12 @@
 import "./App.css";
 import NavBar from "./components/navbar/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Bottoms from "./Pages/Bottoms/Bottoms";
-import Tops from "./Pages/Tops/Tops";
 import {
   BrowserRouter as Router,
   Route,
   Routes
 } from "react-router-dom";
 import Home from "./Pages/Home/Home";
-import Shoes from "./Pages/Shoes/Shoes";
-import Accessories from "./Pages/Accessories/Accessories";
 import { Container } from "react-bootstrap";
 import FilterSortBreadcrumb from "./components/FilterSortBreadcrumb/FilterSortBreadcrumb";
 import ProductPage from './Pages/ProductPage/ProductPage';

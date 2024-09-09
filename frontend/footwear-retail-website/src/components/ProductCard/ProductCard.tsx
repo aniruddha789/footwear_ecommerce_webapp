@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import "./ProductCard.css";
 import quickViewIcon from "../../assets/magnifying-glass.png";
 import addToCartIcon from "../../assets/add-to-cart (1).png";
