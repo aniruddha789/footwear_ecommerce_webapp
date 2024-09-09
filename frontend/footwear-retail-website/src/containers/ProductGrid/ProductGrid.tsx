@@ -28,6 +28,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products , parentBreadcrumb})
                 img1={product.image}
                 img2={product.image}
                 img3={product.image}
+                category={product.type}
                 parentBreadcrumb={parentBreadcrumb}
               />
             </div>

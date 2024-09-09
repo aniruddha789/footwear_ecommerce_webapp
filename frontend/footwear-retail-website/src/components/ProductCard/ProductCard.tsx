@@ -14,6 +14,7 @@ interface Props {
   img1: string;
   img2: string;
   img3: string;
+  category: string;
   parentBreadcrumb: string;
 }
 
@@ -22,7 +23,9 @@ function ProductCard(props: Props) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(`/${props.parentBreadcrumb}/${props.id}`);
+    //const path = props.parentBreadcrumb.trim() ? `/${props.parentBreadcrumb}/${props.id}` : `/${props.id}`;
+    const path = `/${props.category}/${props.id}`;
+    navigate(path);
   };
 
   return (

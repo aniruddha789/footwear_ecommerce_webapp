@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Product } from '../types/Product';
 
-//const BASE_URL = 'http://localhost:8082';
+// const BASE_URL = 'http://localhost:8082';
 const BASE_URL = 'https://backend.myurbankicks.in:8082';
 
 
