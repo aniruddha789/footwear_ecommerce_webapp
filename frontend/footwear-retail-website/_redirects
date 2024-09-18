@@ -1,1 +1,1 @@
-/api/* http://backend.myurbankicks.in:8080/:splat 200
+/api/* https://backend.myurbankicks.in:8082/:splat 200
