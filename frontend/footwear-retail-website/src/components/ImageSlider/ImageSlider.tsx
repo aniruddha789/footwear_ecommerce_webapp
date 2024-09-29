@@ -6,11 +6,9 @@ import "./ImageSlider.css";
 // import offwhite3 from '../../../src/assets/300952867OFFWHITE_3.webp';
 
 interface Props {
-  img1: string;
-  img2: string;
-  img3: string;
+  images: string[]
 }
-function ImageSlider({ img1, img2, img3 }: Props) {
+function ImageSlider({ images }: Props) {
   const imageSizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
   const generateSrcSet = (img: string) => {
     return `${img}?width=240&height=320 240w, 
@@ -22,7 +20,7 @@ function ImageSlider({ img1, img2, img3 }: Props) {
             
   return (
     <Carousel data-bs-theme="dark" nextIcon={null} prevIcon={null} touch={true} className="custom-carousel">
-      {[img1, img2, img3].map((img, index) => (
+      {images.map((img, index) => (
         <Carousel.Item key={index}>
           <img
             className="img-fluid"
