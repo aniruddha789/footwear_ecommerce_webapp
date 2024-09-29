@@ -37,7 +37,7 @@ function ProductCard(props: Props) {
     >
       <div className="cardProduct">
         <div className="productImg">
-          <ImageSlider img1={props.img1} img2={props.img2} img3={props.img3} />
+          <ImageSlider images={[props.img1,props.img2,props.img3]} />
         </div>
         <h4 className="card-title">{props.brandid}</h4>
         <div className="card-body">

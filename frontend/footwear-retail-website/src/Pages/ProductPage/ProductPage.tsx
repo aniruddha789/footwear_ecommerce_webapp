@@ -3,12 +3,16 @@ import './ProductPage.css';
 import { getProductById } from '../../services/api';
 import { Product } from '../../types/Product';
 import { useParams } from 'react-router-dom';
+import ImageSliderPopup from '../../components/ImageSliderPopup/ImageSliderPopup';
+import useIsMobile from '../../hooks/useIsMobile'; // Import the custom hook
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showSlider, setShowSlider] = useState(false);
+  const isMobile = useIsMobile(); // Use the custom hook
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -34,12 +38,24 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <div className="col-lg-3 col-md-6 col-sm-6 col-6 mb-3 fade-in">
-        <img src={product.image} alt={product.name} className="grid-image" />
-        <img src={product.image} alt={product.name} className="grid-image" />
-        <img src={product.image} alt={product.name} className="grid-image" />
-        <img src={product.image} alt={product.name} className="grid-image" />
-      </div>
+      {isMobile ? (
+        <div className="product-images">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="grid-image"
+            onClick={() => setShowSlider(true)}
+          />
+        </div>
+        
+      ) : (
+        <div className="product-images">
+          <img src={product.image} alt={product.name} className="grid-image" />
+          <img src={product.image} alt={product.name} className="grid-image" />
+          <img src={product.image} alt={product.name} className="grid-image" />
+          <img src={product.image} alt={product.name} className="grid-image" />
+        </div>
+      )}
       <div className="product-details">
         <h2>{product.brandid}</h2>
         <h1>{product.name}</h1>
@@ -48,6 +64,12 @@ const ProductPage: React.FC = () => {
         <p className="description">{product.description}</p>
         <button className="add-to-cart">Add to Cart</button>
       </div>
+      {showSlider && (
+        <ImageSliderPopup
+          images={[product.image, product.image, product.image, product.image]}
+          onClose={() => setShowSlider(false)}
+        />
+      )}
     </div>
   );
 };
