@@ -34,7 +34,7 @@ const ProductPage: React.FC = () => {
 
   return (
     <div className="product-page">
-      <div className="product-images">
+      <div className="col-lg-3 col-md-6 col-sm-6 col-6 mb-3 fade-in">
         <img src={product.image} alt={product.name} className="grid-image" />
         <img src={product.image} alt={product.name} className="grid-image" />
         <img src={product.image} alt={product.name} className="grid-image" />

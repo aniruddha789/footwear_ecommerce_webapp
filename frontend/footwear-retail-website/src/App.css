@@ -79,9 +79,11 @@
   width: calc(100% - 100px); /* 100% width minus 50px gap on each side */
   margin: 0 auto; /* Center the container */
   padding: 0 50px; /* Add padding to create the gap */
+
 }
 
 .content-container {
   width: 100%;
   margin: 0 auto;
+  padding: 0 16px;
 }
