@@ -18,6 +18,7 @@
 
 .product-details {
   margin-top: 20px;
+  padding: 0 20px;
 }
 
 /* Desktop styles */
@@ -55,15 +56,15 @@ h2 {
 }
 
 .price {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
 }
 
 .mrp {
   font-size: 14px;
+  font-weight: 400;
   color: #666;
-  margin-left: 10px;
 }
 
 .color {
@@ -86,4 +87,104 @@ h2 {
 
 .add-to-cart:hover {
   background-color: #0056b3;
+}
+
+.brand {
+  font-size: 14px;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+.product-name {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.color-section, .size-section {
+  margin-bottom: 20px;
+}
+
+.color-label, .size-label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.color-options {
+  display: flex;
+}
+
+.color-option {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+.size-guide {
+  float: right;
+  color: #007bff;
+  font-weight: 400;
+}
+
+.size-options {
+  display: flex;
+  gap: 10px;
+}
+
+.size-option {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  background: none;
+  cursor: pointer;
+}
+
+.add-to-bag {
+  width: 50%;
+  padding: 15px;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  border-radius: 0px;
+}
+
+.product-features {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.feature {
+  text-align: center;
+}
+
+.feature img {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 5px;
+}
+
+.feature p {
+  font-size: 12px;
+}
+
+@media (min-width: 768px) {
+  .product-page {
+    display: flex;
+    gap: 40px;
+  }
+
+  .product-images {
+    width: 60%;
+  }
+
+  .product-details {
+    width: 40%;
+  }
 }
