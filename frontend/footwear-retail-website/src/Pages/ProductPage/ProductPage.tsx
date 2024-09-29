@@ -37,25 +37,24 @@ const ProductPage: React.FC = () => {
   if (!product) return <div>Product not found</div>;
 
   return (
-    <div className="product-page">
-      {isMobile ? (
-        <div className="product-images">
+    <div className={`product-page ${isMobile ? 'mobile' : 'desktop'}`}>
+      <div className="product-images">
+        {isMobile ? (
           <img
             src={product.image}
             alt={product.name}
             className="grid-image"
             onClick={() => setShowSlider(true)}
           />
-        </div>
-        
-      ) : (
-        <div className="product-images">
-          <img src={product.image} alt={product.name} className="grid-image" />
-          <img src={product.image} alt={product.name} className="grid-image" />
-          <img src={product.image} alt={product.name} className="grid-image" />
-          <img src={product.image} alt={product.name} className="grid-image" />
-        </div>
-      )}
+        ) : (
+          <>
+            <img src={product.image} alt={product.name} className="grid-image" />
+            <img src={product.image} alt={product.name} className="grid-image" />
+            <img src={product.image} alt={product.name} className="grid-image" />
+            <img src={product.image} alt={product.name} className="grid-image" />
+          </>
+        )}
+      </div>
       <div className="product-details">
         <h2>{product.brandid}</h2>
         <h1>{product.name}</h1>
