@@ -19,6 +19,7 @@
 .product-details {
   margin-top: 20px;
   padding: 0 20px;
+  text-align: left;
 }
 
 /* Desktop styles */
@@ -103,6 +104,7 @@ h2 {
 
 .color-section, .size-section {
   margin-bottom: 20px;
+  text-align: left;
 }
 
 .color-label, .size-label {
@@ -132,6 +134,7 @@ h2 {
 .size-options {
   display: flex;
   gap: 10px;
+  justify-content: flex-start;
 }
 
 .size-option {
@@ -156,7 +159,8 @@ h2 {
 
 .product-features {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  gap: 20px;
   margin-top: 20px;
 }
 
