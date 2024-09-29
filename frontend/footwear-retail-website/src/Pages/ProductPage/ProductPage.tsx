@@ -35,15 +35,15 @@ const ProductPage: React.FC = () => {
   return (
     <div className="product-page">
       <div className="product-images">
-        <img src={product.image} alt={product.name} className="main-image" />
-        <img src={product.image} alt={product.name} className="secondary-image" />
-        <img src={product.image} alt={product.name} className="secondary-image" />
-        <img src={product.image} alt={product.name} className="secondary-image" />
+        <img src={product.image} alt={product.name} className="grid-image" />
+        <img src={product.image} alt={product.name} className="grid-image" />
+        <img src={product.image} alt={product.name} className="grid-image" />
+        <img src={product.image} alt={product.name} className="grid-image" />
       </div>
       <div className="product-details">
-        <h1>{product.name}</h1>
         <h2>{product.brandid}</h2>
-        <p className="price">₹ {product.listprice}</p>
+        <h1>{product.name}</h1>
+        <p className="price">₹ {product.listprice} <span className="mrp">MRP incl. of all taxes</span></p>
         <p className="color">Color: {product.color}</p>
         <p className="description">{product.description}</p>
         <button className="add-to-cart">Add to Cart</button>

@@ -12,7 +12,7 @@ function App() {
   return (
     <Router>
       <NavBar />
-      <Container>
+      <Container className="main-container">
         <FilterSortBreadcrumb />
         <div className="content-container">
           <Routes>           
