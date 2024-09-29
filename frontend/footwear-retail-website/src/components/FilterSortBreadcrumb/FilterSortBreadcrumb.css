@@ -69,3 +69,7 @@
   color: #808080;
   font-size: 14px;
 }
+
+.breadcrumb {
+  margin-left: 24px;
+}

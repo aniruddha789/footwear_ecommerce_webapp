@@ -8,8 +8,15 @@
 .product-images {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 10px;
-  width: 50%;
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 8px;
+  width: 100%;
+}
+
+.grid-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Ensures the image covers the entire grid cell */
 }
 
 .main-image {
@@ -36,13 +43,19 @@ h1 {
 h2 {
   font-size: 18px;
   color: #666;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .price {
   font-size: 22px;
   font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+}
+
+.mrp {
+  font-size: 14px;
+  color: #666;
+  margin-left: 10px;
 }
 
 .color {

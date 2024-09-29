@@ -11,7 +11,7 @@
     padding: 0;
     transition: 0.3s;
     border-radius: 0;
-    width: 20rem;
+    width: 17.5rem; /* Reduced from 20rem to 18rem */
     position: relative;
     display: flex;
     flex-direction: column;

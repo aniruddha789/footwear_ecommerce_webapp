@@ -1,5 +1,6 @@
 .fade-in {
     animation: fadeIn 0.5s ease-in;
+    /* width: 100%; */
   }
   
   @keyframes fadeIn {
@@ -12,3 +13,9 @@
       transform: translateY(0);
     }
   }
+
+.container {
+  width: auto; /* 100% width minus 25px gap on each side */
+  margin: 0 auto; /* Center the container */
+  max-width: inherit;
+}
