@@ -40,6 +40,14 @@ const ProductPage: React.FC = () => {
   if (error) return <div>{error}</div>;
   if (!product) return <div>Product not found</div>;
 
+  // Define the sorted order of sizes
+  const sizeOrder = ['S', 'M', 'L', 'XL', 'XXL', 'UK7', 'UK8', 'UK9'];
+
+  // Sort the inventory based on the defined size order
+  const sortedInventory = product.inventory.sort((a, b) => {
+    return sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size);
+  });
+
   return (
     <div className={`product-page ${isMobile ? 'mobile' : 'desktop'}`}>
       <div className="product-images">
@@ -72,8 +80,8 @@ const ProductPage: React.FC = () => {
         <div className="size-section">
           <p className="size-label">SIZE <span className="size-guide">SIZE GUIDE</span></p>
           <div className="size-options">
-            {['S', 'M', 'L', 'XL', 'XXL'].map(size => (
-              <button key={size} className="size-option">{size}</button>
+            {sortedInventory.map(item => (
+              <button key={item.size} className="size-option">{item.size}</button>
             ))}
           </div>
         </div>
