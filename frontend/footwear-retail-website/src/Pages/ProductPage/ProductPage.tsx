@@ -8,7 +8,7 @@ import useIsMobile from '../../hooks/useIsMobile'; // Import the custom hook
 import shipping_icon from '../../assets/fast-delivery.png'
 import returns_icon from '../../assets/return-box.png'
 import fashion_icon from '../../assets/clean-clothes.png'
-
+import { colorMap } from '../../utils/colorMap'
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -48,6 +48,10 @@ const ProductPage: React.FC = () => {
     return sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size);
   });
 
+
+  // Get the hex color from the map
+  const colorHex = colorMap[product.color.toLowerCase()] || "#000000"; // Default to black if not found
+
   return (
     <div className={`product-page ${isMobile ? 'mobile' : 'desktop'}`}>
       <div className="product-images">
@@ -74,7 +78,7 @@ const ProductPage: React.FC = () => {
         <div className="color-section">
           <p className="color-label">COLOURS</p>
           <div className="color-options">
-            <div className="color-option" style={{backgroundColor: product.color}}></div>
+            <div className="color-option" style={{ backgroundColor: colorHex }}></div>
           </div>
         </div>
         <div className="size-section">
