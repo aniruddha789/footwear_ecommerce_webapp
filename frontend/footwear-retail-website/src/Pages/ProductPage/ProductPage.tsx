@@ -58,6 +58,11 @@ const ProductPage: React.FC = () => {
   // Get the hex color from the map
   const colorHex = colorMap[selectedColor.toLowerCase()] || "#000000"; // Default to black if not found
 
+  const getColorHex = (colorString: string): string => {
+    const lowerCaseColor = colorString.toLowerCase();
+    return colorMap[lowerCaseColor] || "#000000"; // Default to black if not found
+  }
+
   return (
     <div className={`product-page ${isMobile ? 'mobile' : 'desktop'}`}>
       <div className="product-images">
@@ -84,7 +89,9 @@ const ProductPage: React.FC = () => {
         <div className="color-section">
           <p className="color-label">COLOURS</p>
           <div className="color-options">
-            <div className="color-option" style={{ backgroundColor: colorHex }}></div>
+            {Array.from(new Set(sortedInventory.map(item => item.color))).map(color => (
+                <div key={color} className="color-option" style={{ backgroundColor: getColorHex(color) }}></div>
+            ))}
           </div>
         </div>
         <div className="size-section">
