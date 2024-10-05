@@ -11,7 +11,7 @@ import fashion_icon from '../../assets/clean-clothes.png'
 import { colorMap } from '../../utils/colorMap'
 
 const ProductPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id?: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,8 +49,14 @@ const ProductPage: React.FC = () => {
   });
 
 
+  // Find the inventory item that matches the product image
+  const selectedInventory = product.inventory.find(item => item.image === product.image);
+
+  // Get the color from the selected inventory item
+  const selectedColor = selectedInventory ? selectedInventory.color : '';
+
   // Get the hex color from the map
-  const colorHex = colorMap[product.color.toLowerCase()] || "#000000"; // Default to black if not found
+  const colorHex = colorMap[selectedColor.toLowerCase()] || "#000000"; // Default to black if not found
 
   return (
     <div className={`product-page ${isMobile ? 'mobile' : 'desktop'}`}>

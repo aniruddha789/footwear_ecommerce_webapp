@@ -5,7 +5,6 @@ export interface Product {
     name: string;
     type: string;
     brandid: string;
-    color: string;
     description: string;
     listprice : number;
     image: string;
