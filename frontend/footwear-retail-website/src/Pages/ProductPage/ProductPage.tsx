@@ -17,6 +17,8 @@ const ProductPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showSlider, setShowSlider] = useState(false);
   const isMobile = useIsMobile(); // Use the custom hook
+  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedSize, setSelectedSize] = useState<string>('');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -24,6 +26,13 @@ const ProductPage: React.FC = () => {
         if (id) {
           const fetchedProduct = await getProductById(Number(id));
           setProduct(fetchedProduct);
+          
+          // Set initial selected color and size
+          const selectedInventory = fetchedProduct.inventory.find(item => item.image === fetchedProduct.image);
+          if (selectedInventory) {
+            setSelectedColor(selectedInventory.color);
+            setSelectedSize(selectedInventory.size);
+          }
         }
       } catch (err) {
         setError('Failed to fetch product. Please try again later.');
@@ -53,10 +62,10 @@ const ProductPage: React.FC = () => {
   const selectedInventory = product.inventory.find(item => item.image === product.image);
 
   // Get the color from the selected inventory item
-  const selectedColor = selectedInventory ? selectedInventory.color : '';
+  // const selectedColor = selectedInventory ? selectedInventory.color : '';
 
-  // Get the hex color from the map
-  const colorHex = colorMap[selectedColor.toLowerCase()] || "#000000"; // Default to black if not found
+  // // Get the hex color from the map
+  // const colorHex = colorMap[selectedColor.toLowerCase()] || "#000000"; // Default to black if not found
 
   const getColorHex = (colorString: string): string => {
     const lowerCaseColor = colorString.toLowerCase();
@@ -90,15 +99,26 @@ const ProductPage: React.FC = () => {
           <p className="color-label">COLOURS</p>
           <div className="color-options">
             {Array.from(new Set(sortedInventory.map(item => item.color))).map(color => (
-                <div key={color} className="color-option" style={{ backgroundColor: getColorHex(color) }}></div>
+              <div
+                key={color}
+                className={`color-option ${color === selectedColor ? 'selected' : ''}`}
+                style={{ backgroundColor: getColorHex(color) }}
+                onClick={() => setSelectedColor(color)}
+              ></div>
             ))}
           </div>
         </div>
         <div className="size-section">
           <p className="size-label">SIZE <span className="size-guide">SIZE GUIDE</span></p>
           <div className="size-options">
-            {sortedInventory.map(item => (
-              <button key={item.size} className="size-option">{item.size}</button>
+            {Array.from(new Set(sortedInventory.map(item => item.size))).map(size => (
+              <button
+                key={size}
+                className={`size-option ${size === selectedSize ? 'selected' : ''}`}
+                onClick={() => setSelectedSize(size)}
+              >
+                {size}
+              </button>
             ))}
           </div>
         </div>
