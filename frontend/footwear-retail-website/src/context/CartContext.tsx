@@ -66,10 +66,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const updateQuantity = (productId: number, size: string, color: string, quantity: number) => {
     setItems(prevItems =>
       prevItems.map(item =>
-        (item.product.id === productId && 
-         item.selectedSize === size && 
-         item.selectedColor === color)
-          ? { ...item, quantity }
+        (item.product.id === productId && item.selectedColor === color)
+          ? { ...item, quantity, selectedSize: size }
           : item
       )
     );

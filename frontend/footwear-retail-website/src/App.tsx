@@ -9,6 +9,7 @@ import ProductPage from './Pages/ProductPage/ProductPage';
 import PaginatedProductGrid from "./containers/PaginatedProductGrid/PaginatedProductGrid";
 import { CartProvider } from './context/CartContext';
 import CartPage from './Pages/Cart/CartPage';
+import CheckoutPage from './Pages/Checkout/CheckoutPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/:category" element={<PaginatedProductGrid />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
             </Routes>
           </div>
         </Container>
