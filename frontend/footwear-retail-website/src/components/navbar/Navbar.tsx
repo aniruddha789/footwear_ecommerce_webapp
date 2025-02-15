@@ -12,6 +12,7 @@ import { useState, useEffect, useRef } from 'react';
 import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
 import { isTokenValid } from '../../services/api';
 import { jwtDecode } from "jwt-decode";
+import { useCart } from '../../context/CartContext';
 
 function NavBar() {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -20,6 +21,7 @@ function NavBar() {
   const [firstname, setFirstname] = useState('');
   const location = useLocation();
   const isCheckingTokenRef = useRef(false); // Use a ref to track checking status
+  const { getCartCount } = useCart();
 
   interface DecodedToken {
     exp: number;
@@ -111,7 +113,12 @@ function NavBar() {
               <Image src={wishlistLogo} className="wishilistLogo" fluid alt="Wishlist"></Image>
             </Container>
             <Container>
-              <Image src={cartLogo} className="cartLogo" fluid alt="Cart"></Image>
+              <Link to="/cart" className="cart-container">
+                <Image src={cartLogo} className="cartLogo" fluid alt="Cart" />
+                {getCartCount() > 0 && (
+                  <span className="cart-count">{getCartCount()}</span>
+                )}
+              </Link>
             </Container>
             <Container>
               {isLoggedIn ? (

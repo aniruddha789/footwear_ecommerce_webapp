@@ -192,3 +192,15 @@ h2 {
     width: 40%;
   }
 }
+
+.color-option.selected {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.color-option:hover {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.size-option.selected {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 0, 0, 0.3);
+}
