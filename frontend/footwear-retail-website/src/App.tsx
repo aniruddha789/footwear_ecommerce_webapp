@@ -10,6 +10,7 @@ import PaginatedProductGrid from "./containers/PaginatedProductGrid/PaginatedPro
 import { CartProvider } from './context/CartContext';
 import CartPage from './Pages/Cart/CartPage';
 import CheckoutPage from './Pages/Checkout/CheckoutPage';
+import OrderSuccessPage from './Pages/OrderSuccess/OrderSuccessPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/order-success" element={<OrderSuccessPage />} />
             </Routes>
           </div>
         </Container>

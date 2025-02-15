@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Product } from '../types/Product';
+import Address from '../types/Address';
 
 // const BASE_URL = 'http://localhost:8082';
 const BASE_URL = 'https://backend.myurbankicks.in:8082';
@@ -72,4 +73,14 @@ export const isTokenValid = async (): Promise<boolean> => {
     console.error('Error validating token:', error);
     return false;
   }
+};
+
+
+
+export const getAddresses = async (username: string): Promise<Address[]> => {
+  const token = localStorage.getItem('token');
+  const response = await axios.get(`${BASE_URL}/user/getAddress/${username}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data;
 };
