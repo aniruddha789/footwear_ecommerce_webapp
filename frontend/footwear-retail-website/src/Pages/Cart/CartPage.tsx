@@ -82,7 +82,7 @@ const CartPage: React.FC = () => {
             <div className="cart-item-details product-column">
               <img src={item.product.image} alt={item.product.name} />
               <div className="item-info">
-                <div className="item-brand">{item.product.brand}</div>
+                <div className="item-brand">{item.product.brandid}</div>
                 <h3>{item.product.name}</h3>
                 <div className="size-wrapper">
                   <span>Size</span>
@@ -105,7 +105,7 @@ const CartPage: React.FC = () => {
                     ))}
                   </select>
                 </div>
-                <div className="delivery-info">Delivery by {item.deliveryDays || '4-5 days'}</div>
+                <div className="delivery-info">Delivery by {'4-5 days'}</div>
               </div>
             </div>
             <div className="quantity-controls quantity-column">
