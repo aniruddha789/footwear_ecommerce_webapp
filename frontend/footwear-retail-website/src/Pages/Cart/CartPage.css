@@ -405,3 +405,12 @@
     font-size: 14px;
   }
 }
+
+.quantity-button-disabled {
+  cursor: not-allowed !important;
+  color: #999 !important;
+}
+
+.quantity-button-disabled:hover {
+  cursor: not-allowed !important;
+}

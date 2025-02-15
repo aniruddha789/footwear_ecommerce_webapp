@@ -7,7 +7,7 @@ import SignInSlider from '../SignInSlider/SignInSlider';
 import '../../styles/alert.css';
 
 const CartPage: React.FC = () => {
-  const { items, removeFromCart, updateQuantity } = useCart();
+  const { items, removeFromCart, updateQuantity, updateSize } = useCart();
   const navigate = useNavigate();
   const [showSignIn, setShowSignIn] = useState(false);
   const isLoggedIn = localStorage.getItem('token') !== null;
@@ -73,8 +73,11 @@ const CartPage: React.FC = () => {
       </div>
 
       <div className="cart-items">
-        {items.map((item) => (
-          <div key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}`} className="cart-item">
+        {items.map((item, index) => (
+          <div 
+            key={`${item.product.id}-${item.selectedSize}-${item.selectedColor}-${index}`} 
+            className="cart-item"
+          >
             <input type="checkbox" className="checkbox-column" />
             <div className="cart-item-details product-column">
               <img src={item.product.image} alt={item.product.name} />
@@ -88,15 +91,13 @@ const CartPage: React.FC = () => {
                     value={item.selectedSize}
                     onChange={(e) => {
                       const newSize = e.target.value;
-                      console.log('Changing size to:', newSize);
-                      
-                      updateQuantity(
+                      console.log('cart: ' + items.map(a => a.product.id + '-' + a.selectedSize + '-' + a.selectedColor))
+                      updateSize(
                         item.product.id,
-                        newSize,
+                        item.selectedSize,
                         item.selectedColor,
-                        item.quantity
+                        newSize
                       );
-                      console.log('Current item:', item);
                     }}
                   >
                     {[...new Set(item.product.inventory.map(inv => inv.size))].map(size => (
@@ -108,7 +109,11 @@ const CartPage: React.FC = () => {
               </div>
             </div>
             <div className="quantity-controls quantity-column">
-              <button onClick={() => updateQuantity(item.product.id, item.selectedSize, item.selectedColor, Math.max(0, item.quantity - 1))}>-</button>
+              <button 
+                onClick={() => updateQuantity(item.product.id, item.selectedSize, item.selectedColor, Math.max(1, item.quantity - 1))}
+                className={item.quantity === 1 ? 'quantity-button-disabled' : ''}
+                disabled={item.quantity === 1}
+              >-</button>
               <span>{item.quantity}</span>
               <button onClick={() => updateQuantity(item.product.id, item.selectedSize, item.selectedColor, item.quantity + 1)}>+</button>
             </div>
