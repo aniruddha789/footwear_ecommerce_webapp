@@ -13,25 +13,22 @@ interface CartContextType {
   addToCart: (product: Product, size: string, color: string) => void;
   removeFromCart: (productId: number, size: string, color: string) => void;
   updateQuantity: (productId: number, size: string, color: string, quantity: number) => void;
+  updateSize: (productId: number, oldSize: string, color: string, newSize: string) => void;
   getCartCount: () => number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartItem[]>(() => {
+    // Initialize state from localStorage
+    const savedItems = localStorage.getItem('cartItems');
+    return savedItems ? JSON.parse(savedItems) : [];
+  });
 
-  // Load cart from localStorage on mount
+  // Update localStorage whenever items change
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      setItems(JSON.parse(savedCart));
-    }
-  }, []);
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items));
+    localStorage.setItem('cartItems', JSON.stringify(items));
   }, [items]);
 
   const addToCart = (product: Product, size: string, color: string) => {
@@ -75,12 +72,65 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   };
 
+  const updateSize = (productId: number, oldSize: string, color: string, newSize: string) => {
+    setItems(prevItems => {
+      // Find the item being updated
+      const itemToUpdate = prevItems.find(
+        item => item.product.id === productId && 
+                item.selectedSize === oldSize && 
+                item.selectedColor === color
+      );
+
+      if (!itemToUpdate) return prevItems;
+
+      // Find if there's already an item with the new size
+      const existingItemWithNewSize = prevItems.find(
+        item => item.product.id === productId && 
+                item.selectedSize === newSize && 
+                item.selectedColor === color
+      );
+
+      if (existingItemWithNewSize) {
+        // Combine quantities and remove the old item
+        return prevItems
+          .map(item => {
+            if (item === existingItemWithNewSize) {
+              // Add quantities together
+              return { ...item, quantity: item.quantity + itemToUpdate.quantity };
+            }
+            return item;
+          })
+          .filter(item => !(
+            item.product.id === productId && 
+            item.selectedSize === oldSize && 
+            item.selectedColor === color
+          ));
+      }
+
+      // If no existing item with new size, just update the size
+      return prevItems.map(item =>
+        (item.product.id === productId && 
+         item.selectedSize === oldSize && 
+         item.selectedColor === color)
+          ? { ...item, selectedSize: newSize }
+          : item
+      );
+    });
+  };
+
   const getCartCount = () => {
     return items.reduce((total, item) => total + item.quantity, 0);
   };
 
   return (
-    <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity, getCartCount }}>
+    <CartContext.Provider value={{ 
+      items, 
+      addToCart, 
+      removeFromCart, 
+      updateQuantity, 
+      updateSize, 
+      getCartCount 
+    }}>
       {children}
     </CartContext.Provider>
   );
