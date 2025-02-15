@@ -9,6 +9,7 @@ import shipping_icon from '../../assets/fast-delivery.png'
 import returns_icon from '../../assets/return-box.png'
 import fashion_icon from '../../assets/clean-clothes.png'
 import { colorMap } from '../../utils/colorMap'
+import { useCart } from '../../context/CartContext';
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -19,6 +20,7 @@ const ProductPage: React.FC = () => {
   const isMobile = useIsMobile(); // Use the custom hook
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -26,6 +28,7 @@ const ProductPage: React.FC = () => {
         if (id) {
           const fetchedProduct = await getProductById(Number(id));
           setProduct(fetchedProduct);
+          console.log("Inventory: " + fetchedProduct.inventory);
           
           // Set initial selected color and size
           const selectedInventory = fetchedProduct.inventory.find(item => item.image === fetchedProduct.image);
@@ -58,8 +61,6 @@ const ProductPage: React.FC = () => {
   });
 
 
-  // Find the inventory item that matches the product image
-  const selectedInventory = product.inventory.find(item => item.image === product.image);
 
   // Get the color from the selected inventory item
   // const selectedColor = selectedInventory ? selectedInventory.color : '';
@@ -122,7 +123,18 @@ const ProductPage: React.FC = () => {
             ))}
           </div>
         </div>
-        <button className="add-to-bag">ADD TO BAG</button>
+        <button 
+          className="add-to-bag"
+          onClick={() => {
+            if (!selectedSize || !selectedColor) {
+              alert('Please select both size and color');
+              return;
+            }
+            addToCart(product, selectedSize, selectedColor);
+          }}
+        >
+          ADD TO BAG
+        </button>
         <div className="product-features">
           <div className="feature">
             <img src={shipping_icon} alt="Free shipping" />

@@ -7,22 +7,27 @@ import { Container } from "react-bootstrap";
 import FilterSortBreadcrumb from "./components/FilterSortBreadcrumb/FilterSortBreadcrumb";
 import ProductPage from './Pages/ProductPage/ProductPage';
 import PaginatedProductGrid from "./containers/PaginatedProductGrid/PaginatedProductGrid";
+import { CartProvider } from './context/CartContext';
+import CartPage from './Pages/Cart/CartPage';
 
 function App() {
   return (
-    <Router>
-      <NavBar />
-      <Container className="main-container">
-        <FilterSortBreadcrumb />
-        <div className="content-container">
-          <Routes>           
-              <Route path="/:category/:id" element={<ProductPage />} />
-              <Route path="/:category" element={<PaginatedProductGrid />} />
-              <Route path="/" element={<Home />} />
-          </Routes>
-        </div>
-      </Container>
-    </Router>
+    <CartProvider>
+      <Router>
+        <NavBar />
+        <Container className="main-container">
+          <FilterSortBreadcrumb />
+          <div className="content-container">
+            <Routes>           
+                <Route path="/:category/:id" element={<ProductPage />} />
+                <Route path="/:category" element={<PaginatedProductGrid />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/cart" element={<CartPage />} />
+            </Routes>
+          </div>
+        </Container>
+      </Router>
+    </CartProvider>
   );
 }
 
