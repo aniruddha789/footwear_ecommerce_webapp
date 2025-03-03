@@ -7,7 +7,7 @@ import ukLogo from "../../assets/UK logo png black.png";
 import cartLogo from "../../assets/travel.png";
 import wishlistLogo from "../../assets/wishlist.png";
 import { Image } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
 import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
 import { isTokenValid } from '../../services/api';
@@ -22,6 +22,8 @@ function NavBar() {
   const location = useLocation();
   const isCheckingTokenRef = useRef(false); // Use a ref to track checking status
   const { getCartCount } = useCart();
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   interface DecodedToken {
     exp: number;
@@ -104,6 +106,15 @@ function NavBar() {
     setShowUserMenu(!showUserMenu);
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate(`/search?query=${searchTerm}`);
+  };
+
   return (
     <>
       <Navbar className="headerContainer">
@@ -112,7 +123,15 @@ function NavBar() {
           <img src={ukLogo} className="brandLogo" alt="Urban Kicks Logo"></img> Urban Kicks{" "}
         </Navbar.Brand>
         <div className="dummy1"></div>
-        <Form.Control type="text" placeholder="Search on Urban Kicks" className="searchBar"/>
+        <Form onSubmit={handleSearchSubmit} className="d-flex search-form">
+          <Form.Control
+            type="text"
+            placeholder="Search on Urban Kicks"
+            className="searchBar"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+        </Form>
         <div className="dummy2"></div>
         <div className="opts">
           <div className="headerIcons">

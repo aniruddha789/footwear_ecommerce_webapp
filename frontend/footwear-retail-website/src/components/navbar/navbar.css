@@ -173,12 +173,30 @@
     
 }
 
-.searchBar {
-    flex: 3;
-    border-radius: 20px!important;
-    width: 25% !important;
+/* Style for the form container */
+.search-form {
+  margin: 0 15px;
+  width: 100%;
+  max-width: 300px;
+}
 
-    
+/* Style for the search input */
+.searchBar {
+  width: 100%;
+  border-radius: 20px !important;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  transition: border-color 0.3s;
+}
+
+/* Center the placeholder text only */
+.searchBar::placeholder {
+    text-align: center;
+}
+
+.searchBar:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 .dummy2 {
@@ -250,4 +268,10 @@
   font-size: 12px;
   min-width: 18px;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .searchBar {
+    max-width: 100%; /* Full width on smaller screens */
+  }
 }
