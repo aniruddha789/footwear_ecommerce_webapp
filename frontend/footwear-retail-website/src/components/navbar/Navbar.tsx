@@ -71,6 +71,13 @@ function NavBar() {
     checkTokenValidity(); // Check token validity on component mount and route change
   }, [location.pathname]); // Only run when the route changes
 
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setFirstname(storedUsername);
+    }
+  }, []);
+
   const handleSignIn = () => {
     setShowSignIn(true);
   };

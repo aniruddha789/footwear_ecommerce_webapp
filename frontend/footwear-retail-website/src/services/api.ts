@@ -57,6 +57,12 @@ export const loginUser = async (username: string, password: string): Promise<Log
     username,
     password
   });
+  
+  // Store username in localStorage upon successful login
+  if (response.data.token) {
+    localStorage.setItem('username', username);
+  }
+  
   return response.data;
 };
 
