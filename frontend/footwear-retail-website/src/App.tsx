@@ -11,6 +11,7 @@ import { CartProvider } from './context/CartContext';
 import CartPage from './Pages/Cart/CartPage';
 import CheckoutPage from './Pages/Checkout/CheckoutPage';
 import OrderSuccessPage from './Pages/OrderSuccess/OrderSuccessPage';
+import SearchResults from './Pages/SearchResults/SearchResults';
 
 function App() {
   return (
@@ -20,13 +21,14 @@ function App() {
         <Container className="main-container">
           <FilterSortBreadcrumb />
           <div className="content-container">
-            <Routes>           
-                <Route path="/:category/:id" element={<ProductPage />} />
-                <Route path="/:category" element={<PaginatedProductGrid />} />
-                <Route path="/" element={<Home />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/order-success" element={<OrderSuccessPage />} />
+            <Routes>
+              <Route path="/search" element={<SearchResults />} />
+              <Route path="/:category/:id" element={<ProductPage />} />
+              <Route path="/:category" element={<PaginatedProductGrid />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order-success" element={<OrderSuccessPage />} />
             </Routes>
           </div>
         </Container>
