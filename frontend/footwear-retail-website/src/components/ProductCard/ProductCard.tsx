@@ -4,27 +4,25 @@ import quickViewIcon from "../../assets/magnifying-glass.png";
 import addToCartIcon from "../../assets/add-to-cart (1).png";
 import ImageSlider from '../ImageSlider/ImageSlider';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../../context/CartContext';
+import { Product } from '../../types/Product';
 
 interface Props {
-  id: number;
-  name: string;
-  desc: string;
-  brandid: string;
-  price: number;
-  img1: string;
-  img2: string;
-  img3: string;
-  category: string;
+  product: Product;
   parentBreadcrumb: string;
 }
 
-function ProductCard(props: Props) {
+function ProductCard({product}: Props) {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+
+  // Get the first available size and color from the product's inventory
+  const selectedSize = product.inventory.length > 0 ? product.inventory[0].size : 'M'; // Default to 'M' if no inventory
+  const selectedColor = product.inventory.length > 0 ? product.inventory[0].color : 'Red'; // Default to 'Red' if no inventory
 
   const handleCardClick = () => {
-    //const path = props.parentBreadcrumb.trim() ? `/${props.parentBreadcrumb}/${props.id}` : `/${props.id}`;
-    const path = `/${props.category}/${props.id}`;
+    const path = `/${product.type}/${product.id}`;
     navigate(path);
   };
 
@@ -37,13 +35,13 @@ function ProductCard(props: Props) {
     >
       <div className="cardProduct">
         <div className="productImg">
-          <ImageSlider images={[props.img1,props.img2,props.img3]} />
+          <ImageSlider images={[product.image]} />
         </div>
-        <h4 className="card-title">{props.brandid}</h4>
+        <h4 className="card-title">{product.brandid}</h4>
         <div className="card-body">
-          <p className="card-text">{props.name}</p>
+          <p className="card-text">{product.name}</p>
           <div className="card-price-actions">
-            <p className="card-price">₹ {props.price}</p>
+            <p className="card-price">₹ {product.listprice}</p>
             {isHovered && (
               <div className="card-actions">
                 <button className="quick-view-btn" onClick={(e) => e.stopPropagation()}>
@@ -53,7 +51,13 @@ function ProductCard(props: Props) {
                     className="quick-view-icon"
                   />
                 </button>
-                <button className="add-to-cart-btn" onClick={(e) => e.stopPropagation()}>
+                <button 
+                  className="add-to-cart-btn" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart(product, selectedSize, selectedColor); // Use the selected size and color
+                  }}
+                >
                   <img
                     src={addToCartIcon}
                     alt="Add to Cart"
@@ -68,4 +72,5 @@ function ProductCard(props: Props) {
     </div>
   );
 }
+
 export default ProductCard;
