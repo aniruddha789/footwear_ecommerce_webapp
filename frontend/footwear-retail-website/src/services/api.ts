@@ -2,8 +2,8 @@ import axios from 'axios';
 import { Product } from '../types/Product';
 import Address from '../types/Address';
 
-// const BASE_URL = 'http://localhost:8082';
-const BASE_URL = 'https://backend.myurbankicks.in:8082';
+const BASE_URL = 'http://localhost:8082';
+// const BASE_URL = 'https://backend.myurbankicks.in:8082';
 
 export const getAllProducts = async (page: number, pageSize: number): Promise<{ content: Product[], totalPages: number }> => {
   const response = await axios.get(`${BASE_URL}/product/getProductPaged?page=${page}&size=${pageSize}`);
@@ -57,6 +57,12 @@ export const loginUser = async (username: string, password: string): Promise<Log
     username,
     password
   });
+  
+  // Store username in localStorage upon successful login
+  if (response.data.token) {
+    localStorage.setItem('username', username);
+  }
+  
   return response.data;
 };
 
