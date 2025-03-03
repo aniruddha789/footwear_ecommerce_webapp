@@ -80,6 +80,22 @@ function NavBar() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!location.pathname.includes('/search')) {
+      setSearchTerm('');
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname.includes('/search')) {
+      const params = new URLSearchParams(location.search);
+      const query = params.get('query');
+      if (query) {
+        setSearchTerm(query);
+      }
+    }
+  }, [location.pathname, location.search]);
+
   const handleSignIn = () => {
     setShowSignIn(true);
   };
