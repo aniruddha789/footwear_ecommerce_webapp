@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './OrderSuccessPage.css';
 
@@ -6,6 +6,18 @@ const OrderSuccessPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const orderDetails = location.state?.orderDetails;
+
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // If no order details, redirect to home
+  useEffect(() => {
+    if (!orderDetails) {
+      navigate('/');
+    }
+  }, [orderDetails, navigate]);
 
   return (
     <div className="order-success-page">

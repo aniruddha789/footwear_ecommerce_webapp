@@ -91,7 +91,6 @@ const CartPage: React.FC = () => {
                     value={item.selectedSize}
                     onChange={(e) => {
                       const newSize = e.target.value;
-                      console.log('cart: ' + items.map(a => a.product.id + '-' + a.selectedSize + '-' + a.selectedColor))
                       updateSize(
                         item.product.id,
                         item.selectedSize,
@@ -126,17 +125,18 @@ const CartPage: React.FC = () => {
       <div className="cart-summary">
         <h3>Total Amount</h3>
         <div className="summary-row">
-          <span>Total Item</span>
-          <span>{items.length}</span>
+          <span>Total MRP</span>
+          <span>₹ {total.toFixed(0)}</span>
         </div>
         <div className="summary-row">
-          <span>Total MRP</span>
-          <span>₹ {total.toFixed(2)}</span>
+          <span>Discount on MRP</span>
+          <span>₹ 0</span>
         </div>
         <div className="summary-row total">
           <span>Total Amount</span>
-          <span>₹ {total.toFixed(2)}</span>
+          <span>₹ {total.toFixed(0)}</span>
         </div>
+        
         <button className="checkout-button" onClick={handleCheckout}>
           PROCEED TO CHECKOUT
         </button>

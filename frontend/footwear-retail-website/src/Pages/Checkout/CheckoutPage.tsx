@@ -23,6 +23,16 @@ const CheckoutPage: React.FC = () => {
   });
   const [scrollPosition, setScrollPosition] = useState(0);
   const addressBoxesRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -98,7 +108,7 @@ const CheckoutPage: React.FC = () => {
   const handleScroll = (direction: 'left' | 'right') => {
     if (addressBoxesRef.current) {
       const container = addressBoxesRef.current;
-      const scrollAmount = 320; // box width + gap
+      const scrollAmount = isMobile ? 260 : 320; // Adjust for mobile
       const newPosition = direction === 'left' 
         ? scrollPosition - scrollAmount 
         : scrollPosition + scrollAmount;
@@ -120,6 +130,10 @@ const CheckoutPage: React.FC = () => {
   if (!isLoggedIn) {
     return null;
   }
+
+  const total = items.reduce((sum, item) => 
+    sum + (item.product.listprice * item.quantity), 0
+  );
 
   return (
     <div className="checkout-page">
@@ -258,6 +272,40 @@ const CheckoutPage: React.FC = () => {
               Place Order
             </button>
           </form>
+        </div>
+
+        {/* Order Summary Section */}
+        <div className="order-summary">
+          <h2>Order Summary</h2>
+          <div className="order-items">
+            {items.map((item, index) => (
+              <div key={index} className="order-item">
+                <div className="order-item-details">
+                  <div className="order-item-name">{item.product.name}</div>
+                  <div className="order-item-variant">
+                    Size: {item.selectedSize} | Qty: {item.quantity}
+                  </div>
+                </div>
+                <div className="order-item-price">
+                  ₹{item.product.listprice * item.quantity}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="order-total">
+            <div className="order-total-row">
+              <span>Subtotal</span>
+              <span>₹{total}</span>
+            </div>
+            <div className="order-total-row">
+              <span>Shipping</span>
+              <span>Free</span>
+            </div>
+            <div className="order-total-row final">
+              <span>Total</span>
+              <span>₹{total}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
