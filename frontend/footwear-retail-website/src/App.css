@@ -76,3 +76,66 @@
   margin: 0 auto;
   padding: 0 16px;
 }
+
+@media (max-width: 768px) {
+  .main-container {
+    padding-bottom: 70px; /* Add padding to account for the bottom nav bar */
+  }
+  
+  /* Hide desktop navbar elements on mobile */
+  .headerContainer .opts {
+    display: none;
+  }
+  
+  /* Adjust the header for mobile */
+  .headerContainer {
+    padding: 10px;
+  }
+  
+  .companyBrand {
+    font-size: 1.2rem;
+  }
+  
+  .brandLogo {
+    width: 30px;
+    height: 30px;
+  }
+  
+  /* Hide the desktop navigation on mobile */
+  .nav {
+    display: none;
+  }
+  
+  /* Adjust search bar for mobile */
+  .search-form {
+    max-width: 100%;
+    margin: 0 10px;
+  }
+  
+  /* Adjust product grid for mobile */
+  .col-6 {
+    padding: 5px;
+  }
+  
+  .cardProduct {
+    margin-bottom: 10px;
+  }
+  
+  /* Adjust product page for mobile */
+  .product-details {
+    flex-direction: column;
+  }
+  
+  .product-image {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .product-info {
+    width: 100%;
+  }
+}
+
+/* Make sure there are no conflicting styles like: */
+
+/* Or z-index issues that might place other elements above the navbar */

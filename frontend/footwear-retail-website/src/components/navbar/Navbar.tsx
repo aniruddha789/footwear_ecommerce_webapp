@@ -24,6 +24,23 @@ function NavBar() {
   const { getCartCount } = useCart();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if screen is mobile size
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    checkIfMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIfMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIfMobile);
+  }, []);
 
   interface DecodedToken {
     exp: number;
@@ -135,66 +152,72 @@ function NavBar() {
     <>
       <Navbar className="headerContainer">
         <Navbar.Brand href="/" className="companyBrand">
-          {" "}
-          <img src={ukLogo} className="brandLogo" alt="Urban Kicks Logo"></img> Urban Kicks{" "}
+          <img src={ukLogo} className="brandLogo" alt="Urban Kicks Logo" />
+          <span>Urban Kicks</span>
         </Navbar.Brand>
         <div className="dummy1"></div>
-        <Form onSubmit={handleSearchSubmit} className="d-flex search-form">
-          <Form.Control
-            type="text"
-            placeholder="Search on Urban Kicks"
-            className="searchBar"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </Form>
+        {!isMobile && (
+          <Form onSubmit={handleSearchSubmit} className="d-flex search-form">
+            <Form.Control
+              type="text"
+              placeholder="Search on Urban Kicks"
+              className="searchBar"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+          </Form>
+        )}
         <div className="dummy2"></div>
-        <div className="opts">
-          <div className="headerIcons">
-            <Container>
-              <Image src={wishlistLogo} className="wishilistLogo" fluid alt="Wishlist"></Image>
-            </Container>
-            <Container>
-              <Link to="/cart" className="cart-container">
-                <Image src={cartLogo} className="cartLogo" fluid alt="Cart" />
-                {getCartCount() > 0 && (
-                  <span className="cart-count">{getCartCount()}</span>
-                )}
-              </Link>
-            </Container>
-            <Container>
-              {isLoggedIn ? (
-                <div className="user-menu-container">
-                  <p className="user-greeting" onClick={toggleUserMenu}>
-                    <span>Hi</span> {firstname}
-                  </p>
-                  {showUserMenu && (
-                    <div className="user-menu">
-                      <p onClick={() => console.log('View Profile')}>View Profile</p>
-                      <p onClick={() => console.log('Orders')}>Orders</p>
-                      <p onClick={handleSignOut}>Sign Out</p>
-                    </div>
+        {!isMobile && (
+          <div className="opts">
+            <div className="headerIcons">
+              <Container>
+                <Image src={wishlistLogo} className="wishilistLogo" fluid alt="Wishlist"></Image>
+              </Container>
+              <Container>
+                <Link to="/cart" className="cart-container">
+                  <Image src={cartLogo} className="cartLogo" fluid alt="Cart" />
+                  {getCartCount() > 0 && (
+                    <span className="cart-count">{getCartCount()}</span>
                   )}
-                </div>
-              ) : (
-                <p className="signInLink" onClick={handleSignIn}>
-                  Sign In
-                </p>
-              )}
-            </Container>
+                </Link>
+              </Container>
+              <Container>
+                {isLoggedIn ? (
+                  <div className="user-menu-container">
+                    <p className="user-greeting" onClick={toggleUserMenu}>
+                      <span>Hi</span> {firstname}
+                    </p>
+                    {showUserMenu && (
+                      <div className="user-menu">
+                        <p onClick={() => console.log('View Profile')}>View Profile</p>
+                        <p onClick={() => console.log('Orders')}>Orders</p>
+                        <p onClick={handleSignOut}>Sign Out</p>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <p className="signInLink" onClick={handleSignIn}>
+                    Sign In
+                  </p>
+                )}
+              </Container>
+            </div>
           </div>
-        </div>
+        )}
       </Navbar>
-      <Navbar className="nav">
-        <Container className="childContainer">
-          <Nav className="me-auto">
-            <Link to="/tops" className="nav-link">Tops</Link>
-            <Link to="/bottoms" className="nav-link">Bottoms</Link>
-            <Link to="/shoe" className="nav-link">Shoes</Link>
-            <Link to="/accessories" className="nav-link">Accessories</Link>
-          </Nav>
-        </Container>
-      </Navbar>
+      {!isMobile && (
+        <Navbar className="nav">
+          <Container className="childContainer">
+            <Nav className="me-auto">
+              <Link to="/tops" className="nav-link">Tops</Link>
+              <Link to="/bottoms" className="nav-link">Bottoms</Link>
+              <Link to="/shoe" className="nav-link">Shoes</Link>
+              <Link to="/accessories" className="nav-link">Accessories</Link>
+            </Nav>
+          </Container>
+        </Navbar>
+      )}
       <SignInSlider show={showSignIn} onClose={() => setShowSignIn(false)} onLoginSuccess={handleLoginSuccess} />
     </>
   );

@@ -145,18 +145,6 @@
   cursor: not-allowed;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .checkout-container {
-    grid-template-columns: 1fr;
-  }
-
-  .order-summary {
-    position: static;
-    margin-top: 20px;
-  }
-}
-
 /* Payment Method Styles */
 .payment-methods {
   display: flex;
@@ -301,12 +289,97 @@
   margin-bottom: 30px;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
+  .checkout-page {
+    padding: 10px;
+  }
+  
+  .checkout-container {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .checkout-form {
+    padding: 15px;
+  }
+
+  .order-summary {
+    position: static;
+    margin-top: 20px;
+    margin-bottom: 60px; /* Space for mobile nav */
+  }
+  
   .form-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .address-boxes-container {
+    padding: 0 30px;
   }
   
   .address-boxes {
-    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .address-box {
+    flex: 0 0 260px;
+    padding: 12px;
+  }
+  
+  .slider-arrow {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .payment-methods {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .payment-method {
+    padding: 12px;
+  }
+  
+  .place-order-button {
+    padding: 12px;
+    font-size: 15px;
+  }
+  
+  .saved-addresses h2,
+  .delivery-form h2 {
+    font-size: 16px;
+  }
+  
+  .form-group label {
+    font-size: 14px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-page {
+    padding: 8px;
+  }
+  
+  .checkout-form {
+    padding: 12px;
+  }
+  
+  .address-box {
+    flex: 0 0 220px;
+  }
+  
+  .address-details p {
+    font-size: 12px;
+  }
+  
+  .address-type {
+    font-size: 13px;
   }
 } 
