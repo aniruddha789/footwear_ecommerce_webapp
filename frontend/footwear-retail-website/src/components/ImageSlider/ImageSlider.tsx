@@ -11,6 +11,7 @@ interface Props {
 function ImageSlider({ images }: Props) {
   const imageSizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
   const generateSrcSet = (img: string) => {
+    console.log("images:" + images);
     return `${img}?width=240&height=320 240w, 
             ${img}?width=480&height=640 480w, 
             ${img}?width=720&height=960 720w, 

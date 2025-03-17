@@ -6,7 +6,7 @@ export interface Product {
     type: string;
     brandid: string;
     description: string;
-    listprice : number;
+    listprice: number;
     image: string;
     inventory: Array<Inventory>;
-  }
+}
