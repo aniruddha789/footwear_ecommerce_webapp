@@ -153,6 +153,13 @@
   font-size: 20px;
   cursor: pointer;
   color: #999;
+  display: flex;
+  align-items: center;
+  
+}
+
+.remove-button .material-icons {
+  font-size: 24px;
 }
 
 /* Cart Summary */
@@ -380,8 +387,13 @@
 
   .remove-column {
     position: absolute;
-    top: 15px;
+    top: 0px;
     right: 10px;
+    font-size: 18px; /* Reduce the font size for the icon */
+    width: 30px; /* Set a fixed width for the button */
+    height: 30px; /* Set a fixed height for the button */
+ 
+    
   }
 
   /* Cart Summary Mobile Styles */

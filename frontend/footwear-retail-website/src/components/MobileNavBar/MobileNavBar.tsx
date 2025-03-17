@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './MobileNavBar.css';
 import { MdOutlineHome, MdOutlineSearch, MdOutlinePerson, MdOutlineShoppingBag, MdOutlineCategory } from 'react-icons/md';
 import { useCart } from '../../context/CartContext';
