@@ -20,7 +20,10 @@ const ProductPage: React.FC = () => {
   const isMobile = useIsMobile(); // Use the custom hook
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedSize, setSelectedSize] = useState<string>('');
+  const [availableSizes, setAvailableSizes] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]); // State for images
   const { addToCart } = useCart();
+  const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -31,11 +34,24 @@ const ProductPage: React.FC = () => {
           console.log("Inventory: " + fetchedProduct.inventory);
           
           // Set initial selected color and size
-          const selectedInventory = fetchedProduct.inventory.find(item => item.image === fetchedProduct.image);
+          const selectedInventory = fetchedProduct.inventory[0]; // Get the first inventory item
           if (selectedInventory) {
             setSelectedColor(selectedInventory.color);
             setSelectedSize(selectedInventory.size);
+          } else {
+            // If no inventory, set default images from product.image
+            setImages(fetchedProduct.image ? fetchedProduct.image.split(';') : []);
           }
+
+          // Determine the images to display
+          const inventoryImage = selectedInventory ? selectedInventory.image : null;
+          const initialImages = (inventoryImage && inventoryImage.trim() !== "") 
+            ? inventoryImage.split(';') // Split inventory image into an array
+            : fetchedProduct.image && fetchedProduct.image.trim() !== "" 
+              ? fetchedProduct.image.split(';') // Split product image into an array
+              : []; // Fallback to an empty array if no images are available
+          setImages(initialImages); // Set initial images
+          setAvailableSizes(fetchedProduct.inventory.map(item => item.size)); // Set available sizes based on inventory
         }
       } catch (err) {
         setError('Failed to fetch product. Please try again later.');
@@ -48,48 +64,74 @@ const ProductPage: React.FC = () => {
     fetchProduct();
   }, [id]);
 
+  useEffect(() => {
+    if (product) {
+      // Find the first inventory item that matches the selected color
+      const matchingInventory = product.inventory.find(item => item.color === selectedColor);
+      if (matchingInventory) {
+        const inventoryImage = matchingInventory.image;
+        const newImages = (inventoryImage && inventoryImage.trim() !== "") 
+          ? inventoryImage.split(';') // Split inventory image into an array
+          : product.image && product.image.trim() !== "" 
+            ? product.image.split(';') // Split product image into an array
+            : []; // Fallback to an empty array if no images are available
+        setImages(newImages); // Set images for the selected color
+        setAvailableSizes(product.inventory
+          .filter(item => item.color === selectedColor)
+          .map(item => item.size)); // Update available sizes
+      } else {
+        setAvailableSizes([]); // Clear sizes if no inventory found
+      }
+    }
+  }, [selectedColor, product]);
+
+  const cacheImages = (color: string, images: string[]) => {
+    localStorage.setItem(`product-${id}-color-${color}`, JSON.stringify(images));
+  };
+
+  const getCachedImages = (color: string): string[] | null => {
+    const cachedImages = localStorage.getItem(`product-${id}-color-${color}`);
+    return cachedImages ? JSON.parse(cachedImages) : null;
+  };
+
+  // Function to handle image load
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!product) return <div>Product not found</div>;
 
-  // Define the sorted order of sizes
-  const sizeOrder = ['S', 'M', 'L', 'XL', 'XXL', 'UK7', 'UK8', 'UK9'];
-
-  // Sort the inventory based on the defined size order
-  const sortedInventory = product.inventory.sort((a, b) => {
-    return sizeOrder.indexOf(a.size) - sizeOrder.indexOf(b.size);
-  });
-
-
-
-  // Get the color from the selected inventory item
-  // const selectedColor = selectedInventory ? selectedInventory.color : '';
-
-  // // Get the hex color from the map
-  // const colorHex = colorMap[selectedColor.toLowerCase()] || "#000000"; // Default to black if not found
+  // Cache the images if they are not already cached
+  if (!getCachedImages(selectedColor)) {
+    cacheImages(selectedColor, images);
+  }
 
   const getColorHex = (colorString: string): string => {
     const lowerCaseColor = colorString.toLowerCase();
     return colorMap[lowerCaseColor] || "#000000"; // Default to black if not found
   }
 
+  // Check if the product is out of stock
+  const isOutOfStock = availableSizes.length === 0;
+
   return (
     <div className={`product-page ${isMobile ? 'mobile' : 'desktop'}`}>
       <div className="product-images">
         {isMobile ? (
           <img
-            src={product.image}
+            src={images.length > 0 ? images[0] : product.image}
             alt={product.name}
             className="grid-image"
             onClick={() => setShowSlider(true)}
+            onLoad={handleImageLoad}
+            style={{ display: imageLoading ? 'none' : 'block' }}
           />
         ) : (
-          <>
-            <img src={product.image} alt={product.name} className="grid-image" />
-            <img src={product.image} alt={product.name} className="grid-image" />
-            <img src={product.image} alt={product.name} className="grid-image" />
-            <img src={product.image} alt={product.name} className="grid-image" />
-          </>
+          images.length > 0 && images.map((img, index) => (
+            <img key={index} src={img} alt={product.name} className="grid-image" onLoad={handleImageLoad} />
+          ))
         )}
       </div>
       <div className="product-details">
@@ -99,29 +141,36 @@ const ProductPage: React.FC = () => {
         <div className="color-section">
           <p className="color-label">COLOURS</p>
           <div className="color-options">
-            {Array.from(new Set(sortedInventory.map(item => item.color))).map(color => (
+            {Array.from(new Set(product.inventory.map(item => item.color))).map(color => (
               <div
                 key={color}
                 className={`color-option ${color === selectedColor ? 'selected' : ''}`}
                 style={{ backgroundColor: getColorHex(color) }}
-                onClick={() => setSelectedColor(color)}
+                onClick={() => {
+                  setSelectedColor(color);
+                  setSelectedSize(''); // Reset size when color changes
+                }}
               ></div>
             ))}
           </div>
         </div>
         <div className="size-section">
           <p className="size-label">SIZE <span className="size-guide">SIZE GUIDE</span></p>
-          <div className="size-options">
-            {Array.from(new Set(sortedInventory.map(item => item.size))).map(size => (
-              <button
-                key={size}
-                className={`size-option ${size === selectedSize ? 'selected' : ''}`}
-                onClick={() => setSelectedSize(size)}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
+          {isOutOfStock ? (
+            <div className="out-of-stock">Out of Stock</div>
+          ) : (
+            <div className="size-options">
+              {availableSizes.map(size => (
+                <button
+                  key={size}
+                  className={`size-option ${size === selectedSize ? 'selected' : ''}`}
+                  onClick={() => setSelectedSize(size)}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <button 
           className="add-to-bag"
@@ -152,10 +201,11 @@ const ProductPage: React.FC = () => {
       </div>
       {showSlider && (
         <ImageSliderPopup
-          images={[product.image, product.image, product.image, product.image]}
+          images={images}
           onClose={() => setShowSlider(false)}
         />
       )}
+      {imageLoading && <div>Loading images...</div>}
     </div>
   );
 };

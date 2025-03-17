@@ -117,7 +117,9 @@ const CartPage: React.FC = () => {
               <button onClick={() => updateQuantity(item.product.id, item.selectedSize, item.selectedColor, item.quantity + 1)}>+</button>
             </div>
             <div className="price subtotal-column">₹ {item.product.listprice * item.quantity}</div>
-            <button className="remove-button remove-column" onClick={() => removeFromCart(item.product.id, item.selectedSize, item.selectedColor)}>×</button>
+            <button className="remove-button remove-column" onClick={() => removeFromCart(item.product.id, item.selectedSize, item.selectedColor)}>
+              <span className="material-icons">delete</span>
+            </button>
           </div>
         ))}
       </div>
