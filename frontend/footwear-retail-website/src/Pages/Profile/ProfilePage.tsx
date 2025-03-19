@@ -146,14 +146,6 @@ const ProfilePage: React.FC = () => {
               <MdChevronRight className="menu-item-arrow" />
             </Link>
 
-            <Link to="/saved-details" className="profile-menu-item">
-              <div className="menu-item-icon">
-                <MdOutlineDescription />
-              </div>
-              <span className="menu-item-text">Saved Details</span>
-              <MdChevronRight className="menu-item-arrow" />
-            </Link>
-
             <Link to="/account-settings" className="profile-menu-item">
               <div className="menu-item-icon">
                 <MdOutlineSettings />
@@ -162,21 +154,6 @@ const ProfilePage: React.FC = () => {
               <MdChevronRight className="menu-item-arrow" />
             </Link>
 
-            <Link to="/weststyleclub" className="profile-menu-item">
-              <div className="menu-item-icon">
-                <div className="custom-icon">W</div>
-              </div>
-              <span className="menu-item-text">WestStyleClub</span>
-              <MdChevronRight className="menu-item-arrow" />
-            </Link>
-
-            <Link to="/store-locator" className="profile-menu-item">
-              <div className="menu-item-icon">
-                <MdOutlineLocationOn />
-              </div>
-              <span className="menu-item-text">Store Locator</span>
-              <MdChevronRight className="menu-item-arrow" />
-            </Link>
 
             <Link to="/contact-us" className="profile-menu-item">
               <div className="menu-item-icon">
