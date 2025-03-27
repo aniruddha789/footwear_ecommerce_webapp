@@ -90,3 +90,46 @@ export const getAddresses = async (username: string): Promise<Address[]> => {
   });
   return response.data;
 };
+
+interface SubmitOrderItem {
+  id: number;
+  quantity: number;
+  size: string;
+  color: string;
+}
+
+interface SubmitOrderRequest {
+  username: string;
+  items: SubmitOrderItem[];
+}
+
+interface OrderResponse {
+  id: number;
+  userId: number;
+  orderDate: string;
+  orderStatus: string;
+  orderItems: {
+    id: number;
+    orderID: number;
+    productID: number;
+    quantity: number;
+    size: string;
+    color: string;
+    product: Product;
+  }[];
+}
+
+export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
+  const token = localStorage.getItem('token');
+  const response = await axios.post(
+    `${BASE_URL}/order/submitOrder`,
+    orderRequest,
+    {
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  return response.data;
+};

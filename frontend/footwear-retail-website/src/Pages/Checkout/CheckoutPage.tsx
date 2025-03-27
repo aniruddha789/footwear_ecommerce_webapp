@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './CheckoutPage.css';
 import { useCart } from '../../context/CartContext';
 import Address from '../../types/Address';
-import { getAddresses } from '../../services/api';
+import { getAddresses, placeOrder } from '../../services/api';
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -83,25 +83,45 @@ const CheckoutPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Here you would typically make an API call to place the order
-      // For now, we'll just simulate it
-      const mockOrderId = Math.floor(Math.random() * 1000000);
+      const username = localStorage.getItem('username');
+      if (!username) {
+        throw new Error('User not logged in');
+      }
+
+      // Prepare order items
+      const orderItems = items.map(item => ({
+        id: item.product.id,
+        quantity: item.quantity,
+        size: item.selectedSize,
+        color: item.product.color // Assuming product has color property
+      }));
+
+      // Create order request
+      const orderRequest = {
+        username: username,
+        items: orderItems
+      };
+
+      // Call the API
+      const response = await placeOrder(orderRequest);
       
-      // Clear the cart
+      // Clear the cart after successful order
       clearCart();
       
       // Navigate to success page with order details
       navigate('/order-success', {
         state: {
           orderDetails: {
-            orderId: mockOrderId,
-            address: formData,
-            items: items
+            orderId: response.id,
+            orderStatus: response.orderStatus,
+            orderDate: response.orderDate,
+            items: response.orderItems
           }
         }
       });
     } catch (error) {
       console.error('Error placing order:', error);
+      // You might want to show an error message to the user here
     }
   };
 
