@@ -6,6 +6,7 @@ interface CartItem {
   quantity: number;
   selectedSize: string;
   selectedColor: string;
+  image: string;
 }
 
 interface CartContextType {
@@ -49,7 +50,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         );
       }
       console.log("Added to cart!")
-      return [...prevItems, { product, quantity: 1, selectedSize: size, selectedColor: color }];
+      return [...prevItems, { 
+        product, 
+        quantity: 1, 
+        selectedSize: size, 
+        selectedColor: color,
+        image: product.inventory?.find(inv => inv.color === color)?.image || product.image || '' // Add optional chaining and empty string fallback
+      }];
     });
   };
 
