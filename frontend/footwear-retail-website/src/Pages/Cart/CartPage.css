@@ -486,6 +486,12 @@
   .social-icons {
     gap: 30px;
   }
+
+  .trash-icon {
+    margin-bottom: 0 !important;  /* Remove bottom margin for mobile */
+    width: 24px !important;  /* Make icon slightly smaller on mobile */
+    height: 24px !important;
+  }
 }
 
 .quantity-button-disabled {

@@ -81,7 +81,7 @@ const CartPage: React.FC = () => {
           >
             <input type="checkbox" className="checkbox-column" />
             <div className="cart-item-details product-column">
-              <img src={item.product.image} alt={item.product.name} />
+              <img src={item.product.image.split(";")[0]} alt={item.product.name} />
               <div className="item-info">
                 <div className="item-brand">{item.product.brandid}</div>
                 <h3>{item.product.name}</h3>
