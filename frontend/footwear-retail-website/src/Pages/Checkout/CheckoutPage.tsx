@@ -93,7 +93,7 @@ const CheckoutPage: React.FC = () => {
         id: item.product.id,
         quantity: item.quantity,
         size: item.selectedSize,
-        color: item.product.color // Assuming product has color property
+        color: item.selectedColor // Assuming product has color property
       }));
 
       // Create order request

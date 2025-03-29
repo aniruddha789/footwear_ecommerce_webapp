@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import './ProfilePage.css';
 import { 
   MdOutlineShoppingBag, MdOutlineFavoriteBorder, MdOutlineInfo,
-  MdOutlineSettings, MdOutlineLocationOn, MdOutlineContactSupport,
+  MdOutlineSettings, MdOutlineContactSupport,
   MdOutlineDescription, MdOutlinePrivacyTip, MdChevronRight, MdArrowBack
 } from 'react-icons/md';
 import { jwtDecode } from 'jwt-decode';
