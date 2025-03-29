@@ -157,3 +157,22 @@ export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<Orde
   );
   return response.data;
 };
+
+export const clearAuthData = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  localStorage.removeItem('firstname');
+  cachedPublicKey = null; // Also clear the cached public key
+};
+
+interface CartIconResponse {
+  quantity: string;
+}
+
+export const getCartIconQuantity = async (username: string): Promise<string> => {
+  const token = localStorage.getItem('token');
+  const response = await axios.get<CartIconResponse>(`${BASE_URL}/order/cartIcon/${username}`, {
+    headers: { Authorization: `Bearer ${token}` }
+    });
+  return response.data.quantity;
+};

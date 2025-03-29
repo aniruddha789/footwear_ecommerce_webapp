@@ -8,6 +8,7 @@ import {
 } from 'react-icons/md';
 import { jwtDecode } from 'jwt-decode';
 import SignInSlider from '../SignInSlider/SignInSlider';
+import { clearAuthData } from '../../services/api';
 
 interface UserDetails {
   username: string;
@@ -65,9 +66,7 @@ const ProfilePage: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('firstname');
+    clearAuthData();
     navigate('/');
   };
 
