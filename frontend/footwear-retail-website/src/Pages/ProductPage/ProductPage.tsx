@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './ProductPage.css';
-import { getProductById } from '../../services/api';
+import { getProductById, addItemToCart, SubmitOrderRequest } from '../../services/api';
 import { Product } from '../../types/Product';
 import { useParams } from 'react-router-dom';
 import ImageSliderPopup from '../../components/ImageSliderPopup/ImageSliderPopup';
@@ -99,6 +99,50 @@ const ProductPage: React.FC = () => {
     setImageLoading(false);
   };
 
+  const handleAddToCart = async () => {
+    if (!selectedSize || !selectedColor) {
+      alert('Please select both size and color');
+      return;
+    }
+
+    if (!product) {
+      alert('Product not found');
+      return;
+    }
+
+    try {
+      // Get username from localStorage
+      const username = localStorage.getItem('username');
+      if (!username) {
+        alert('Please sign in to add items to cart');
+        return;
+      }
+
+      // Prepare the request payload
+      const orderRequest: SubmitOrderRequest = {
+        username: username,
+        items: [{
+          id: product.id, // This is already a number from the Product type
+          quantity: 1,
+          size: selectedSize,
+          color: selectedColor
+        }]
+      };
+
+      // Add to backend cart
+      await addItemToCart(orderRequest);
+
+      // Add to local cart
+      addToCart(product, selectedSize, selectedColor);
+
+      // Show success message
+      alert('Item added to cart successfully!');
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      alert('Failed to add item to cart. Please try again.');
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!product) return <div>Product not found</div>;
@@ -174,13 +218,7 @@ const ProductPage: React.FC = () => {
         </div>
         <button 
           className="add-to-bag"
-          onClick={() => {
-            if (!selectedSize || !selectedColor) {
-              alert('Please select both size and color');
-              return;
-            }
-            addToCart(product, selectedSize, selectedColor);
-          }}
+          onClick={handleAddToCart}
         >
           ADD TO BAG
         </button>

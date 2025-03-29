@@ -10,7 +10,7 @@ import { Image } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from 'react';
 import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
-import { isTokenValid } from '../../services/api';
+import { isTokenValid, clearAuthData, getCartIconQuantity } from '../../services/api';
 import { jwtDecode } from "jwt-decode";
 import { useCart } from '../../context/CartContext';
 
@@ -21,10 +21,11 @@ function NavBar() {
   const [firstname, setFirstname] = useState('');
   const location = useLocation();
   const isCheckingTokenRef = useRef(false); // Use a ref to track checking status
-  const { getCartCount } = useCart();
+  const { getCartCount, clearCart, onCartUpdate } = useCart();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
+  const [cartIconQuantity, setCartIconQuantity] = useState<string>('');
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -90,10 +91,34 @@ function NavBar() {
     checkTokenValidity(); // Check token validity on component mount and route change
   }, [location.pathname]); // Only run when the route changes
 
+  // Add cart update listener
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
-      setFirstname(storedUsername);
+    const fetchCartQuantity = async () => {
+      const username = localStorage.getItem('username');
+      if (username && isLoggedIn) {
+        try {
+          const quantity = await getCartIconQuantity(username);
+          setCartIconQuantity(quantity);
+        } catch (error) {
+          console.error('Error fetching cart quantity:', error);
+        }
+      }
+    };
+
+    // Subscribe to cart updates
+    const unsubscribe = onCartUpdate(fetchCartQuantity);
+
+    // Initial fetch
+    fetchCartQuantity();
+
+    // Cleanup subscription
+    return () => unsubscribe();
+  }, [isLoggedIn]); // Only re-run if login state changes
+
+  useEffect(() => {
+    const storedFirstname = localStorage.getItem('firstname');
+    if (storedFirstname) {
+      setFirstname(storedFirstname);
     }
   }, []);
 
@@ -117,22 +142,31 @@ function NavBar() {
     setShowSignIn(true);
   };
 
-  const handleLoginSuccess = (loggedInFirstname: string) => {
+  const handleLoginSuccess = async (loggedInUsername: string, loggedInFirstname: string) => {
     setIsLoggedIn(true);
     setFirstname(loggedInFirstname);
     setShowSignIn(false);
+    
+    // Get initial cart quantity from backend
+    const username = loggedInUsername;
+    if (username) {
+      try {
+        const quantity = await getCartIconQuantity(username);
+        setCartIconQuantity(quantity);
+      } catch (error) {
+        console.error('Error fetching cart quantity:', error);
+      }
+    }
   };
 
   const handleSignOut = () => {
     console.log('Signing out...');
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    localStorage.removeItem('firstname');
+    clearAuthData();
+    clearCart(); // Clear the cart when signing out
+    setCartIconQuantity(''); // Clear the cart icon quantity
     setIsLoggedIn(false);
     setFirstname('');
     setShowUserMenu(false);
-    // Instead of reloading, we'll just update the state
-    // window.location.reload();
   };
 
   const toggleUserMenu = () => {
@@ -177,8 +211,8 @@ function NavBar() {
               <Container>
                 <Link to="/cart" className="cart-container">
                   <Image src={cartLogo} className="cartLogo" fluid alt="Cart" />
-                  {getCartCount() > 0 && (
-                    <span className="cart-count">{getCartCount()}</span>
+                  {(parseInt(cartIconQuantity) > 0 || getCartCount() > 0) && (
+                    <span className="cart-count">{cartIconQuantity || getCartCount()}</span>
                   )}
                 </Link>
               </Container>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import './SignInSlider.css';
 import cancelIcon from '../../assets/cancel.png';
-import { loginUser, registerUser } from '../../services/api';
+import { loginUser, registerUser, clearAuthData } from '../../services/api';
 
 interface SignInSliderProps {
   show: boolean;
@@ -37,6 +37,7 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
           setError(response.message);
         }
       } else {
+        clearAuthData(); // Clear any existing auth data before new login
         const response = await loginUser(username, password);
         if (response.status === 'SUCCESS') {
           onClose();
