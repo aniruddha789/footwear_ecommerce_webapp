@@ -486,6 +486,12 @@
   .social-icons {
     gap: 30px;
   }
+
+  .trash-icon {
+    margin-bottom: 0 !important;  /* Remove bottom margin for mobile */
+    width: 24px !important;  /* Make icon slightly smaller on mobile */
+    height: 24px !important;
+  }
 }
 
 .quantity-button-disabled {
@@ -495,4 +501,37 @@
 
 .quantity-button-disabled:hover {
   cursor: not-allowed !important;
+}
+
+.color-selector {
+  margin-bottom: 12px;
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  min-width: 80px;
+}
+
+.color-selector:focus {
+  outline: none;
+  border-color: #000;
+}
+
+.size-selector {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+}
+
+.trash-icon {
+  width: 35px !important;
+  height: 35px !important;
+  margin-bottom: 15px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.remove-button:hover .trash-icon {
+  opacity: 1;
 }

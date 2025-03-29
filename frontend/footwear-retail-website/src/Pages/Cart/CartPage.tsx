@@ -5,6 +5,7 @@ import './CartPage.css';
 import { Link } from 'react-router-dom';
 import SignInSlider from '../SignInSlider/SignInSlider';
 import '../../styles/alert.css';
+import trashIcon from '../../assets/trash-can.png';
 
 const CartPage: React.FC = () => {
   const { items, removeFromCart, updateQuantity, updateSize } = useCart();
@@ -80,10 +81,16 @@ const CartPage: React.FC = () => {
           >
             <input type="checkbox" className="checkbox-column" />
             <div className="cart-item-details product-column">
-              <img src={item.product.image} alt={item.product.name} />
+              <img src={item.product.image.split(";")[0]} alt={item.product.name} />
               <div className="item-info">
                 <div className="item-brand">{item.product.brandid}</div>
                 <h3>{item.product.name}</h3>
+                
+                <div className="color-display">
+                  <span>Color: </span>
+                  <span className="selected-color">{item.selectedColor}</span>
+                </div>
+
                 <div className="size-wrapper">
                   <span>Size</span>
                   <select 
@@ -99,7 +106,11 @@ const CartPage: React.FC = () => {
                       );
                     }}
                   >
-                    {[...new Set(item.product.inventory.map(inv => inv.size))].map(size => (
+                    {[...new Set(
+                      item.product.inventory
+                        .filter(inv => inv.color === item.selectedColor)
+                        .map(inv => inv.size)
+                    )].map(size => (
                       <option key={size} value={size}>{size}</option>
                     ))}
                   </select>
@@ -118,7 +129,7 @@ const CartPage: React.FC = () => {
             </div>
             <div className="price subtotal-column">₹ {item.product.listprice * item.quantity}</div>
             <button className="remove-button remove-column" onClick={() => removeFromCart(item.product.id, item.selectedSize, item.selectedColor)}>
-              <span className="material-icons">delete</span>
+              <img src={trashIcon} alt="Remove" className="trash-icon" />
             </button>
           </div>
         ))}
