@@ -21,7 +21,7 @@ function NavBar() {
   const [firstname, setFirstname] = useState('');
   const location = useLocation();
   const isCheckingTokenRef = useRef(false); // Use a ref to track checking status
-  const { getCartCount, clearCart } = useCart();
+  const { getCartCount, clearCart, onCartUpdate } = useCart();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
@@ -90,6 +90,30 @@ function NavBar() {
   useEffect(() => {
     checkTokenValidity(); // Check token validity on component mount and route change
   }, [location.pathname]); // Only run when the route changes
+
+  // Add cart update listener
+  useEffect(() => {
+    const fetchCartQuantity = async () => {
+      const username = localStorage.getItem('username');
+      if (username && isLoggedIn) {
+        try {
+          const quantity = await getCartIconQuantity(username);
+          setCartIconQuantity(quantity);
+        } catch (error) {
+          console.error('Error fetching cart quantity:', error);
+        }
+      }
+    };
+
+    // Subscribe to cart updates
+    const unsubscribe = onCartUpdate(fetchCartQuantity);
+
+    // Initial fetch
+    fetchCartQuantity();
+
+    // Cleanup subscription
+    return () => unsubscribe();
+  }, [isLoggedIn]); // Only re-run if login state changes
 
   useEffect(() => {
     const storedFirstname = localStorage.getItem('firstname');

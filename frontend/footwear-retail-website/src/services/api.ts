@@ -115,14 +115,14 @@ export const getAddresses = async (username: string): Promise<Address[]> => {
   return response.data;
 };
 
-interface SubmitOrderItem {
+export interface SubmitOrderItem {
   id: number;
   quantity: number;
   size: string;
   color: string;
 }
 
-interface SubmitOrderRequest {
+export interface SubmitOrderRequest {
   username: string;
   items: SubmitOrderItem[];
 }
@@ -139,7 +139,6 @@ interface OrderResponse {
     quantity: number;
     size: string;
     color: string;
-    product: Product;
   }[];
 }
 
@@ -147,6 +146,21 @@ export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<Orde
   const token = localStorage.getItem('token');
   const response = await axios.post(
     `${BASE_URL}/order/submitOrder`,
+    orderRequest,
+    {
+      headers: { 
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  return response.data;
+};
+
+export const addItemToCart = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
+  const token = localStorage.getItem('token');
+  const response = await axios.post(
+    `${BASE_URL}/order/cart/add`,
     orderRequest,
     {
       headers: { 

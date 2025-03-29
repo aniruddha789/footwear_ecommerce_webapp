@@ -17,6 +17,7 @@ interface CartContextType {
   updateSize: (productId: number, oldSize: string, color: string, newSize: string) => void;
   getCartCount: () => number;
   clearCart: () => void;
+  onCartUpdate: (callback: () => void) => () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -28,9 +29,23 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return savedItems ? JSON.parse(savedItems) : [];
   });
 
+  const [updateCallbacks, setUpdateCallbacks] = useState<(() => void)[]>([]);
+
+  const onCartUpdate = (callback: () => void) => {
+    setUpdateCallbacks(prev => [...prev, callback]);
+    return () => {
+      setUpdateCallbacks(prev => prev.filter(cb => cb !== callback));
+    };
+  };
+
+  const notifyCartUpdate = () => {
+    updateCallbacks.forEach(callback => callback());
+  };
+
   // Update localStorage whenever items change
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(items));
+    notifyCartUpdate();
   }, [items]);
 
   const addToCart = (product: Product, size: string, color: string) => {
@@ -142,7 +157,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateQuantity, 
       updateSize, 
       getCartCount,
-      clearCart
+      clearCart,
+      onCartUpdate
     }}>
       {children}
     </CartContext.Provider>
