@@ -54,7 +54,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         quantity: item.quantity,
         selectedSize: item.size,
         selectedColor: item.color,
-        image: item.product.image || ''
+        image: item.product.inventory?.find(inv => inv.color === item.color)?.image || item.product.image || ''
       }));
       setItems(cartItems);
       notifyCartUpdate();
