@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { Product } from '../types/Product';
+import { getCart, updateItemQuantity } from '../services/api';
 
 interface CartItem {
+  itemId: number;
   product: Product;
   quantity: number;
   selectedSize: string;
@@ -13,22 +15,18 @@ interface CartContextType {
   items: CartItem[];
   addToCart: (product: Product, size: string, color: string) => void;
   removeFromCart: (productId: number, size: string, color: string) => void;
-  updateQuantity: (productId: number, size: string, color: string, quantity: number) => void;
+  updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   updateSize: (productId: number, oldSize: string, color: string, newSize: string) => void;
   getCartCount: () => number;
   clearCart: () => void;
   onCartUpdate: (callback: () => void) => () => void;
+  refreshCart: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    // Initialize state from localStorage
-    const savedItems = localStorage.getItem('cartItems');
-    return savedItems ? JSON.parse(savedItems) : [];
-  });
-
+  const [items, setItems] = useState<CartItem[]>([]);
   const [updateCallbacks, setUpdateCallbacks] = useState<(() => void)[]>([]);
 
   const onCartUpdate = (callback: () => void) => {
@@ -42,14 +40,30 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     updateCallbacks.forEach(callback => callback());
   };
 
-  // Update localStorage whenever items change
-  useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(items));
-    notifyCartUpdate();
-  }, [items]);
+  const refreshCart = async () => {
+    try {
+      const username = localStorage.getItem('username');
+      if (!username) {
+        setItems([]);
+        return;
+      }
+      const cart = await getCart(username);
+      const cartItems: CartItem[] = cart.orderItems.map(item => ({
+        itemId: item.id,
+        product: item.product,
+        quantity: item.quantity,
+        selectedSize: item.size,
+        selectedColor: item.color,
+        image: item.product.image || ''
+      }));
+      setItems(cartItems);
+      notifyCartUpdate();
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+    }
+  };
 
   const addToCart = (product: Product, size: string, color: string) => {
-    console.log("Current cart: " + items.map(item => item.product.name + "_" + item.quantity + "_" + item.selectedColor + "_" + item.selectedSize))
     setItems(prevItems => {
       const existingItem = prevItems.find(
         item => item.product.id === product.id && 
@@ -64,13 +78,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             : item
         );
       }
-      console.log("Added to cart!")
       return [...prevItems, { 
+        itemId: 0,
         product, 
         quantity: 1, 
         selectedSize: size, 
         selectedColor: color,
-        image: product.inventory?.find(inv => inv.color === color)?.image || product.image || '' // Add optional chaining and empty string fallback
+        image: product.inventory?.find(inv => inv.color === color)?.image || product.image || ''
       }];
     });
   };
@@ -83,21 +97,36 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     ));
   };
 
-  const updateQuantity = (productId: number, size: string, color: string, quantity: number) => {
-    setItems(prevItems =>
-      prevItems.map(item =>
-        (item.product.id === productId && 
-         item.selectedSize === size && 
-         item.selectedColor === color)
-          ? { ...item, quantity }
-          : item
-      )
-    );
+  const updateQuantity = async (itemId: number, quantity: number) => {
+    try {
+      const username = localStorage.getItem('username');
+      if (!username) {
+        console.error('No username found');
+        return;
+      }
+
+      // Call the backend API directly with the itemId
+      const updatedCart = await updateItemQuantity(username, itemId, quantity);
+      
+      // Update local state with the new cart data
+      const cartItems: CartItem[] = updatedCart.orderItems.map(item => ({
+        itemId: item.id,
+        product: item.product,
+        quantity: item.quantity,
+        selectedSize: item.size,
+        selectedColor: item.color,
+        image: item.product.image || ''
+      }));
+      
+      setItems(cartItems);
+      notifyCartUpdate();
+    } catch (error) {
+      console.error('Error updating quantity:', error);
+    }
   };
 
   const updateSize = (productId: number, oldSize: string, color: string, newSize: string) => {
     setItems(prevItems => {
-      // Find the item being updated
       const itemToUpdate = prevItems.find(
         item => item.product.id === productId && 
                 item.selectedSize === oldSize && 
@@ -106,7 +135,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (!itemToUpdate) return prevItems;
 
-      // Find if there's already an item with the new size
       const existingItemWithNewSize = prevItems.find(
         item => item.product.id === productId && 
                 item.selectedSize === newSize && 
@@ -114,11 +142,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       );
 
       if (existingItemWithNewSize) {
-        // Combine quantities and remove the old item
         return prevItems
           .map(item => {
             if (item === existingItemWithNewSize) {
-              // Add quantities together
               return { ...item, quantity: item.quantity + itemToUpdate.quantity };
             }
             return item;
@@ -130,7 +156,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           ));
       }
 
-      // If no existing item with new size, just update the size
       return prevItems.map(item =>
         (item.product.id === productId && 
          item.selectedSize === oldSize && 
@@ -158,7 +183,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updateSize, 
       getCartCount,
       clearCart,
-      onCartUpdate
+      onCartUpdate,
+      refreshCart
     }}>
       {children}
     </CartContext.Provider>

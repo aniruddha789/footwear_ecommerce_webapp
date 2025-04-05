@@ -190,3 +190,43 @@ export const getCartIconQuantity = async (username: string): Promise<string> => 
     });
   return response.data.quantity;
 };
+
+export interface CartItem {
+  id: number;
+  orderID: number;
+  productID: number;
+  quantity: number;
+  size: string;
+  color: string;
+  product: Product;
+}
+
+export interface ShopOrder {
+  id: number;
+  userId: number;
+  orderDate: string;
+  orderStatus: string;
+  orderItems: CartItem[];
+}
+
+export const getCart = async (username: string): Promise<ShopOrder> => {
+  const token = localStorage.getItem('token');
+  const response = await axios.get(`${BASE_URL}/order/cart`, {
+    headers: { Authorization: `Bearer ${token}` },
+    params: { username }
+  });
+  return response.data;
+};
+
+export const updateItemQuantity = async (username: string, itemId: number, newQuantity: number): Promise<ShopOrder> => {
+  const token = localStorage.getItem('token');
+  const response = await axios.post(
+    `${BASE_URL}/order/cart/updateQuantity`,
+    null,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { username, itemId, newQuantity }
+    }
+  );
+  return response.data;
+};
