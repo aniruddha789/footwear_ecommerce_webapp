@@ -113,7 +113,7 @@ function NavBar() {
 
     // Cleanup subscription
     return () => unsubscribe();
-  }, [isLoggedIn]); // Only re-run if login state changes
+  }, [isLoggedIn, location.pathname]); // Add location.pathname as a dependency
 
   useEffect(() => {
     const storedFirstname = localStorage.getItem('firstname');

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import './CartPage.css';
@@ -8,11 +8,15 @@ import '../../styles/alert.css';
 import trashIcon from '../../assets/trash-can.png';
 
 const CartPage: React.FC = () => {
-  const { items, removeFromCart, updateQuantity, updateSize } = useCart();
+  const { items, removeFromCart, updateQuantity, updateSize, refreshCart } = useCart();
   const navigate = useNavigate();
   const [showSignIn, setShowSignIn] = useState(false);
   const isLoggedIn = localStorage.getItem('token') !== null;
   const [showAlert, setShowAlert] = useState(false);
+
+  useEffect(() => {
+    refreshCart();
+  }, []);
 
   const total = items.reduce((sum, item) => 
     sum + (item.product.listprice * item.quantity), 0
@@ -101,12 +105,7 @@ const CartPage: React.FC = () => {
                     value={item.selectedSize}
                     onChange={(e) => {
                       const newSize = e.target.value;
-                      updateSize(
-                        item.product.id,
-                        item.selectedSize,
-                        item.selectedColor,
-                        newSize
-                      );
+                      updateSize(item.itemId, newSize);
                     }}
                   >
                     {[...new Set(
@@ -123,15 +122,18 @@ const CartPage: React.FC = () => {
             </div>
             <div className="quantity-controls quantity-column">
               <button 
-                onClick={() => updateQuantity(item.product.id, item.selectedSize, item.selectedColor, Math.max(1, item.quantity - 1))}
+                onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
                 className={item.quantity === 1 ? 'quantity-button-disabled' : ''}
                 disabled={item.quantity === 1}
               >-</button>
               <span>{item.quantity}</span>
-              <button onClick={() => updateQuantity(item.product.id, item.selectedSize, item.selectedColor, item.quantity + 1)}>+</button>
+              <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>+</button>
             </div>
             <div className="price subtotal-column">₹ {item.product.listprice * item.quantity}</div>
-            <button className="remove-button remove-column" onClick={() => removeFromCart(item.product.id, item.selectedSize, item.selectedColor)}>
+            <button 
+              className="remove-button remove-column" 
+              onClick={() => removeFromCart(item.itemId)}
+            >
               <img src={trashIcon} alt="Remove" className="trash-icon" />
             </button>
           </div>

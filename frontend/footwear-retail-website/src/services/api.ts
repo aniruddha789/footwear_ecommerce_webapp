@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Product } from '../types/Product';
 import Address from '../types/Address';
 import JSEncrypt from 'jsencrypt';
+import { customAlert } from '../utils/alert';
 
 // const BASE_URL = 'http://localhost:8082';
 const BASE_URL = 'https://backend.myurbankicks.in:8082';
@@ -27,7 +28,6 @@ export const getAllProducts = async (page: number, pageSize: number): Promise<{ 
 
 export const getProductsByType = async (type: string, page: number, pageSize: number): Promise<{ content: Product[], totalPages: number }> => {
   const response = await axios.get(`${BASE_URL}/product/getProductByTypePaged/${type}?page=${page}&size=${pageSize}`);
-  console.log('response:' + response.data);
   return response.data;
 };
 
@@ -68,10 +68,7 @@ interface LoginResponse {
 }
 
 export const loginUser = async (username: string, password: string): Promise<LoginResponse> => {
-  // Get the public key
   const publicKey = await getPublicKey();
-  
-  // Encrypt password with RSA public key
   const encrypt = new JSEncrypt();
   encrypt.setPublicKey(publicKey);
   const encryptedPassword = encrypt.encrypt(password);
@@ -96,22 +93,14 @@ export const isTokenValid = async (): Promise<boolean> => {
   const token = localStorage.getItem('token');
   if (!token) return false;
 
-  try {
-    const response = await axios.get(`${BASE_URL}/user/validate-token`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data.valid;
-  } catch (error) {
-    console.error('Error validating token:', error);
-    return false;
-  }
+  const response = await axios.get(`${BASE_URL}/user/validate-token`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return response.data.valid;
 };
 
 export const getAddresses = async (username: string): Promise<Address[]> => {
-  const token = localStorage.getItem('token');
-  const response = await axios.get(`${BASE_URL}/user/getAddress/${username}`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  const response = await axios.get(`${BASE_URL}/user/getAddress/${username}`);
   return response.data;
 };
 
@@ -143,31 +132,17 @@ interface OrderResponse {
 }
 
 export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
-  const token = localStorage.getItem('token');
   const response = await axios.post(
     `${BASE_URL}/order/submitOrder`,
-    orderRequest,
-    {
-      headers: { 
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    }
+    orderRequest
   );
   return response.data;
 };
 
 export const addItemToCart = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
-  const token = localStorage.getItem('token');
   const response = await axios.post(
     `${BASE_URL}/order/cart/add`,
-    orderRequest,
-    {
-      headers: { 
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    }
+    orderRequest
   );
   return response.data;
 };
@@ -184,9 +159,123 @@ interface CartIconResponse {
 }
 
 export const getCartIconQuantity = async (username: string): Promise<string> => {
-  const token = localStorage.getItem('token');
-  const response = await axios.get<CartIconResponse>(`${BASE_URL}/order/cartIcon/${username}`, {
-    headers: { Authorization: `Bearer ${token}` }
-    });
+  const response = await axios.get<CartIconResponse>(`${BASE_URL}/order/cartIcon/${username}`);
   return response.data.quantity;
 };
+
+export interface CartItem {
+  id: number;
+  orderID: number;
+  productID: number;
+  quantity: number;
+  size: string;
+  color: string;
+  product: Product;
+}
+
+export interface ShopOrder {
+  id: number;
+  userId: number;
+  orderDate: string;
+  orderStatus: string;
+  orderItems: CartItem[];
+}
+
+export const getCart = async (username: string): Promise<ShopOrder> => {
+  const response = await axios.get(`${BASE_URL}/order/cart`, {
+    params: { username }
+  });
+  return response.data;
+};
+
+export const updateItemQuantity = async (username: string, itemId: number, newQuantity: number): Promise<ShopOrder> => {
+
+    const response = await axios.post(
+      `${BASE_URL}/order/cart/updateQuantity`,
+      null,
+      {
+        params: { username, itemId, newQuantity }
+      }
+    );
+    return response.data;
+
+};
+
+export const removeItemFromCart = async (username: string, itemId: number): Promise<ShopOrder> => {
+  const response = await axios.post(
+    `${BASE_URL}/order/cart/removeX`,
+    null,
+    {
+      params: { username, itemId }
+    }
+  );
+  return response.data;
+};
+
+export const updateItemSize = async (username: string, itemId: number, newSize: string): Promise<ShopOrder> => {
+  const response = await axios.post(
+    `${BASE_URL}/order/cart/updateSize`,
+    null,
+    {
+      params: { username, itemId, size: newSize }
+    }
+  );
+  return response.data;
+};
+
+const handleUnauthorized = () => {
+  clearAuthData();
+  window.location.href = '/';
+};
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (!error.response) {
+      console.error('Network error:', error);
+      throw new Error('Network error. Please check your connection.');
+    }
+
+    const { status, data } = error.response;
+
+    switch (status) {
+      case 401:
+        handleUnauthorized();
+        throw new Error('Session expired. Please login again.');
+
+      case 403:
+        throw new Error('You do not have permission to perform this action.');
+
+      case 404:
+        throw new Error('Resource not found.');
+
+      case 422: {
+        const validationMessage = data.message || 'Validation failed.';
+        throw new Error(validationMessage);
+      }
+
+      case 500:
+        throw new Error('Internal server error. Please try again later.');
+
+      default: {
+        const errorMessage = data?.message || 'Something went wrong. Please try again.';
+        customAlert(errorMessage);
+        throw new Error(errorMessage);
+      }
+    }
+  }
+);
+
+/** Add auth token to each API Call */ 
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
