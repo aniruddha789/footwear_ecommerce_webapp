@@ -212,6 +212,17 @@ export const removeItemFromCart = async (username: string, itemId: number): Prom
   return response.data;
 };
 
+export const updateItemSize = async (username: string, itemId: number, newSize: string): Promise<ShopOrder> => {
+  const response = await axios.post(
+    `${BASE_URL}/order/cart/updateSize`,
+    null,
+    {
+      params: { username, itemId, size: newSize }
+    }
+  );
+  return response.data;
+};
+
 const handleUnauthorized = () => {
   clearAuthData();
   window.location.href = '/';

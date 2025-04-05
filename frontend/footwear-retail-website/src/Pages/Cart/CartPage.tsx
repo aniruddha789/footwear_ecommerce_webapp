@@ -105,12 +105,7 @@ const CartPage: React.FC = () => {
                     value={item.selectedSize}
                     onChange={(e) => {
                       const newSize = e.target.value;
-                      updateSize(
-                        item.product.id,
-                        item.selectedSize,
-                        item.selectedColor,
-                        newSize
-                      );
+                      updateSize(item.itemId, newSize);
                     }}
                   >
                     {[...new Set(
