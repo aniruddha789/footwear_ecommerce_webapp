@@ -135,7 +135,10 @@ const CartPage: React.FC = () => {
               <button onClick={() => updateQuantity(item.product.id, item.quantity + 1)}>+</button>
             </div>
             <div className="price subtotal-column">₹ {item.product.listprice * item.quantity}</div>
-            <button className="remove-button remove-column" onClick={() => removeFromCart(item.product.id, item.selectedSize, item.selectedColor)}>
+            <button 
+              className="remove-button remove-column" 
+              onClick={() => removeFromCart(item.itemId)}
+            >
               <img src={trashIcon} alt="Remove" className="trash-icon" />
             </button>
           </div>

@@ -201,6 +201,17 @@ export const updateItemQuantity = async (username: string, itemId: number, newQu
 
 };
 
+export const removeItemFromCart = async (username: string, itemId: number): Promise<ShopOrder> => {
+  const response = await axios.post(
+    `${BASE_URL}/order/cart/removeX`,
+    null,
+    {
+      params: { username, itemId }
+    }
+  );
+  return response.data;
+};
+
 const handleUnauthorized = () => {
   clearAuthData();
   window.location.href = '/';

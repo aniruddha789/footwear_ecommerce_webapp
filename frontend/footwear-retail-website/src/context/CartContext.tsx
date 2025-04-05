@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Product } from '../types/Product';
-import { getCart, updateItemQuantity } from '../services/api';
+import { getCart, updateItemQuantity, removeItemFromCart } from '../services/api';
 
 interface CartItem {
   itemId: number;
@@ -14,7 +14,7 @@ interface CartItem {
 interface CartContextType {
   items: CartItem[];
   addToCart: (product: Product, size: string, color: string) => void;
-  removeFromCart: (productId: number, size: string, color: string) => void;
+  removeFromCart: (itemId: number) => Promise<void>;
   updateQuantity: (itemId: number, quantity: number) => Promise<void>;
   updateSize: (productId: number, oldSize: string, color: string, newSize: string) => void;
   getCartCount: () => number;
@@ -87,14 +87,36 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         image: product.inventory?.find(inv => inv.color === color)?.image || product.image || ''
       }];
     });
+    
+    notifyCartUpdate();
   };
 
-  const removeFromCart = (productId: number, size: string, color: string) => {
-    setItems(prevItems => prevItems.filter(item => 
-      !(item.product.id === productId && 
-        item.selectedSize === size && 
-        item.selectedColor === color)
-    ));
+  const removeFromCart = async (itemId: number) => {
+    try {
+      const username = localStorage.getItem('username');
+      if (!username) {
+        console.error('No username found');
+        return;
+      }
+
+      // Call the backend API with the itemId
+      const updatedCart = await removeItemFromCart(username, itemId);
+      
+      // Update local state with the new cart data
+      const cartItems: CartItem[] = updatedCart.orderItems.map(item => ({
+        itemId: item.id,
+        product: item.product,
+        quantity: item.quantity,
+        selectedSize: item.size,
+        selectedColor: item.color,
+        image: item.product.image || ''
+      }));
+      
+      setItems(cartItems);
+      notifyCartUpdate();
+    } catch (error) {
+      console.error('Error removing item from cart:', error);
+    }
   };
 
   const updateQuantity = async (itemId: number, quantity: number) => {
