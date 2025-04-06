@@ -17,8 +17,15 @@ import CategoriesPage from './Pages/Categories/CategoriesPage';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import ProfilePage from './Pages/Profile/ProfilePage';
+import { setupAuthSync } from './services/firebaseAuth';
+import { useEffect } from 'react';
 
 function App() {
+  useEffect(() => {
+    // Setup the auth synchronization
+    setupAuthSync();
+  }, []);
+
   return (
     <CartProvider>
       <Router>

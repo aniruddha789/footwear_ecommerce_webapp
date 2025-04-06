@@ -3,6 +3,8 @@ import { Product } from '../types/Product';
 import Address from '../types/Address';
 import JSEncrypt from 'jsencrypt';
 import { customAlert } from '../utils/alert';
+import { signUpWithEmailAndVerify, signInWithGoogle, firebaseSignOut } from './firebaseAuth';
+import { auth } from '../services/firebase';
 
 // const BASE_URL = 'http://localhost:8082';
 const BASE_URL = 'https://backend.myurbankicks.in:8082';
@@ -49,14 +51,30 @@ interface RegisterResponse {
 }
 
 export const registerUser = async (username: string, email: string, password: string, firstname: string, lastname: string): Promise<RegisterResponse> => {
-  const response = await axios.post(`${BASE_URL}/user/register`, {
-    username,
-    email,
-    password,
-    firstname,
-    lastname
-  });
-  return response.data;
+  try {
+    // First create Firebase user for email verification
+    const firebaseUid = await signUpWithEmailAndVerify(email);
+    
+    // Then register in your Spring Boot backend
+    const response = await axios.post(`${BASE_URL}/user/register`, {
+      username,
+      email,
+      password,
+      firstname,
+      lastname,
+      firebaseUid // Store this to verify email later
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        status: 'ERROR',
+        message: error.message,
+        code: '400'
+      };
+    }
+    throw error;
+  }
 };
 
 interface LoginResponse {
@@ -151,7 +169,8 @@ export const clearAuthData = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('username');
   localStorage.removeItem('firstname');
-  cachedPublicKey = null; // Also clear the cached public key
+  cachedPublicKey = null;
+  firebaseSignOut();
 };
 
 interface CartIconResponse {
@@ -279,3 +298,52 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// Add this new function for Google sign-in
+export const loginWithGoogle = async (): Promise<LoginResponse> => {
+  try {
+    // First authenticate with Firebase
+    const googleUser = await signInWithGoogle();
+    
+    // Get Firebase ID token to verify with backend (more secure approach)
+    const idToken = await auth.currentUser?.getIdToken(true);
+    
+    // Then authenticate with your backend
+    const response = await axios.post(`${BASE_URL}/user/google-login`, {
+      firebaseUid: googleUser.firebaseUid,
+      email: googleUser.email,
+      displayName: googleUser.displayName,
+      photoURL: googleUser.photoURL,
+      idToken // Send this token for verification on backend
+    });
+    
+    // Clear any existing data before setting new data
+    clearAuthData();
+    
+    // Store authentication data in localStorage
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', response.data.username);
+      localStorage.setItem('firstname', response.data.firstname);
+    } else {
+      // If backend didn't provide a token, sign out from Firebase
+      await firebaseSignOut();
+    }
+    
+    return response.data;
+  } catch (error) {
+    // Sign out from Firebase on error
+    await firebaseSignOut();
+    
+    if (error instanceof Error) {
+      return {
+        token: null,
+        status: 'ERROR',
+        message: error.message,
+        username: '',
+        firstname: ''
+      };
+    }
+    throw error;
+  }
+};
