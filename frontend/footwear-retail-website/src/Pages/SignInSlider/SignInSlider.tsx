@@ -155,6 +155,9 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
               required
             />
           </Form.Group>
+          <Button variant="dark" type="submit" className="submit-button">
+            {isSignUp ? 'Sign Up' : 'Sign In'}
+          </Button>
           <div className="social-login">
             <Button 
               variant="light" 
@@ -165,13 +168,10 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
               Sign in with Google
             </Button>
           </div>
-          <Button variant="dark" type="submit" className="submit-button">
-            {isSignUp ? 'Sign Up' : 'Sign In'}
-          </Button>
         </Form>
-        <p className="toggle-sign-up" onClick={toggleSignUp}>
+        {/* <p className="toggle-sign-up" onClick={toggleSignUp}>
           {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-        </p>
+        </p> */}
       </div>
     </div>
   );
