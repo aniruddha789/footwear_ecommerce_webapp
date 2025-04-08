@@ -40,10 +40,10 @@ const Footer: React.FC = () => {
             </address>
             
             <div className="social-links">
-            <a href="https://instagram.com/urban_kicks_amt" target="_blank" rel="noopener noreferrer">Instagram</a>
+              <a href="https://instagram.com/urban_kicks_amt" target="_blank" rel="noopener noreferrer">Instagram</a>
               <a href="https://www.facebook.com/profile.php?id=61557063887144" target="_blank" rel="noopener noreferrer">Facebook</a>
               <a href="https://x.com/MyUrbanKicks" target="_blank" rel="noopener noreferrer">Twitter</a>
-             </div>
+            </div>
           </Col>
         </Row>
         

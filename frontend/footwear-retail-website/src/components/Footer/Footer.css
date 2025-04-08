@@ -69,6 +69,7 @@
 }
 
 /* Contact section */
+
 .footer-contact h5 {
   font-size: 14px;
   font-weight: 600;
@@ -86,6 +87,7 @@
   margin-bottom: 8px;
   color: #666;
   font-size: 14px;
+  text-align: center;
 }
 
 .footer-contact a {
@@ -97,6 +99,7 @@
 .footer-contact a:hover {
   color: #000;
 }
+
 
 .social-links {
   display: flex;
