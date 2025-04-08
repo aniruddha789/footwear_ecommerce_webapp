@@ -3,9 +3,11 @@ import { Product } from '../types/Product';
 import Address from '../types/Address';
 import JSEncrypt from 'jsencrypt';
 import { customAlert } from '../utils/alert';
+import { signUpWithEmailAndVerify, signInWithGoogle, firebaseSignOut } from './firebaseAuth';
+import { auth } from '../services/firebase';
 
-// const BASE_URL = 'http://localhost:8082';
-const BASE_URL = 'https://backend.myurbankicks.in:8082';
+const BASE_URL = 'http://localhost:8082';
+// const BASE_URL = 'https://backend.myurbankicks.in:8082';
 
 let cachedPublicKey: string | null = null;
 
@@ -49,14 +51,30 @@ interface RegisterResponse {
 }
 
 export const registerUser = async (username: string, email: string, password: string, firstname: string, lastname: string): Promise<RegisterResponse> => {
-  const response = await axios.post(`${BASE_URL}/user/register`, {
-    username,
-    email,
-    password,
-    firstname,
-    lastname
-  });
-  return response.data;
+  try {
+    // First create Firebase user for email verification
+    const firebaseUid = await signUpWithEmailAndVerify(email);
+    
+    // Then register in your Spring Boot backend
+    const response = await axios.post(`${BASE_URL}/user/register`, {
+      username,
+      email,
+      password,
+      firstname,
+      lastname,
+      firebaseUid // Store this to verify email later
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        status: 'ERROR',
+        message: error.message,
+        code: '400'
+      };
+    }
+    throw error;
+  }
 };
 
 interface LoginResponse {
@@ -116,22 +134,7 @@ export interface SubmitOrderRequest {
   items: SubmitOrderItem[];
 }
 
-interface OrderResponse {
-  id: number;
-  userId: number;
-  orderDate: string;
-  orderStatus: string;
-  orderItems: {
-    id: number;
-    orderID: number;
-    productID: number;
-    quantity: number;
-    size: string;
-    color: string;
-  }[];
-}
-
-export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
+export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<OrdersResponse> => {
   const response = await axios.post(
     `${BASE_URL}/order/submitOrder`,
     orderRequest
@@ -139,7 +142,7 @@ export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<Orde
   return response.data;
 };
 
-export const addItemToCart = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
+export const addItemToCart = async (orderRequest: SubmitOrderRequest): Promise<OrdersResponse> => {
   const response = await axios.post(
     `${BASE_URL}/order/cart/add`,
     orderRequest
@@ -151,7 +154,8 @@ export const clearAuthData = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('username');
   localStorage.removeItem('firstname');
-  cachedPublicKey = null; // Also clear the cached public key
+  cachedPublicKey = null;
+  firebaseSignOut();
 };
 
 interface CartIconResponse {
@@ -189,7 +193,6 @@ export const getCart = async (username: string): Promise<ShopOrder> => {
 };
 
 export const updateItemQuantity = async (username: string, itemId: number, newQuantity: number): Promise<ShopOrder> => {
-
     const response = await axios.post(
       `${BASE_URL}/order/cart/updateQuantity`,
       null,
@@ -198,7 +201,6 @@ export const updateItemQuantity = async (username: string, itemId: number, newQu
       }
     );
     return response.data;
-
 };
 
 export const removeItemFromCart = async (username: string, itemId: number): Promise<ShopOrder> => {
@@ -279,3 +281,127 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// Add this new function for Google sign-in
+export const loginWithGoogle = async (): Promise<LoginResponse> => {
+  try {
+    // First authenticate with Firebase
+    const googleUser = await signInWithGoogle();
+    
+    // Get Firebase ID token to verify with backend (more secure approach)
+    const idToken = await auth.currentUser?.getIdToken(true);
+    
+    // Then authenticate with your backend
+    const response = await axios.post(`${BASE_URL}/user/google-login`, {
+      firebaseUid: googleUser.firebaseUid,
+      email: googleUser.email,
+      displayName: googleUser.displayName,
+      photoURL: googleUser.photoURL,
+      idToken // Send this token for verification on backend
+    });
+    
+    // Clear any existing data before setting new data
+    clearAuthData();
+    
+    // Store authentication data in localStorage
+    if (response.data.token) {
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('username', response.data.username);
+      localStorage.setItem('firstname', response.data.firstname);
+    } else {
+      // If backend didn't provide a token, sign out from Firebase
+      await firebaseSignOut();
+    }
+    
+    return response.data;
+  } catch (error) {
+    // Sign out from Firebase on error
+    await firebaseSignOut();
+    
+    if (error instanceof Error) {
+      return {
+        token: null,
+        status: 'ERROR',
+        message: error.message,
+        username: '',
+        firstname: ''
+      };
+    }
+    throw error;
+  }
+};
+
+// Function to update user password
+export interface UpdatePasswordResponse {
+  status: string;
+  message: string;
+}
+
+export const updatePassword = async (username: string, password: string): Promise<UpdatePasswordResponse> => {
+  try {
+    // Encrypt password with public key
+    const publicKey = await getPublicKey();
+    const encrypt = new JSEncrypt();
+    encrypt.setPublicKey(publicKey);
+    const encryptedPassword = encrypt.encrypt(password);
+    
+    if (!encryptedPassword) {
+      throw new Error('Password encryption failed');
+    }
+
+    const response = await axios.post(`${BASE_URL}/user/updatePassword`, {
+      username,
+      password: encryptedPassword
+    });
+    
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        status: 'ERROR',
+        message: error.message
+      };
+    }
+    throw error;
+  }
+};
+
+// Define the OrderItem interface
+export interface OrderItem {
+  id: number;
+  productId: number;
+  name: string;
+  size: string;
+  color: string;
+  quantity: number;
+  image: string;
+}
+
+// Define the Order interface
+export interface Order {
+  id: number;
+  orderDate: string;
+  orderStatus: string;
+  orderItems: OrderItem[];
+}
+
+// Define the OrdersResponse interface
+export interface OrdersResponse {
+  id: number;
+  orderDate: string;
+  orderStatus: string;
+  userId: number;
+  orders: Order[];
+}
+
+// Update the getPlacedOrders function to return OrdersResponse
+export const getPlacedOrders = async (username: string): Promise<OrdersResponse> => {
+  const response = await axios.get(`${BASE_URL}/order/getOrders/${username}`);
+  return response.data; // Ensure this matches the OrdersResponse structure
+};
+
+// Add the cancelOrder function
+export const cancelOrder = async (orderId: number): Promise<ShopOrder> => {
+  const response = await axios.post(`${BASE_URL}/order/${orderId}/cancel`);
+  return response.data; // Ensure this matches the ShopOrder structure
+};

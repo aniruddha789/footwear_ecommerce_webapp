@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import './SignInSlider.css';
 import cancelIcon from '../../assets/cancel.png';
-import { loginUser, registerUser, clearAuthData } from '../../services/api';
+import { loginUser, registerUser, clearAuthData, loginWithGoogle } from '../../services/api';
+import { FcGoogle } from 'react-icons/fc';
 
 interface SignInSliderProps {
   show: boolean;
@@ -30,7 +31,7 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
         const response = await registerUser(username, email, password, firstname, lastname);
         console.log('response:' + JSON.stringify(response));
         if (response.status === 'PASS' || response.code === '200') {
-          setSuccess('User registered successfully! Please sign in.');
+          setSuccess('Registration successful! Please check your email for verification.');
           setIsSignUp(false);
           setPassword(''); // Clear password field after successful registration
         } else {
@@ -61,11 +62,32 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
     setPassword(''); // Clear password field after form submission
   };
 
-  const toggleSignUp = () => {
-    setIsSignUp(!isSignUp);
+  // const toggleSignUp = () => {
+  //   setIsSignUp(!isSignUp);
+  //   setError('');
+  //   setSuccess('');
+  //   setPassword(''); // Clear password when toggling between sign in and sign up
+  // };
+
+  const handleGoogleSignIn = async () => {
     setError('');
     setSuccess('');
-    setPassword(''); // Clear password when toggling between sign in and sign up
+    
+    try {
+      const response = await loginWithGoogle();
+      if (response.status === 'SUCCESS') {
+        onClose();
+        onLoginSuccess(response.username, response.firstname);
+      } else {
+        setError(response.message);
+      }
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
+    }
   };
 
   return (
@@ -135,10 +157,20 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
           <Button variant="dark" type="submit" className="submit-button">
             {isSignUp ? 'Sign Up' : 'Sign In'}
           </Button>
+          <div className="social-login">
+            <Button 
+              variant="light" 
+              className="google-button" 
+              onClick={handleGoogleSignIn}
+            >
+              <FcGoogle size={20} style={{ marginRight: '8px' }} />
+              Sign in with Google
+            </Button>
+          </div>
         </Form>
-        <p className="toggle-sign-up" onClick={toggleSignUp}>
+        {/* <p className="toggle-sign-up" onClick={toggleSignUp}>
           {isSignUp ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-        </p>
+        </p> */}
       </div>
     </div>
   );

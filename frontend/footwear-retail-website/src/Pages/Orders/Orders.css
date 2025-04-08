@@ -1,0 +1,175 @@
+.orders-page {
+  max-width: 100%;
+  margin: 0 auto;
+  padding-bottom: 80px;
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.orders-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  position: relative;
+  width: 100%;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.page-title {
+  flex: 1;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.orders-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 16px;
+  color: #666;
+}
+
+.orders-content {
+  padding: 20px;
+  width: 100%;
+}
+
+.no-orders-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40vh;
+  text-align: center;
+}
+
+.no-orders-message p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #666;
+}
+
+.start-shopping-btn {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-shopping-btn:hover {
+  background-color: #555;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Space between order tiles */
+}
+
+.order-item {
+  background-color: #f9f9f9; /* Light background for order cards */
+  border: 1px solid #ddd; /* Border for the cards */
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px; /* Padding inside the card */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  display: flex; /* Flexbox for layout */
+  flex-direction: column; /* Stack items vertically */
+}
+
+.order-item-header {
+  display: flex; /* Flexbox for header layout */
+  justify-content: space-between; /* Space between elements */
+  align-items: center; /* Center items vertically */
+}
+
+.order-item h3 {
+  margin: 0; /* Margin for the order ID */
+}
+
+.order-item img {
+  max-width: 100px; /* Set a max width for images */
+  margin-right: 15px; /* Space between image and text */
+}
+
+.order-details {
+  display: flex; /* Flexbox for details layout */
+  flex-direction: column; /* Stack items vertically */
+  margin-top: 10px; /* Space above details */
+}
+
+.item-card {
+  background-color: #fff; /* White background for item cards */
+  border: 1px solid #ddd; /* Border for item cards */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px; /* Padding inside item cards */
+  display: flex; /* Flexbox for item layout */
+  align-items: center; /* Center items vertically */
+  margin-top: 10px; /* Space between item cards */
+}
+
+.item-card img {
+  max-width: 80px; /* Set a max width for item images */
+  margin-right: 15px; /* Space between image and text */
+}
+
+.item-card h4 {
+  margin: 0; /* Remove margin for item title */
+}
+
+.item-card p {
+  margin: 5px 0; /* Margin for item details */
+}
+
+.order-item ul {
+  list-style-type: none; /* Remove default list styles */
+  padding: 0; /* Remove padding */
+}
+
+.order-item li {
+  padding: 5px 0; /* Padding for each item */
+  border-bottom: 1px solid #eee; /* Divider between items */
+}
+
+.order-item li:last-child {
+  border-bottom: none; /* Remove border for the last item */
+}
+
+.cancel-order-btn {
+  background-color: #ff4d4d; /* Red color for cancel */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.cancel-order-btn:hover {
+  background-color: #ff1a1a; /* Darker red on hover */
+}
+
+@media (min-width: 768px) {
+  .orders-page {
+    max-width: 600px;
+    margin: 0 auto;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+  }
+} 

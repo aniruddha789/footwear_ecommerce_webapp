@@ -10,15 +10,24 @@ import PaginatedProductGrid from "./containers/PaginatedProductGrid/PaginatedPro
 import { CartProvider } from './context/CartContext';
 import CartPage from './Pages/Cart/CartPage';
 import CheckoutPage from './Pages/Checkout/CheckoutPage';
-import OrderSuccessPage from './Pages/OrderSuccess/OrderSuccessPage';
+import OrderSuccessPage from './Pages/OrderSuccess/OrderConfirmation';
 import SearchResults from './Pages/SearchResults/SearchResults';
 import MobileNavBar from './components/MobileNavBar/MobileNavBar';
 import CategoriesPage from './Pages/Categories/CategoriesPage';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import ProfilePage from './Pages/Profile/ProfilePage';
+import AccountSettings from './Pages/AccountSettings/AccountSettings';
+import Orders from './Pages/Orders/Orders';
+import { setupAuthSync } from './services/firebaseAuth';
+import { useEffect } from 'react';
 
 function App() {
+  useEffect(() => {
+    // Setup the auth synchronization
+    setupAuthSync();
+  }, []);
+
   return (
     <CartProvider>
       <Router>
@@ -35,9 +44,11 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/order-success" element={<OrderSuccessPage />} />
+                <Route path="/order-confirmation" element={<OrderSuccessPage />} />
                 <Route path="/categories" element={<CategoriesPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/account-settings" element={<AccountSettings />} />
+                <Route path="/orders" element={<Orders />} />
               </Routes>
             </div>
           </Container>

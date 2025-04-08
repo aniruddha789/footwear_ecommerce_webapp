@@ -224,8 +224,8 @@ function NavBar() {
                     </p>
                     {showUserMenu && (
                       <div className="user-menu">
-                        <p onClick={() => console.log('View Profile')}>View Profile</p>
-                        <p onClick={() => console.log('Orders')}>Orders</p>
+                        <p onClick={() => navigate('/profile')}>View Profile</p>
+                        <p onClick={() => navigate('/orders')}>Orders</p>
                         <p onClick={handleSignOut}>Sign Out</p>
                       </div>
                     )}
