@@ -25,6 +25,9 @@ const ProductPage: React.FC = () => {
   const { addToCart } = useCart();
   const [imageLoading, setImageLoading] = useState(true);
 
+  // State for collapsing the product details section
+  const [isDetailsVisible, setIsDetailsVisible] = useState(true);
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -235,6 +238,26 @@ const ProductPage: React.FC = () => {
             <img src={fashion_icon} alt="Fresh Fashion" />
             <p>Fresh Fashion</p>
           </div>
+        </div>
+        <div className="product-details-section">
+          <div className="details-header" onClick={() => setIsDetailsVisible(!isDetailsVisible)}>
+            <h2>Product Details and Overview</h2>
+            <span className={`arrow ${isDetailsVisible ? 'up' : 'down'}`}>^</span>
+          </div>
+          {isDetailsVisible && (
+            <div className="details-content">
+              <p><strong>SKU:</strong> {product.sku}</p>
+              <p><strong>Description:</strong> {product.description}</p>
+              <p><strong>Dimensions:</strong> {product.dimensions}</p>
+              <p><strong>Net Quantity:</strong> {product.netQuantity}</p>
+              <p><strong>Fit:</strong> {product.fit}</p>
+              <p><strong>Care Instruction:</strong> {product.careInstruction}</p>
+              <p><strong>Fabric Composition:</strong> {product.fabricComposition}</p>
+              <p><strong>Model Fit:</strong> {product.modelFit}</p>
+              <p><strong>Manufactured and Marketed By:</strong> {product.manufacturer}</p>
+              <p><strong>Country Of Origin:</strong> {product.countryOfOrigin}</p>
+            </div>
+          )}
         </div>
       </div>
       {showSlider && (

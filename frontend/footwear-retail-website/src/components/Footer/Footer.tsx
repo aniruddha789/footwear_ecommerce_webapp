@@ -30,17 +30,7 @@ const Footer: React.FC = () => {
               <li><Link to="/accessories">Accessories</Link></li>
             </ul>
           </Col>
-          
-          <Col lg={2} md={6} className="footer-links">
-            <h5>Help</h5>
-            <ul>
-              <li><Link to="/contact">Contact Us</Link></li>
-              <li><Link to="/shipping">Shipping</Link></li>
-              <li><Link to="/returns">Returns</Link></li>
-              <li><Link to="/faq">FAQ</Link></li>
-            </ul>
-          </Col>
-          
+
           <Col lg={4} md={6} className="footer-contact">
             <h5>Contact</h5>
             <address>
@@ -60,7 +50,9 @@ const Footer: React.FC = () => {
         <div className="footer-bottom">
           <p className="copyright">&copy; {currentYear} Urban Kicks. All rights reserved.</p>
           <div className="legal-links">
-            <Link to="/privacy">Privacy Policy</Link>
+            <Link to="/returns-policy">Returns Policy</Link>
+            <Link to="/shipping-policy">Shipping Policy</Link>
+            <Link to="/privacy-policy">Privacy Policy</Link>
             <Link to="/terms">Terms of Service</Link>
           </div>
         </div>

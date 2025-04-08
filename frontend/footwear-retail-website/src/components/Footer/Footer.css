@@ -102,6 +102,7 @@
   display: flex;
   gap: 24px;
   margin-top: 20px;
+  justify-content: center;
 }
 
 .social-links a {
