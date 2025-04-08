@@ -21,6 +21,10 @@ import AccountSettings from './Pages/AccountSettings/AccountSettings';
 import Orders from './Pages/Orders/Orders';
 import { setupAuthSync } from './services/firebaseAuth';
 import { useEffect } from 'react';
+import ReturnsPolicy from './Pages/Policies/ReturnsPolicy';
+import ShippingPolicy from './Pages/Policies/ShippingPolicy';
+import PrivacyPolicy from './Pages/Policies/PrivacyPolicy';
+import TermsAndConditions from "./Pages/Policies/TermsAndConditions";
 
 function App() {
   useEffect(() => {
@@ -49,6 +53,10 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/account-settings" element={<AccountSettings />} />
                 <Route path="/orders" element={<Orders />} />
+                <Route path="/returns-policy" element={<ReturnsPolicy />} />
+                <Route path="/shipping-policy" element={<ShippingPolicy />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms" element={<TermsAndConditions />} />
               </Routes>
             </div>
           </Container>

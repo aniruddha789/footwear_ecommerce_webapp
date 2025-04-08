@@ -1,0 +1,30 @@
+.terms-container {
+  padding: 2rem; /* Padding around the content */
+  font-family: Arial, sans-serif; /* Font family */
+  color: #333; /* Text color */
+  line-height: 1.6; /* Line height for readability */
+}
+
+h1 {
+  font-size: 24px; /* Size for the main heading */
+  margin-bottom: 1rem; /* Space below the heading */
+}
+
+h2 {
+  font-size: 20px; /* Size for subheadings */
+  margin-top: 1.5rem; /* Space above subheadings */
+  margin-bottom: 0.5rem; /* Space below subheadings */
+}
+
+ol {
+  margin-left: 1.5rem; /* Indent ordered list */
+}
+
+ul {
+  margin-left: 1.5rem; /* Indent unordered list */
+}
+
+p {
+  text-align: left; /* Left align text */
+  margin-bottom: 1rem; /* Space below paragraphs */
+}
