@@ -75,7 +75,7 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
         next={fetchProducts}
         hasMore={hasMore}
         loader={<h4>Loading ...</h4>}
-        endMessage={<p>No more products to load.</p>}
+        endMessage={<p></p>}
       >
         <div className="fade-in">
           <ProductGrid products={products} parentBreadcrumb={category || ''} />

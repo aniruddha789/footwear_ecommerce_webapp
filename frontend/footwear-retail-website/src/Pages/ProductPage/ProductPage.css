@@ -204,3 +204,52 @@ h2 {
 .size-option.selected {
   box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(0, 0, 0, 0.3);
 }
+
+.product-details-section {
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.product-details-section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.details-content {
+  background-color: #f9f9f9;
+}
+
+.product-details-section p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.custom-accordion-button {
+  border: none;
+  background: transparent;
+  color: #000000 !important;
+  font-weight: 300;
+}
+
+.custom-accordion-button:focus {
+  box-shadow: none;
+}
+
+.custom-accordion-button.collapsed {
+  color: #a9a9a9;
+}
+
+.custom-accordion-button:not(.collapsed) {
+  color: #a9a9a9;
+  background-color: white;
+}
+
+
+.accordion-button {
+  font-size: 16px; /* Adjust the size of the text and arrow */
+}
+
+.accordion-button::after {
+  
+}

@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import './ProductPage.css';
-import { getProductById, addItemToCart, SubmitOrderRequest } from '../../services/api';
-import { Product } from '../../types/Product';
-import { useParams } from 'react-router-dom';
-import ImageSliderPopup from '../../components/ImageSliderPopup/ImageSliderPopup';
-import useIsMobile from '../../hooks/useIsMobile'; // Import the custom hook
-import shipping_icon from '../../assets/fast-delivery.png'
-import returns_icon from '../../assets/return-box.png'
-import fashion_icon from '../../assets/clean-clothes.png'
-import { colorMap } from '../../utils/colorMap'
-import { useCart } from '../../context/CartContext';
+import React, { useState, useEffect } from "react";
+import "./ProductPage.css";
+import {
+  getProductById,
+  addItemToCart,
+  SubmitOrderRequest,
+} from "../../services/api";
+import { Product } from "../../types/Product";
+import { useParams } from "react-router-dom";
+import ImageSliderPopup from "../../components/ImageSliderPopup/ImageSliderPopup";
+import useIsMobile from "../../hooks/useIsMobile"; // Import the custom hook
+import shipping_icon from "../../assets/fast-delivery.png";
+import returns_icon from "../../assets/return-box.png";
+import fashion_icon from "../../assets/clean-clothes.png";
+import { colorMap } from "../../utils/colorMap";
+import { useCart } from "../../context/CartContext";
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -18,8 +22,8 @@ const ProductPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [showSlider, setShowSlider] = useState(false);
   const isMobile = useIsMobile(); // Use the custom hook
-  const [selectedColor, setSelectedColor] = useState<string>('');
-  const [selectedSize, setSelectedSize] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [availableSizes, setAvailableSizes] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]); // State for images
   const { addToCart } = useCart();
@@ -32,7 +36,7 @@ const ProductPage: React.FC = () => {
           const fetchedProduct = await getProductById(Number(id));
           setProduct(fetchedProduct);
           console.log("Inventory: " + fetchedProduct.inventory);
-          
+
           // Set initial selected color and size
           const selectedInventory = fetchedProduct.inventory[0]; // Get the first inventory item
           if (selectedInventory) {
@@ -40,22 +44,27 @@ const ProductPage: React.FC = () => {
             setSelectedSize(selectedInventory.size);
           } else {
             // If no inventory, set default images from product.image
-            setImages(fetchedProduct.image ? fetchedProduct.image.split(';') : []);
+            setImages(
+              fetchedProduct.image ? fetchedProduct.image.split(";") : []
+            );
           }
 
           // Determine the images to display
-          const inventoryImage = selectedInventory ? selectedInventory.image : null;
-          const initialImages = (inventoryImage && inventoryImage.trim() !== "") 
-            ? inventoryImage.split(';') // Split inventory image into an array
-            : fetchedProduct.image && fetchedProduct.image.trim() !== "" 
-              ? fetchedProduct.image.split(';') // Split product image into an array
+          const inventoryImage = selectedInventory
+            ? selectedInventory.image
+            : null;
+          const initialImages =
+            inventoryImage && inventoryImage.trim() !== ""
+              ? inventoryImage.split(";") // Split inventory image into an array
+              : fetchedProduct.image && fetchedProduct.image.trim() !== ""
+              ? fetchedProduct.image.split(";") // Split product image into an array
               : []; // Fallback to an empty array if no images are available
           setImages(initialImages); // Set initial images
-          setAvailableSizes(fetchedProduct.inventory.map(item => item.size)); // Set available sizes based on inventory
+          setAvailableSizes(fetchedProduct.inventory.map((item) => item.size)); // Set available sizes based on inventory
         }
       } catch (err) {
-        setError('Failed to fetch product. Please try again later.');
-        console.error('Error fetching product:', err);
+        setError("Failed to fetch product. Please try again later.");
+        console.error("Error fetching product:", err);
       } finally {
         setLoading(false);
       }
@@ -67,18 +76,23 @@ const ProductPage: React.FC = () => {
   useEffect(() => {
     if (product) {
       // Find the first inventory item that matches the selected color
-      const matchingInventory = product.inventory.find(item => item.color === selectedColor);
+      const matchingInventory = product.inventory.find(
+        (item) => item.color === selectedColor
+      );
       if (matchingInventory) {
         const inventoryImage = matchingInventory.image;
-        const newImages = (inventoryImage && inventoryImage.trim() !== "") 
-          ? inventoryImage.split(';') // Split inventory image into an array
-          : product.image && product.image.trim() !== "" 
-            ? product.image.split(';') // Split product image into an array
+        const newImages =
+          inventoryImage && inventoryImage.trim() !== ""
+            ? inventoryImage.split(";") // Split inventory image into an array
+            : product.image && product.image.trim() !== ""
+            ? product.image.split(";") // Split product image into an array
             : []; // Fallback to an empty array if no images are available
         setImages(newImages); // Set images for the selected color
-        setAvailableSizes(product.inventory
-          .filter(item => item.color === selectedColor)
-          .map(item => item.size)); // Update available sizes
+        setAvailableSizes(
+          product.inventory
+            .filter((item) => item.color === selectedColor)
+            .map((item) => item.size)
+        ); // Update available sizes
       } else {
         setAvailableSizes([]); // Clear sizes if no inventory found
       }
@@ -86,7 +100,10 @@ const ProductPage: React.FC = () => {
   }, [selectedColor, product]);
 
   const cacheImages = (color: string, images: string[]) => {
-    localStorage.setItem(`product-${id}-color-${color}`, JSON.stringify(images));
+    localStorage.setItem(
+      `product-${id}-color-${color}`,
+      JSON.stringify(images)
+    );
   };
 
   const getCachedImages = (color: string): string[] | null => {
@@ -101,32 +118,34 @@ const ProductPage: React.FC = () => {
 
   const handleAddToCart = async () => {
     if (!selectedSize || !selectedColor) {
-      alert('Please select both size and color');
+      alert("Please select both size and color");
       return;
     }
 
     if (!product) {
-      alert('Product not found');
+      alert("Product not found");
       return;
     }
 
     try {
       // Get username from localStorage
-      const username = localStorage.getItem('username');
+      const username = localStorage.getItem("username");
       if (!username) {
-        alert('Please sign in to add items to cart');
+        alert("Please sign in to add items to cart");
         return;
       }
 
       // Prepare the request payload
       const orderRequest: SubmitOrderRequest = {
         username: username,
-        items: [{
-          id: product.id, // This is already a number from the Product type
-          quantity: 1,
-          size: selectedSize,
-          color: selectedColor
-        }]
+        items: [
+          {
+            id: product.id, // This is already a number from the Product type
+            quantity: 1,
+            size: selectedSize,
+            color: selectedColor,
+          },
+        ],
       };
 
       // Add to backend cart
@@ -136,10 +155,10 @@ const ProductPage: React.FC = () => {
       addToCart(product, selectedSize, selectedColor);
 
       // Show success message
-      alert('Item added to cart successfully!');
+      alert("Item added to cart successfully!");
     } catch (error) {
-      console.error('Error adding item to cart:', error);
-      alert('Failed to add item to cart. Please try again.');
+      console.error("Error adding item to cart:", error);
+      alert("Failed to add item to cart. Please try again.");
     }
   };
 
@@ -155,13 +174,13 @@ const ProductPage: React.FC = () => {
   const getColorHex = (colorString: string): string => {
     const lowerCaseColor = colorString.toLowerCase();
     return colorMap[lowerCaseColor] || "#000000"; // Default to black if not found
-  }
+  };
 
   // Check if the product is out of stock
   const isOutOfStock = availableSizes.length === 0;
 
   return (
-    <div className={`product-page ${isMobile ? 'mobile' : 'desktop'}`}>
+    <div className={`product-page ${isMobile ? "mobile" : "desktop"}`}>
       <div className="product-images">
         {isMobile ? (
           <img
@@ -170,44 +189,62 @@ const ProductPage: React.FC = () => {
             className="grid-image"
             onClick={() => setShowSlider(true)}
             onLoad={handleImageLoad}
-            style={{ display: imageLoading ? 'none' : 'block' }}
+            style={{ display: imageLoading ? "none" : "block" }}
           />
         ) : (
-          images.length > 0 && images.map((img, index) => (
-            <img key={index} src={img} alt={product.name} className="grid-image" onLoad={handleImageLoad} />
+          images.length > 0 &&
+          images.map((img, index) => (
+            <img
+              key={index}
+              src={img}
+              alt={product.name}
+              className="grid-image"
+              onLoad={handleImageLoad}
+            />
           ))
         )}
       </div>
       <div className="product-details">
         <h2 className="brand">{product.brandid}</h2>
         <h1 className="product-name">{product.name}</h1>
-        <p className="price">₹ {product.listprice} <span className="mrp">MRP incl. of all taxes</span></p>
+        <p className="price">
+          ₹ {product.listprice}{" "}
+          <span className="mrp">MRP incl. of all taxes</span>
+        </p>
         <div className="color-section">
           <p className="color-label">COLOURS</p>
           <div className="color-options">
-            {Array.from(new Set(product.inventory.map(item => item.color))).map(color => (
+            {Array.from(
+              new Set(product.inventory.map((item) => item.color))
+            ).map((color) => (
               <div
                 key={color}
-                className={`color-option ${color === selectedColor ? 'selected' : ''}`}
+                className={`color-option ${
+                  color === selectedColor ? "selected" : ""
+                }`}
                 style={{ backgroundColor: getColorHex(color) }}
                 onClick={() => {
                   setSelectedColor(color);
-                  setSelectedSize(''); // Reset size when color changes
+                  setSelectedSize(""); // Reset size when color changes
                 }}
               ></div>
             ))}
           </div>
         </div>
         <div className="size-section">
-          <p className="size-label">SIZE <span className="size-guide">SIZE GUIDE</span></p>
+          <p className="size-label">
+            SIZE <span className="size-guide">SIZE GUIDE</span>
+          </p>
           {isOutOfStock ? (
             <div className="out-of-stock">Out of Stock</div>
           ) : (
             <div className="size-options">
-              {availableSizes.map(size => (
+              {availableSizes.map((size) => (
                 <button
                   key={size}
-                  className={`size-option ${size === selectedSize ? 'selected' : ''}`}
+                  className={`size-option ${
+                    size === selectedSize ? "selected" : ""
+                  }`}
                   onClick={() => setSelectedSize(size)}
                 >
                   {size}
@@ -216,10 +253,7 @@ const ProductPage: React.FC = () => {
             </div>
           )}
         </div>
-        <button 
-          className="add-to-bag"
-          onClick={handleAddToCart}
-        >
+        <button className="add-to-bag" onClick={handleAddToCart}>
           ADD TO BAG
         </button>
         <div className="product-features">
@@ -234,6 +268,39 @@ const ProductPage: React.FC = () => {
           <div className="feature">
             <img src={fashion_icon} alt="Fresh Fashion" />
             <p>Fresh Fashion</p>
+          </div>
+        </div>
+        <div className="accordion product-details-section">
+          <h2 className="accordion-header details-header">
+            <button
+              className="accordion-button custom-accordion-button"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              Product Details and Overview
+            </button>
+          </h2>    
+          <div id="collapseOne" className="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div className="accordion-body details-content">
+            <p>
+              <strong>Description:</strong> {product.description}
+            </p>
+            <p>
+              <strong>Net Quantity:</strong> 1 
+            </p>
+            <p>
+              <strong>Care Instruction:</strong> Normal Wash
+            </p>
+            <p>
+              <strong>Marketed By:</strong>{" "} Urban Kicks
+            </p>
+            <p>
+              <strong>Country Of Origin:</strong> India
+            </p>
+          </div>
           </div>
         </div>
       </div>
