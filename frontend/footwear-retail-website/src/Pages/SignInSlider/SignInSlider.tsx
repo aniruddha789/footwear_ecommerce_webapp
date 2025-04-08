@@ -3,7 +3,6 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import './SignInSlider.css';
 import cancelIcon from '../../assets/cancel.png';
 import { loginUser, registerUser, clearAuthData, loginWithGoogle } from '../../services/api';
-import { isEmailVerified } from '../../services/firebaseAuth';
 import { FcGoogle } from 'react-icons/fc';
 
 interface SignInSliderProps {
@@ -63,12 +62,12 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
     setPassword(''); // Clear password field after form submission
   };
 
-  const toggleSignUp = () => {
-    setIsSignUp(!isSignUp);
-    setError('');
-    setSuccess('');
-    setPassword(''); // Clear password when toggling between sign in and sign up
-  };
+  // const toggleSignUp = () => {
+  //   setIsSignUp(!isSignUp);
+  //   setError('');
+  //   setSuccess('');
+  //   setPassword(''); // Clear password when toggling between sign in and sign up
+  // };
 
   const handleGoogleSignIn = async () => {
     setError('');

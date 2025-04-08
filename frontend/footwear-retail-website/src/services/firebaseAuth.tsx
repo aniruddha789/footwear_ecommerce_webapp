@@ -3,11 +3,9 @@ import {
   sendEmailVerification,
   signInWithPopup,
   signOut,
-  onAuthStateChanged,
-  User as FirebaseUser
+  onAuthStateChanged
 } from 'firebase/auth';
 import { auth, googleProvider } from './firebase';
-import { clearAuthData } from './api'; // Make sure this is properly imported
 
 export const signUpWithEmailAndVerify = async (email: string): Promise<string> => {
   try {
@@ -23,9 +21,14 @@ export const signUpWithEmailAndVerify = async (email: string): Promise<string> =
     
     // Return Firebase UID to store in your own system
     return user.uid;
-  } catch (error: any) {
-    console.error('Firebase auth error:', error);
-    throw new Error(error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Firebase auth error:', error);
+      throw new Error(error.message);
+    } else {
+      console.error('Unexpected error:', error);
+      throw new Error('An unexpected error occurred.');
+    }
   }
 };
 
@@ -60,9 +63,14 @@ export const signInWithGoogle = async (): Promise<{
       isVerified: user.emailVerified,
       photoURL: user.photoURL
     };
-  } catch (error: any) {
-    console.error('Google sign-in error:', error);
-    throw new Error(error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Google sign-in error:', error);
+      throw new Error(error.message);
+    } else {
+      console.error('Unexpected error:', error);
+      throw new Error('An unexpected error occurred.');
+    }
   }
 };
 

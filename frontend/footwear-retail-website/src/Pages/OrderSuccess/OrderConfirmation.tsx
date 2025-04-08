@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import './OrderSuccessPage.css';
+import './OrderConfirmation.css';
 
-const OrderSuccessPage: React.FC = () => {
+const OrderConfirmation: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const orderDetails = location.state?.orderDetails;
@@ -46,4 +46,4 @@ const OrderSuccessPage: React.FC = () => {
   );
 };
 
-export default OrderSuccessPage; 
+export default OrderConfirmation; 

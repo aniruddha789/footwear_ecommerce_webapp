@@ -139,3 +139,16 @@
 /* Make sure there are no conflicting styles like: */
 
 /* Or z-index issues that might place other elements above the navbar */
+
+/* Bootstrap alerts override */
+.alert-success {
+  color: #155724 !important;
+  background-color: #d4edda !important;
+  border-color: #c3e6cb !important;
+}
+
+.alert-danger {
+  color: #721c24 !important;
+  background-color: #f8d7da !important;
+  border-color: #f5c6cb !important;
+}

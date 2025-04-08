@@ -6,8 +6,8 @@ import { customAlert } from '../utils/alert';
 import { signUpWithEmailAndVerify, signInWithGoogle, firebaseSignOut } from './firebaseAuth';
 import { auth } from '../services/firebase';
 
-// const BASE_URL = 'http://localhost:8082';
-const BASE_URL = 'https://backend.myurbankicks.in:8082';
+const BASE_URL = 'http://localhost:8082';
+// const BASE_URL = 'https://backend.myurbankicks.in:8082';
 
 let cachedPublicKey: string | null = null;
 
@@ -134,22 +134,7 @@ export interface SubmitOrderRequest {
   items: SubmitOrderItem[];
 }
 
-interface OrderResponse {
-  id: number;
-  userId: number;
-  orderDate: string;
-  orderStatus: string;
-  orderItems: {
-    id: number;
-    orderID: number;
-    productID: number;
-    quantity: number;
-    size: string;
-    color: string;
-  }[];
-}
-
-export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
+export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<OrdersResponse> => {
   const response = await axios.post(
     `${BASE_URL}/order/submitOrder`,
     orderRequest
@@ -157,7 +142,7 @@ export const placeOrder = async (orderRequest: SubmitOrderRequest): Promise<Orde
   return response.data;
 };
 
-export const addItemToCart = async (orderRequest: SubmitOrderRequest): Promise<OrderResponse> => {
+export const addItemToCart = async (orderRequest: SubmitOrderRequest): Promise<OrdersResponse> => {
   const response = await axios.post(
     `${BASE_URL}/order/cart/add`,
     orderRequest
@@ -208,7 +193,6 @@ export const getCart = async (username: string): Promise<ShopOrder> => {
 };
 
 export const updateItemQuantity = async (username: string, itemId: number, newQuantity: number): Promise<ShopOrder> => {
-
     const response = await axios.post(
       `${BASE_URL}/order/cart/updateQuantity`,
       null,
@@ -217,7 +201,6 @@ export const updateItemQuantity = async (username: string, itemId: number, newQu
       }
     );
     return response.data;
-
 };
 
 export const removeItemFromCart = async (username: string, itemId: number): Promise<ShopOrder> => {
@@ -346,4 +329,79 @@ export const loginWithGoogle = async (): Promise<LoginResponse> => {
     }
     throw error;
   }
+};
+
+// Function to update user password
+export interface UpdatePasswordResponse {
+  status: string;
+  message: string;
+}
+
+export const updatePassword = async (username: string, password: string): Promise<UpdatePasswordResponse> => {
+  try {
+    // Encrypt password with public key
+    const publicKey = await getPublicKey();
+    const encrypt = new JSEncrypt();
+    encrypt.setPublicKey(publicKey);
+    const encryptedPassword = encrypt.encrypt(password);
+    
+    if (!encryptedPassword) {
+      throw new Error('Password encryption failed');
+    }
+
+    const response = await axios.post(`${BASE_URL}/user/updatePassword`, {
+      username,
+      password: encryptedPassword
+    });
+    
+    return response.data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        status: 'ERROR',
+        message: error.message
+      };
+    }
+    throw error;
+  }
+};
+
+// Define the OrderItem interface
+export interface OrderItem {
+  id: number;
+  productId: number;
+  name: string;
+  size: string;
+  color: string;
+  quantity: number;
+  image: string;
+}
+
+// Define the Order interface
+export interface Order {
+  id: number;
+  orderDate: string;
+  orderStatus: string;
+  orderItems: OrderItem[];
+}
+
+// Define the OrdersResponse interface
+export interface OrdersResponse {
+  id: number;
+  orderDate: string;
+  orderStatus: string;
+  userId: number;
+  orders: Order[];
+}
+
+// Update the getPlacedOrders function to return OrdersResponse
+export const getPlacedOrders = async (username: string): Promise<OrdersResponse> => {
+  const response = await axios.get(`${BASE_URL}/order/getOrders/${username}`);
+  return response.data; // Ensure this matches the OrdersResponse structure
+};
+
+// Add the cancelOrder function
+export const cancelOrder = async (orderId: number): Promise<ShopOrder> => {
+  const response = await axios.post(`${BASE_URL}/order/${orderId}/cancel`);
+  return response.data; // Ensure this matches the ShopOrder structure
 };

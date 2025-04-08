@@ -109,13 +109,13 @@ const CheckoutPage: React.FC = () => {
       clearCart();
       
       // Navigate to success page with order details
-      navigate('/order-success', {
+      navigate('/order-confirmation', {
         state: {
           orderDetails: {
             orderId: response.id,
             orderStatus: response.orderStatus,
             orderDate: response.orderDate,
-            items: response.orderItems
+            items: response.orders
           }
         }
       });
