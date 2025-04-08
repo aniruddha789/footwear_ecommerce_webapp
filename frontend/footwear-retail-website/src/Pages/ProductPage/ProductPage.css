@@ -224,3 +224,32 @@ h2 {
   font-size: 14px;
   color: #333;
 }
+
+.custom-accordion-button {
+  border: none;
+  background: transparent;
+  color: #000000 !important;
+  font-weight: 300;
+}
+
+.custom-accordion-button:focus {
+  box-shadow: none;
+}
+
+.custom-accordion-button.collapsed {
+  color: #a9a9a9;
+}
+
+.custom-accordion-button:not(.collapsed) {
+  color: #a9a9a9;
+  background-color: white;
+}
+
+
+.accordion-button {
+  font-size: 16px; /* Adjust the size of the text and arrow */
+}
+
+.accordion-button::after {
+  
+}
