@@ -86,16 +86,6 @@ const PrivacyPolicy: React.FC = () => {
         We may update this policy periodically. Please review it regularly. We will notify significant changes as
         required by applicable law.
       </p>
-
-      <h2>Grievance Officer</h2>
-      <p>
-        Insert Name of the Officer<br />
-        Designation<br />
-        Insert Name and Address of the Company<br />
-        Contact us:<br />
-        Phone: [Insert Phone Number]<br />
-        Time: Monday - Friday (9:00 AM - 6:00 PM)
-      </p>
     </div>
   );
 };
