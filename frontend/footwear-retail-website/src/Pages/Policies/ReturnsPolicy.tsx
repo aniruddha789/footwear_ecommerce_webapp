@@ -15,7 +15,8 @@ You agree that there may be a certain category of products / items that are exem
 / return accepted request(s) (as applicable), once your returned product / item is received and inspected
 by us, we will send you an email to notify you about receipt of the returned / exchanged product. Further.
 If the same has been approved after the quality check at our end, your request (i.e. return / exchange) will
-be processed in accordance with our policies.</p>
+be processed in accordance with our policies.
+Refund will be credited to your original payment method with in 5 to 7 business </p>
     </div>
   );
 };
