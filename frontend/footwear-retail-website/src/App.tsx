@@ -25,6 +25,7 @@ import ReturnsPolicy from './Pages/Policies/ReturnsPolicy';
 import ShippingPolicy from './Pages/Policies/ShippingPolicy';
 import PrivacyPolicy from './Pages/Policies/PrivacyPolicy';
 import TermsAndConditions from "./Pages/Policies/TermsAndConditions";
+import ContactUs from "./Pages/ContactUs/ContactUs";
 
 function App() {
   useEffect(() => {
@@ -57,6 +58,7 @@ function App() {
                 <Route path="/shipping-policy" element={<ShippingPolicy />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<TermsAndConditions />} />
+                <Route path="/contact-us" element={<ContactUs />} />
               </Routes>
             </div>
           </Container>
