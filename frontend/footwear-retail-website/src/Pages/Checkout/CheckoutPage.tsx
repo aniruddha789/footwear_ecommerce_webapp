@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './CheckoutPage.css';
 import { useCart } from '../../context/CartContext';
 import Address from '../../types/Address';
-import { getAddresses, placeOrder, initiatePayment, getCart, cancelOrder } from '../../services/api';
+import { getAddresses, placeOrder, initiatePayment, getCart, cancelOrder, addAddress } from '../../services/api';
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +11,7 @@ const CheckoutPage: React.FC = () => {
   const isLoggedIn = localStorage.getItem('token') !== null;
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [showAddressForm, setShowAddressForm] = useState(false);
   const [formData, setFormData] = useState<Omit<Address, 'id'>>({
     addressType: '',
     addressLine1: '',
@@ -24,6 +25,7 @@ const CheckoutPage: React.FC = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const addressBoxesRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isAddingAddress, setIsAddingAddress] = useState(false);
  
   useEffect(() => {
     const handleResize = () => {
@@ -53,6 +55,13 @@ const CheckoutPage: React.FC = () => {
       }
       const addressList = await getAddresses(username);
       setAddresses(addressList);
+      // If there are addresses, select the first one by default
+      if (addressList.length > 0) {
+        handleAddressSelect(addressList[0]);
+      } else {
+        // If no addresses, show the form to add one
+        setShowAddressForm(true);
+      }
     } catch (error) {
       console.error('Error fetching addresses:', error);
     }
@@ -60,24 +69,52 @@ const CheckoutPage: React.FC = () => {
 
   const handleAddressSelect = (address: Address) => {
     setSelectedAddress(address);
-    setFormData({
-      addressType: address.addressType,
-      addressLine1: address.addressLine1,
-      addressLine2: address.addressLine2,
-      city: address.city,
-      district: address.district,
-      state: address.state,
-      pincode: address.pincode,
-      country: address.country
-    });
+    setShowAddressForm(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'pincode' ? parseInt(value) || 0 : value
     }));
+  };
+
+  const handleAddNewAddress = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsAddingAddress(true);
+    try {
+      const username = localStorage.getItem('username');
+      if (!username) {
+        throw new Error('User not logged in');
+      }
+
+      // Add the new address
+      await addAddress(username, formData);
+      
+      // Reset form
+      setFormData({
+        addressType: '',
+        addressLine1: '',
+        addressLine2: '',
+        city: '',
+        district: '',
+        state: '',
+        pincode: 0,
+        country: ''
+      });
+      
+      // Refresh addresses list
+      await fetchAddresses();
+      
+      // Hide the form
+      setShowAddressForm(false);
+    } catch (error) {
+      console.error('Error adding address:', error);
+      alert('Failed to add address. Please try again.');
+    } finally {
+      setIsAddingAddress(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,17 +125,22 @@ const CheckoutPage: React.FC = () => {
         throw new Error('User not logged in');
       }
 
+      if (!selectedAddress) {
+        throw new Error('Please select a delivery address');
+      }
+
       // Prepare order items
       const orderItems = items.map(item => ({
         id: item.product.id,
         quantity: item.quantity,
         size: item.selectedSize,
-        color: item.selectedColor // Assuming product has color property
+        color: item.selectedColor
       }));
 
-      // Create order request
+      // Create order request with addressId
       const orderRequest = {
         username: username,
+        addressId: selectedAddress.id,
         items: orderItems
       };
 
@@ -121,7 +163,7 @@ const CheckoutPage: React.FC = () => {
       });
     } catch (error) {
       console.error('Error placing order:', error);
-      // You might want to show an error message to the user here
+      alert(error instanceof Error ? error.message : 'Failed to place order');
     }
   };
 
@@ -156,6 +198,10 @@ const CheckoutPage: React.FC = () => {
         throw new Error('User not logged in');
       }
 
+      if (!selectedAddress) {
+        throw new Error('Please select a delivery address');
+      }
+
       // Calculate total amount in rupees first
       const totalInRupees = items.reduce((sum, item) => 
         sum + (item.product.listprice * item.quantity), 0
@@ -178,9 +224,10 @@ const CheckoutPage: React.FC = () => {
           callback: async (response) => {
             if (response === 'CONCLUDED') {
               try {
-                // Place order only after successful payment
+                // Place order only after successful payment, including addressId
                 const orderResponse = await placeOrder({
                   username: username,
+                  addressId: selectedAddress.id,
                   items: items.map(item => ({
                     id: item.product.id,
                     quantity: item.quantity,
@@ -206,7 +253,7 @@ const CheckoutPage: React.FC = () => {
                 alert('Payment successful but order placement failed. Please contact support.');
               }
             } else if (response === 'USER_CANCEL') {
-              await cancelOrder(cartId)
+              await cancelOrder(cartId);
               alert('Payment was cancelled by the user.');
             }
           },
@@ -217,7 +264,7 @@ const CheckoutPage: React.FC = () => {
       }
     } catch (error) {
       console.error('Error initiating payment:', error);
-      alert('Failed to initiate payment. Please try again.');
+      alert(error instanceof Error ? error.message : 'Failed to initiate payment. Please try again.');
     }
   };
 
@@ -234,151 +281,191 @@ const CheckoutPage: React.FC = () => {
       <div className="checkout-container">
         <div className="checkout-form">
           <div className="saved-addresses">
-            <h2>Saved Addresses</h2>
-            <div className="address-boxes-container">
-              {canScrollLeft && (
+            <div className="saved-addresses-header">
+              <h2>Saved Addresses</h2>
+              {addresses.length > 0 && (
                 <button 
-                  className="slider-arrow left"
-                  onClick={() => handleScroll('left')}
-                  aria-label="Scroll left"
+                  className="add-address-btn"
+                  onClick={() => setShowAddressForm(true)}
                 >
-                  ←
-                </button>
-              )}
-              <div 
-                className="address-boxes"
-                ref={addressBoxesRef}
-                onScroll={(e) => setScrollPosition(e.currentTarget.scrollLeft)}
-              >
-                {addresses.map(address => (
-                  <div 
-                    key={address.id}
-                    className={`address-box ${selectedAddress?.id === address.id ? 'selected' : ''}`}
-                    onClick={() => handleAddressSelect(address)}
-                  >
-                    <div className="address-type">{address.addressType}</div>
-                    <div className="address-details">
-                      <p>{address.addressLine1}</p>
-                      <p>{address.addressLine2}</p>
-                      <p>{address.city}, {address.district}</p>
-                      <p>{address.state} - {address.pincode}</p>
-                      <p>{address.country}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {canScrollRight && (
-                <button 
-                  className="slider-arrow right"
-                  onClick={() => handleScroll('right')}
-                  aria-label="Scroll right"
-                >
-                  →
+                  Add New Address
                 </button>
               )}
             </div>
+            {addresses.length > 0 && (
+              <div className="address-boxes-container">
+                {canScrollLeft && (
+                  <button 
+                    className="slider-arrow left"
+                    onClick={() => handleScroll('left')}
+                    aria-label="Scroll left"
+                  >
+                    ←
+                  </button>
+                )}
+                <div 
+                  className="address-boxes"
+                  ref={addressBoxesRef}
+                  onScroll={(e) => setScrollPosition(e.currentTarget.scrollLeft)}
+                >
+                  {addresses.map(address => (
+                    <div 
+                      key={address.id}
+                      className={`address-box ${selectedAddress?.id === address.id ? 'selected' : ''}`}
+                      onClick={() => handleAddressSelect(address)}
+                    >
+                      <div className="address-type">{address.addressType}</div>
+                      <div className="address-details">
+                        <p>{address.addressLine1}</p>
+                        <p>{address.addressLine2}</p>
+                        <p>{address.city}, {address.district}</p>
+                        <p>{address.state} - {address.pincode}</p>
+                        <p>{address.country}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {canScrollRight && (
+                  <button 
+                    className="slider-arrow right"
+                    onClick={() => handleScroll('right')}
+                    aria-label="Scroll right"
+                  >
+                    →
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
-          <form onSubmit={(e) => e.preventDefault()} className="delivery-form">
-            <h2>Delivery Details</h2>
-            <div className="form-grid">
-              <div className="form-group">
-                <label>Address Type</label>
-                <input
-                  type="text"
-                  name="addressType"
-                  value={formData.addressType}
-                  onChange={handleInputChange}
-                  required
-                />
+          {showAddressForm && (
+            <form onSubmit={handleAddNewAddress} className="delivery-form">
+              <h2>Add New Address</h2>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Address Type</label>
+                  <input
+                    type="text"
+                    name="addressType"
+                    value={formData.addressType}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Address Line 1</label>
+                  <input
+                    type="text"
+                    name="addressLine1"
+                    value={formData.addressLine1}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Address Line 2</label>
+                  <input
+                    type="text"
+                    name="addressLine2"
+                    value={formData.addressLine2}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>City</label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>District</label>
+                  <input
+                    type="text"
+                    name="district"
+                    value={formData.district}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>State</label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Pincode</label>
+                  <input
+                    type="number"
+                    name="pincode"
+                    value={formData.pincode || ''}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Country</label>
+                  <input
+                    type="text"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
               </div>
-              <div className="form-group">
-                <label>Address Line 1</label>
-                <input
-                  type="text"
-                  name="addressLine1"
-                  value={formData.addressLine1}
-                  onChange={handleInputChange}
-                  required
-                />
+              <div className="form-actions">
+                <button 
+                  type="button" 
+                  className="cancel-btn"
+                  onClick={() => {
+                    if (addresses.length > 0) {
+                      setShowAddressForm(false);
+                      setSelectedAddress(addresses[0]);
+                    }
+                  }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit" 
+                  className="save-address-btn"
+                  disabled={isAddingAddress}
+                >
+                  {isAddingAddress ? 'Saving...' : 'Save Address'}
+                </button>
               </div>
-              <div className="form-group">
-                <label>Address Line 2</label>
-                <input
-                  type="text"
-                  name="addressLine2"
-                  value={formData.addressLine2}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>City</label>
-                <input
-                  type="text"
-                  name="city"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>District</label>
-                <input
-                  type="text"
-                  name="district"
-                  value={formData.district}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>State</label>
-                <input
-                  type="text"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Pincode</label>
-                <input
-                  type="number"
-                  name="pincode"
-                  value={formData.pincode || ''}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Country</label>
-                <input
-                  type="text"
-                  name="country"
-                  value={formData.country}
-                  onChange={handleInputChange}
-                  required
-                />
+            </form>
+          )}
+
+          {selectedAddress && !showAddressForm && (
+            <div className="selected-address-actions">
+              <div className="button-group">
+                <button 
+                  type="button" 
+                  className="pay-button"
+                  onClick={handlePayment}
+                >
+                  Pay Now
+                </button>
+                <button 
+                  type="button" 
+                  className="place-order-button"
+                  onClick={handleSubmit}
+                >
+                  Place Order (Cash on Delivery)
+                </button>
               </div>
             </div>
-            <div className="button-group">
-              <button 
-                type="button" 
-                className="pay-button"
-                onClick={handlePayment}
-              >
-                Pay Now
-              </button>
-              <button 
-                type="button" 
-                className="place-order-button"
-                onClick={handleSubmit}
-              >
-                Place Order (Cash on Delivery)
-              </button>
-            </div>
-          </form>
+          )}
         </div>
 
         {/* Order Summary Section */}

@@ -131,6 +131,7 @@ export interface SubmitOrderItem {
 
 export interface SubmitOrderRequest {
   username: string;
+  addressId: number;
   items: SubmitOrderItem[];
 }
 
@@ -386,6 +387,14 @@ export interface Order {
   orderItems: OrderItem[];
 }
 
+export interface Status {
+  status: string;
+  message: string;
+  timestamp: string;
+  code: string;
+  path: string;
+}
+
 // Define the OrdersResponse interface
 export interface OrdersResponse {
   id: number;
@@ -427,5 +436,10 @@ export const initiatePayment = async (orderId: number, amount: number): Promise<
       }
     }
   );
+  return response.data;
+};
+
+export const addAddress = async (username: string, address: Omit<Address, 'id'>): Promise<Status> => {
+  const response = await axios.post(`${BASE_URL}/user/addAddress/${username}`, address);
   return response.data;
 };
