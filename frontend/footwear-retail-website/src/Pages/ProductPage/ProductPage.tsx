@@ -138,6 +138,7 @@ const ProductPage: React.FC = () => {
       // Prepare the request payload
       const orderRequest: SubmitOrderRequest = {
         username: username,
+        addressId: -1, //No need to pass addressId here to add item. Add item and submit order are using same request model btw. 
         items: [
           {
             id: product.id, // This is already a number from the Product type
