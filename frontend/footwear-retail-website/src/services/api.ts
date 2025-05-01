@@ -405,3 +405,26 @@ export const cancelOrder = async (orderId: number): Promise<ShopOrder> => {
   const response = await axios.post(`${BASE_URL}/order/${orderId}/cancel`);
   return response.data; // Ensure this matches the ShopOrder structure
 };
+
+// Define the response type for payment initiation
+interface PaymentInitiationResponse {
+  merchantOrderId: string;
+  orderId: string;
+  state: string; // Add other possible states if any
+  expireAt: number;
+  redirectUrl: string;
+}
+
+export const initiatePayment = async (orderId: number, amount: number): Promise<PaymentInitiationResponse> => {
+  const response = await axios.post(
+    `${BASE_URL}/checkout/initiatePayment`,
+    null,
+    {
+      params: {
+        orderId,
+        amount
+      }
+    }
+  );
+  return response.data;
+};

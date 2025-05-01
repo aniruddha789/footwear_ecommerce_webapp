@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import './CheckoutPage.css';
 import { useCart } from '../../context/CartContext';
 import Address from '../../types/Address';
-import { getAddresses, placeOrder } from '../../services/api';
+import { getAddresses, placeOrder, initiatePayment, getCart, cancelOrder } from '../../services/api';
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const CheckoutPage: React.FC = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const addressBoxesRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
+ 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -147,6 +147,80 @@ const CheckoutPage: React.FC = () => {
     ? scrollPosition < addressBoxesRef.current.scrollWidth - addressBoxesRef.current.clientWidth 
     : false;
 
+
+  // Add payment initiation function
+  const handlePayment = async () => {
+    try {
+      const username = localStorage.getItem('username');
+      if (!username) {
+        throw new Error('User not logged in');
+      }
+
+      // Calculate total amount in rupees first
+      const totalInRupees = items.reduce((sum, item) => 
+        sum + (item.product.listprice * item.quantity), 0
+      );
+      
+      // Convert to paise (1 rupee = 100 paise)
+      const totalInPaise = Math.round(totalInRupees * 100);
+
+      // Get current cart ID (which will be the order ID)
+      const cart = await getCart(username);
+      const cartId = cart.id;
+
+      // Initiate payment with amount in paise
+      const paymentResponse = await initiatePayment(cartId, totalInPaise);
+
+      // Initialize PhonePe checkout
+      if (window.PhonePeCheckout && window.PhonePeCheckout.transact) {
+        window.PhonePeCheckout.transact({
+          tokenUrl: paymentResponse.redirectUrl,
+          callback: async (response) => {
+            if (response === 'CONCLUDED') {
+              try {
+                // Place order only after successful payment
+                const orderResponse = await placeOrder({
+                  username: username,
+                  items: items.map(item => ({
+                    id: item.product.id,
+                    quantity: item.quantity,
+                    size: item.selectedSize,
+                    color: item.selectedColor
+                  }))
+                });
+                
+                alert('Payment successful!');
+                clearCart();
+                navigate('/order-confirmation', {
+                  state: {
+                    orderDetails: {
+                      orderId: orderResponse.id,
+                      orderStatus: orderResponse.orderStatus,
+                      orderDate: orderResponse.orderDate,
+                      items: orderResponse.orders
+                    }
+                  }
+                });
+              } catch (error) {
+                console.error('Error placing order:', error);
+                alert('Payment successful but order placement failed. Please contact support.');
+              }
+            } else if (response === 'USER_CANCEL') {
+              await cancelOrder(cartId)
+              alert('Payment was cancelled by the user.');
+            }
+          },
+          type: 'IFRAME'
+        });
+      } else {
+        alert('PhonePeCheckout is not available.');
+      }
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      alert('Failed to initiate payment. Please try again.');
+    }
+  };
+
   if (!isLoggedIn) {
     return null;
   }
@@ -205,7 +279,7 @@ const CheckoutPage: React.FC = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="delivery-form">
+          <form onSubmit={(e) => e.preventDefault()} className="delivery-form">
             <h2>Delivery Details</h2>
             <div className="form-grid">
               <div className="form-group">
@@ -288,9 +362,22 @@ const CheckoutPage: React.FC = () => {
                 />
               </div>
             </div>
-            <button type="submit" className="place-order-button">
-              Place Order
-            </button>
+            <div className="button-group">
+              <button 
+                type="button" 
+                className="pay-button"
+                onClick={handlePayment}
+              >
+                Pay Now
+              </button>
+              <button 
+                type="button" 
+                className="place-order-button"
+                onClick={handleSubmit}
+              >
+                Place Order (Cash on Delivery)
+              </button>
+            </div>
           </form>
         </div>
 
@@ -331,5 +418,18 @@ const CheckoutPage: React.FC = () => {
     </div>
   );
 };
+
+// Add TypeScript declaration for PhonePe checkout
+declare global {
+  interface Window {
+    PhonePeCheckout?: {
+      transact: (options: {
+        tokenUrl: string;
+        callback: (response: string) => void;
+        type: 'IFRAME';
+      }) => void;
+    };
+  }
+}
 
 export default CheckoutPage; 
