@@ -105,25 +105,23 @@ const Orders: React.FC = () => {
                             <p>Size: {item.size}</p>
                             <p>Qty: {item.quantity}</p>
                           </div>
-                         
-                          <div className="delivery-date">
-                            {order.orderStatus === 'CANCELLED' ? (
-                              <div className="cancellation-note">
-                                <span>Note: Cancelled orders are deleted from the system after 10 days</span>
-                              </div>
-                            ) : (
-                              <div>
-                                <span>Delivery Expected by:</span>
-                                <span>{new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + 7)).toLocaleDateString()}</span>
-                              </div>
-                            )}
-                          </div>
                           
                           <div className="itemPrice">
 
                             <p>₹{item.price}</p>
                           </div>
-                          
+                          <div className="delivery-date">
+                          {order.orderStatus === 'CANCELLED' ? (
+                            <div className="cancellation-note">
+                              <span>Note: Cancelled orders are deleted from the system after 10 days</span>
+                            </div>
+                          ) : (
+                            <div>
+                              <span>Delivery Expected by:</span>
+                              <span>{new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + 7)).toLocaleDateString()}</span>
+                            </div>
+                          )}
+                        </div>
                         </div>
                       </div>
                     ))}
