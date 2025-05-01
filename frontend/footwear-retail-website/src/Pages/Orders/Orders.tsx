@@ -83,6 +83,10 @@ const Orders: React.FC = () => {
                     <div className="order-info">
                       <span className="order-number">#{order.id}</span>
                       <span className="order-date">Order Placed: {new Date(order.orderDate).toLocaleDateString()}</span>
+                      <div className="item-status">
+                            <span className="status-label">Status:</span>
+                            <span className="status-value">{order.orderStatus}</span>
+                      </div>    
                     </div>
                   </div>
                   
@@ -93,21 +97,19 @@ const Orders: React.FC = () => {
                           <img src={item.image} alt={item.name} />
                         </div>
                         <div className="item-details">
+                          
+                         
                           <h3 className="item-name">{item.name}</h3>
                           <p className="item-brand">Color: {item.color}</p>
                           <div className="item-specs">
                             <p>Size: {item.size}</p>
                             <p>Qty: {item.quantity}</p>
                           </div>
-                          <div className="item-status">
-                            <span className="status-label">Status:</span>
-                            <span className="status-value">{order.orderStatus}</span>
-                          </div>
-                          
+                         
                           <div className="delivery-date">
                             {order.orderStatus === 'CANCELLED' ? (
                               <div className="cancellation-note">
-                                <span>Note: Cancelled orders are deleted from system after 10 days</span>
+                                <span>Note: Cancelled orders are deleted from the system after 10 days</span>
                               </div>
                             ) : (
                               <div>
@@ -116,6 +118,12 @@ const Orders: React.FC = () => {
                               </div>
                             )}
                           </div>
+                          
+                          <div className="itemPrice">
+
+                            <p>₹{item.price}</p>
+                          </div>
+                          
                         </div>
                       </div>
                     ))}
@@ -123,7 +131,7 @@ const Orders: React.FC = () => {
 
                   <div className="order-box-footer">
                     <div className="total-amount">
-                      Rs. {order.orderItems.reduce((sum, item) => sum + (item.price || 0), 0)}
+                    Total: ₹ {order.orderItems.reduce((sum, item) => sum + (item.price || 0), 0)}
                     </div>
                     {order.orderStatus !== 'CANCELLED' && (
                       <button 
