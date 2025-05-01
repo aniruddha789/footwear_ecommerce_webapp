@@ -375,6 +375,7 @@ export interface OrderItem {
   color: string;
   quantity: number;
   image: string;
+  price: number;
 }
 
 // Define the Order interface
