@@ -1,0 +1,11 @@
+.phone {
+    font-size: smaller;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+
+.address {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    align-items: center;
+    align-content: center;
+}

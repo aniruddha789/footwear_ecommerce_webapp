@@ -24,9 +24,12 @@ const Orders: React.FC = () => {
       setIsLoading(true);
       setError(null);
       try {
-        const fetchedOrders = await getPlacedOrders(username); // Fetch placed orders
-        console.log(fetchedOrders); // Add this line to check the structure
-        setOrders(fetchedOrders.orders); // Set the orders array
+        const fetchedOrders = await getPlacedOrders(username);
+        // Sort orders by date in descending order (newest first)
+        const sortedOrders = [...fetchedOrders.orders].sort((a, b) => 
+          new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime()
+        );
+        setOrders(sortedOrders);
       } catch (err) {
         console.error("Error fetching orders:", err);
         setError("Failed to load orders. Please try again.");
@@ -54,7 +57,7 @@ const Orders: React.FC = () => {
         <button className="back-button" onClick={() => navigate(-1)}>
           <MdArrowBack />
         </button>
-        <h1 className="page-title">My Orders</h1>
+          <h1 className="page-title">My Orders</h1>
       </div>
 
       {isLoading && <div className="orders-loading">Loading your orders...</div>}
@@ -75,30 +78,68 @@ const Orders: React.FC = () => {
           ) : (
             <div className="orders-list">
               {orders.map(order => (
-                <div key={order.id} className="order-item">
-                  <div className="order-item-header">
-                    <h3>Order ID: {order.id}</h3>
-                    <p>Date: {new Date(order.orderDate).toLocaleDateString()}</p>
+                <div key={order.id} className="order-box">
+                  <div className="order-box-header">
+                    <div className="order-info">
+                      <span className="order-number">#{order.id}</span>
+                      <span className="order-date">Order Placed: {new Date(order.orderDate).toLocaleDateString()}</span>
+                      <div className="item-status">
+                            <span className="status-label">Status:</span>
+                            <span className="status-value">{order.orderStatus}</span>
+                      </div>    
+                    </div>
                   </div>
-                  <div className="order-details">
+                  
+                  <div className="order-items">
                     {order.orderItems.map(item => (
-                      <div key={item.id} className="item-card">
-                        <img src={item.image} alt={item.name} /> {/* Assuming each item has an image */}
-                        <div>
-                          <h4>{item.name}</h4>
-                          <p>Size: {item.size}</p>
-                          <p>Color: {item.color}</p>
-                          <p>Qty: {item.quantity}</p>
+                      <div key={item.id} className="order-item-card">
+                        <div className="item-image">
+                          <img src={item.image} alt={item.name} />
+                        </div>
+                        <div className="item-details">
+                          
+                         
+                          <h3 className="item-name">{item.name}</h3>
+                          <p className="item-brand">Color: {item.color}</p>
+                          <div className="item-specs">
+                            <p>Size: {item.size}</p>
+                            <p>Qty: {item.quantity}</p>
+                          </div>
+                          
+                          <div className="itemPrice">
+
+                            <p>₹{item.price}</p>
+                          </div>
+                          <div className="delivery-date">
+                          {order.orderStatus === 'CANCELLED' ? (
+                            <div className="cancellation-note">
+                              <span>Note: Cancelled orders are deleted from the system after 10 days</span>
+                            </div>
+                          ) : (
+                            <div>
+                              <span>Delivery Expected by:</span>
+                              <span>{new Date(new Date(order.orderDate).setDate(new Date(order.orderDate).getDate() + 7)).toLocaleDateString()}</span>
+                            </div>
+                          )}
+                        </div>
                         </div>
                       </div>
                     ))}
                   </div>
-                  <button 
-                    className="cancel-order-btn"
-                    onClick={() => handleCancelOrder(order.id)}
-                  >
-                    Cancel Order
-                  </button>
+
+                  <div className="order-box-footer">
+                    <div className="total-amount">
+                    Total: ₹ {order.orderItems.reduce((sum, item) => sum + (item.price || 0), 0)}
+                    </div>
+                    {order.orderStatus !== 'CANCELLED' && (
+                      <button 
+                        className="cancel-order-btn"
+                        onClick={() => handleCancelOrder(order.id)}
+                      >
+                        CANCEL ORDER
+                      </button>
+                    )} 
+                  </div>
                 </div>
               ))}
             </div>

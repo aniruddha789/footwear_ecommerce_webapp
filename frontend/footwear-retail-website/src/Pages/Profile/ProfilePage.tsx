@@ -178,7 +178,7 @@ const ProfilePage: React.FC = () => {
               <MdChevronRight className="menu-item-arrow" />
             </Link>
 
-            <Link to="/privacy" className="profile-menu-item">
+            <Link to="/privacy-policy" className="profile-menu-item">
               <div className="menu-item-icon">
                 <MdOutlinePrivacyTip />
               </div>
