@@ -7,7 +7,7 @@ import { signUpWithEmailAndVerify, signInWithGoogle, firebaseSignOut } from './f
 import { auth } from '../services/firebase';
 
 // const BASE_URL = 'http://localhost:8082';
-const BASE_URL = 'https://backend.myurbankicks.in:8082';
+const BASE_URL = 'https://backend.myurbankicks.in';
 
 let cachedPublicKey: string | null = null;
 
