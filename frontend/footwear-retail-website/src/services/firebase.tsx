@@ -9,8 +9,9 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
-  apiKey: "AIzaSyD34t7uoLJ3K7PsjBhWqT21Slf4tUVj2D8",
+  apiKey: import.meta.env.VITE_URBAN_KICKS_FIREBASE_API_KEY,
   authDomain: "urban-kicks-392619.firebaseapp.com",
   projectId: "urban-kicks-392619",
   storageBucket: "urban-kicks-392619.appspot.com",
