@@ -9,8 +9,7 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-const firebaseConfig = {
+const getFirebaseConfig = () => ({
   apiKey: import.meta.env.VITE_URBAN_KICKS_FIREBASE_API_KEY,
   authDomain: "urban-kicks-392619.firebaseapp.com",
   projectId: "urban-kicks-392619",
@@ -18,10 +17,10 @@ const firebaseConfig = {
   messagingSenderId: "548769979195",
   appId: "1:548769979195:web:4f852ae6a23b46bad3751e",
   measurementId: "G-5WM19GZT2K"
-};
+});
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(getFirebaseConfig());
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
