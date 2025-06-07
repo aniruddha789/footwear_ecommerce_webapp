@@ -60,6 +60,7 @@ h2 {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 20px;
+  color: inherit;
 }
 
 .mrp {
@@ -94,12 +95,14 @@ h2 {
   font-size: 14px;
   font-weight: 400;
   margin-bottom: 5px;
+  color: inherit;
 }
 
 .product-name {
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 10px;
+  color: inherit;
 }
 
 .color-section, .size-section {
@@ -111,6 +114,7 @@ h2 {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 10px;
+  color: inherit;
 }
 
 .color-options {
@@ -142,6 +146,7 @@ h2 {
   border: 1px solid #ccc;
   background: none;
   cursor: pointer;
+  color: inherit;
 }
 
 .add-to-bag {
@@ -252,4 +257,24 @@ h2 {
 
 .accordion-button::after {
   
+}
+
+/* Add dark mode specific styles */
+@media (prefers-color-scheme: dark) {
+  .size-option {
+    border-color: #666;
+    color: #000000;
+  }
+
+  .size-option.selected {
+    box-shadow: 0 0 0 1px #333, 0 0 0 4px rgba(255, 255, 255, 0.3);
+  }
+
+  .mrp {
+    color: #999;
+  }
+
+  .size-guide {
+    color: #4dabf7; /* Lighter blue for better visibility in dark mode */
+  }
 }
