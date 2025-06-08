@@ -14,6 +14,7 @@ import returns_icon from "../../assets/return-box.png";
 import fashion_icon from "../../assets/clean-clothes.png";
 import { colorMap } from "../../utils/colorMap";
 import { useCart } from "../../context/CartContext";
+import ImageSlider from "../../components/ImageSlider/ImageSlider";
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -184,13 +185,9 @@ const ProductPage: React.FC = () => {
     <div className={`product-page ${isMobile ? "mobile" : "desktop"}`}>
       <div className="product-images">
         {isMobile ? (
-          <img
-            src={images.length > 0 ? images[0] : product.image}
-            alt={product.name}
-            className="grid-image"
-            onClick={() => setShowSlider(true)}
-            onLoad={handleImageLoad}
-            style={{ display: imageLoading ? "none" : "block" }}
+          <ImageSlider
+            images={images.length > 0 ? images : [product.image]}
+            onClick={() => {setShowSlider(true); console.log("showSlider: " + showSlider);}}
           />
         ) : (
           images.length > 0 &&
