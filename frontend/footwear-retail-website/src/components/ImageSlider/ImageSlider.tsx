@@ -6,9 +6,10 @@ import "./ImageSlider.css";
 // import offwhite3 from '../../../src/assets/300952867OFFWHITE_3.webp';
 
 interface Props {
-  images: string[]
+  images: string[], 
+  onClick?: () => void;  // Optional click handler
 }
-function ImageSlider({ images }: Props) {
+function ImageSlider({ images, onClick }: Props) {
   const imageSizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
   const generateSrcSet = (img: string) => {
     console.log("images:" + images);
@@ -20,7 +21,14 @@ function ImageSlider({ images }: Props) {
   };
             
   return (
-    <Carousel data-bs-theme="dark" nextIcon={null} prevIcon={null} touch={true} className="custom-carousel">
+    <Carousel 
+      data-bs-theme="dark" 
+      nextIcon={null} 
+      prevIcon={null} 
+      touch={true} 
+      className="custom-carousel"
+      onClick={onClick}
+    >
       {images.map((img, index) => (
         <Carousel.Item key={index}>
           <img
