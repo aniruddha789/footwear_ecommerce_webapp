@@ -255,14 +255,11 @@ h2 {
   font-size: 16px; /* Adjust the size of the text and arrow */
 }
 
-.accordion-button::after {
-  
-}
 
 /* Add dark mode specific styles */
 @media (prefers-color-scheme: dark) {
   .size-option {
-    border-color: #666;
+    border-color: #514949;
     color: #000000;
   }
 

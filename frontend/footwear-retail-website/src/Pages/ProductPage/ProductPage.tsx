@@ -15,6 +15,7 @@ import fashion_icon from "../../assets/clean-clothes.png";
 import { colorMap } from "../../utils/colorMap";
 import { useCart } from "../../context/CartContext";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
+import { toastSuccess } from "../../utils/customToast";
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -156,11 +157,12 @@ const ProductPage: React.FC = () => {
       // Add to local cart
       addToCart(product, selectedSize, selectedColor);
 
-      // Show success message
-      alert("Item added to cart successfully!");
+      // Show success toast
+      toastSuccess("Item added to cart successfully!");
+
     } catch (error) {
       console.error("Error adding item to cart:", error);
-      alert("Failed to add item to cart. Please try again.");
+      // toastError("Failed to add item to cart. Please try again.");
     }
   };
 

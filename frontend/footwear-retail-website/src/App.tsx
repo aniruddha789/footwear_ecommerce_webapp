@@ -27,6 +27,8 @@ import PrivacyPolicy from './Pages/Policies/PrivacyPolicy';
 import TermsAndConditions from "./Pages/Policies/TermsAndConditions";
 import ContactUs from "./Pages/ContactUs/ContactUs";
 import AboutUs from "./Pages/AboutUs/AboutUs";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   useEffect(() => {
@@ -67,6 +69,7 @@ function App() {
           <Footer />
           <MobileNavBar />
         </div>
+        <ToastContainer />
       </Router>
     </CartProvider>
   );
