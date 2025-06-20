@@ -116,6 +116,7 @@ const CartPage: React.FC = () => {
                       <option key={size} value={size}>{size}</option>
                     ))}
                   </select>
+                  <span className="cart-item-quantity">x{item.quantity}</span>
                 </div>
                 <div className="delivery-info">Delivery by {'4-5 days'}</div>
               </div>
