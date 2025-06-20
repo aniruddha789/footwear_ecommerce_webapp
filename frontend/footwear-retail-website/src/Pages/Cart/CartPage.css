@@ -141,6 +141,13 @@
   color: inherit;
 }
 
+.cart-item-quantity {
+  font-size: 17px !important;
+  color: #888;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
 .quantity-controls span {
   font-size: 14px;
   color: inherit;
