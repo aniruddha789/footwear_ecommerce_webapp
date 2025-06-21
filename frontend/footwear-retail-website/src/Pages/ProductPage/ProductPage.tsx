@@ -253,9 +253,11 @@ const ProductPage: React.FC = () => {
             </div>
           )}
         </div>
-        <button className="add-to-bag" onClick={handleAddToCart}>
-          ADD TO BAG
-        </button>
+        {!isMobile && (
+          <button className="add-to-bag" onClick={handleAddToCart}>
+            ADD TO BAG
+          </button>
+        )}
         <div className="product-features">
           <div className="feature">
             <img src={shipping_icon} alt="Free shipping" />
@@ -304,13 +306,14 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
       </div>
-      {showSlider && (
-        <ImageSliderPopup
-          images={images}
-          onClose={() => setShowSlider(false)}
-        />
+      
+      {isMobile && (
+        <div className="mobile-floating-cart-button">
+          <button className="mobile-add-to-bag" onClick={handleAddToCart}>
+            ADD TO BAG
+          </button>
+        </div>
       )}
-      {imageLoading && <div>Loading images...</div>}
     </div>
   );
 };

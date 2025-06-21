@@ -275,3 +275,39 @@ h2 {
     color: #4dabf7; /* Lighter blue for better visibility in dark mode */
   }
 }
+
+/* Mobile floating cart button */
+.mobile-floating-cart-button {
+  display: none; /* Hidden by default on desktop */
+}
+
+@media (max-width: 768px) {
+  .mobile-floating-cart-button {
+    display: block;
+    position: fixed;
+    bottom: 70px; /* Position above mobile navbar (60px height + 10px gap) */
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    padding: 0 20px; /* Side margins */
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-add-to-bag {
+    width: 100%;
+    padding: 15px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 0px;
+  }
+
+  /* Add bottom padding to product page to account for floating button */
+  .product-page.mobile {
+    padding-bottom: 140px; /* 70px for floating button + 70px for mobile navbar */
+  }
+}
