@@ -15,7 +15,7 @@ import fashion_icon from "../../assets/clean-clothes.png";
 import { colorMap } from "../../utils/colorMap";
 import { useCart } from "../../context/CartContext";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
-import { toastSuccess } from "../../utils/customToast";
+import { toastError, toastInfo, toastSuccess } from "../../utils/customToast";
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -120,12 +120,12 @@ const ProductPage: React.FC = () => {
 
   const handleAddToCart = async () => {
     if (!selectedSize || !selectedColor) {
-      alert("Please select both size and color");
+      toastInfo("Please select both size and color");
       return;
     }
 
     if (!product) {
-      alert("Product not found");
+      toastInfo("Product not found");
       return;
     }
 
@@ -133,7 +133,7 @@ const ProductPage: React.FC = () => {
       // Get username from localStorage
       const username = localStorage.getItem("username");
       if (!username) {
-        alert("Please sign in to add items to cart");
+        toastInfo("Please sign in to add items to cart");
         return;
       }
 
