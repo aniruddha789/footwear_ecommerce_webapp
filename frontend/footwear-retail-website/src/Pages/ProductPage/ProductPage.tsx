@@ -23,6 +23,7 @@ const ProductPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showSlider, setShowSlider] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const isMobile = useIsMobile(); // Use the custom hook
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -199,6 +200,11 @@ const ProductPage: React.FC = () => {
               src={img}
               alt={product.name}
               className="grid-image"
+              onClick={() => {
+                setSelectedImageIndex(index);
+                setShowSlider(true);
+              }}
+              style={{ cursor: 'pointer' }}
               // onLoad={handleImageLoad}
             />
           ))
@@ -318,6 +324,7 @@ const ProductPage: React.FC = () => {
       {showSlider && (
         <ImageSliderPopup
           images={images.length > 0 ? images : [product.image]}
+          initialIndex={selectedImageIndex}
           onClose={() => setShowSlider(false)}
         />
       )}

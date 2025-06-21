@@ -31,3 +31,14 @@
     justify-content: center;
     align-items: center;
 }
+
+/* Desktop styles - fixed width and height */
+@media (min-width: 768px) {
+    .image-slider-container {
+        width: 35%;
+        max-width: 800px;
+        height: 70%; /* Reduced height */
+        max-height: 600px;
+        margin: auto; /* Center it */
+    }
+}
