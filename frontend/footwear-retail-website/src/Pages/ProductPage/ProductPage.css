@@ -211,8 +211,8 @@ h2 {
 }
 
 .product-details-section {
-  margin-top: 20px;
-  padding: 20px;
+  margin-top: 10px;
+  padding: 0px;
 }
 
 .product-details-section h2 {
@@ -308,6 +308,6 @@ h2 {
 
   /* Add bottom padding to product page to account for floating button */
   .product-page.mobile {
-    padding-bottom: 140px; /* 70px for floating button + 70px for mobile navbar */
+    padding-bottom: 10px; /* 70px for floating button + 70px for mobile navbar */
   }
 }
