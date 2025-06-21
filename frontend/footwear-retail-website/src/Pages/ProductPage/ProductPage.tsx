@@ -7,7 +7,6 @@ import {
 } from "../../services/api";
 import { Product } from "../../types/Product";
 import { useParams } from "react-router-dom";
-import ImageSliderPopup from "../../components/ImageSliderPopup/ImageSliderPopup";
 import useIsMobile from "../../hooks/useIsMobile"; // Import the custom hook
 import shipping_icon from "../../assets/fast-delivery.png";
 import returns_icon from "../../assets/return-box.png";
@@ -29,7 +28,7 @@ const ProductPage: React.FC = () => {
   const [availableSizes, setAvailableSizes] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]); // State for images
   const { addToCart } = useCart();
-  const [imageLoading, setImageLoading] = useState(true);
+  // const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -113,10 +112,10 @@ const ProductPage: React.FC = () => {
     return cachedImages ? JSON.parse(cachedImages) : null;
   };
 
-  // Function to handle image load
-  const handleImageLoad = () => {
-    setImageLoading(false);
-  };
+  // // Function to handle image load
+  // const handleImageLoad = () => {
+  //   setImageLoading(false);
+  // };
 
   const handleAddToCart = async () => {
     if (!selectedSize || !selectedColor) {
@@ -199,7 +198,7 @@ const ProductPage: React.FC = () => {
               src={img}
               alt={product.name}
               className="grid-image"
-              onLoad={handleImageLoad}
+              // onLoad={handleImageLoad}
             />
           ))
         )}
