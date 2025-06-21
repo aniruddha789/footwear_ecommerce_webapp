@@ -8,8 +8,9 @@ import "./ImageSlider.css";
 interface Props {
   images: string[], 
   onClick?: () => void;  // Optional click handler
+  initialIndex?: number; // Add this prop
 }
-function ImageSlider({ images, onClick }: Props) {
+function ImageSlider({ images, onClick, initialIndex = 0 }: Props) {
   const imageSizes = "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw";
   const generateSrcSet = (img: string) => {
     console.log("images:" + images);
@@ -28,6 +29,7 @@ function ImageSlider({ images, onClick }: Props) {
       touch={true} 
       className="custom-carousel"
       onClick={onClick}
+      defaultActiveIndex={initialIndex}
     >
       {images.map((img, index) => (
         <Carousel.Item key={index}>
