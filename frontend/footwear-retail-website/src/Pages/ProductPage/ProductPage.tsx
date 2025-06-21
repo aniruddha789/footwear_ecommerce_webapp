@@ -15,7 +15,7 @@ import fashion_icon from "../../assets/clean-clothes.png";
 import { colorMap } from "../../utils/colorMap";
 import { useCart } from "../../context/CartContext";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
-import { toastError, toastInfo, toastSuccess } from "../../utils/customToast";
+import { toastInfo, toastSuccess } from "../../utils/customToast";
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
