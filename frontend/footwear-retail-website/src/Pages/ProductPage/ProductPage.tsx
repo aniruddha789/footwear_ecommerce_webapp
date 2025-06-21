@@ -15,6 +15,7 @@ import { colorMap } from "../../utils/colorMap";
 import { useCart } from "../../context/CartContext";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
 import { toastInfo, toastSuccess } from "../../utils/customToast";
+import ImageSliderPopup from "../../components/ImageSliderPopup/ImageSliderPopup";
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -312,6 +313,13 @@ const ProductPage: React.FC = () => {
             ADD TO BAG
           </button>
         </div>
+      )}
+      
+      {showSlider && (
+        <ImageSliderPopup
+          images={images.length > 0 ? images : [product.image]}
+          onClose={() => setShowSlider(false)}
+        />
       )}
     </div>
   );
