@@ -232,9 +232,9 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
         <div className="size-section">
-          <p className="size-label">
+          {/* <p className="size-label">
             SIZE <span className="size-guide">SIZE GUIDE</span>
-          </p>
+          </p> */}
           {isOutOfStock ? (
             <div className="out-of-stock">Out of Stock</div>
           ) : (
