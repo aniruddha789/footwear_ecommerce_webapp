@@ -7,7 +7,6 @@ import {
 } from "../../services/api";
 import { Product } from "../../types/Product";
 import { useParams } from "react-router-dom";
-import ImageSliderPopup from "../../components/ImageSliderPopup/ImageSliderPopup";
 import useIsMobile from "../../hooks/useIsMobile"; // Import the custom hook
 import shipping_icon from "../../assets/fast-delivery.png";
 import returns_icon from "../../assets/return-box.png";
@@ -15,7 +14,7 @@ import fashion_icon from "../../assets/clean-clothes.png";
 import { colorMap } from "../../utils/colorMap";
 import { useCart } from "../../context/CartContext";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
-import { toastSuccess } from "../../utils/customToast";
+import { toastInfo, toastSuccess } from "../../utils/customToast";
 
 const ProductPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -29,7 +28,7 @@ const ProductPage: React.FC = () => {
   const [availableSizes, setAvailableSizes] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]); // State for images
   const { addToCart } = useCart();
-  const [imageLoading, setImageLoading] = useState(true);
+  // const [imageLoading, setImageLoading] = useState(true);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -113,19 +112,19 @@ const ProductPage: React.FC = () => {
     return cachedImages ? JSON.parse(cachedImages) : null;
   };
 
-  // Function to handle image load
-  const handleImageLoad = () => {
-    setImageLoading(false);
-  };
+  // // Function to handle image load
+  // const handleImageLoad = () => {
+  //   setImageLoading(false);
+  // };
 
   const handleAddToCart = async () => {
     if (!selectedSize || !selectedColor) {
-      alert("Please select both size and color");
+      toastInfo("Please select both size and color");
       return;
     }
 
     if (!product) {
-      alert("Product not found");
+      toastInfo("Product not found");
       return;
     }
 
@@ -133,7 +132,7 @@ const ProductPage: React.FC = () => {
       // Get username from localStorage
       const username = localStorage.getItem("username");
       if (!username) {
-        alert("Please sign in to add items to cart");
+        toastInfo("Please sign in to add items to cart");
         return;
       }
 
@@ -199,7 +198,7 @@ const ProductPage: React.FC = () => {
               src={img}
               alt={product.name}
               className="grid-image"
-              onLoad={handleImageLoad}
+              // onLoad={handleImageLoad}
             />
           ))
         )}
@@ -232,9 +231,9 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
         <div className="size-section">
-          <p className="size-label">
+          {/* <p className="size-label">
             SIZE <span className="size-guide">SIZE GUIDE</span>
-          </p>
+          </p> */}
           {isOutOfStock ? (
             <div className="out-of-stock">Out of Stock</div>
           ) : (
@@ -253,9 +252,11 @@ const ProductPage: React.FC = () => {
             </div>
           )}
         </div>
-        <button className="add-to-bag" onClick={handleAddToCart}>
-          ADD TO BAG
-        </button>
+        {!isMobile && (
+          <button className="add-to-bag" onClick={handleAddToCart}>
+            ADD TO BAG
+          </button>
+        )}
         <div className="product-features">
           <div className="feature">
             <img src={shipping_icon} alt="Free shipping" />
@@ -304,13 +305,14 @@ const ProductPage: React.FC = () => {
           </div>
         </div>
       </div>
-      {showSlider && (
-        <ImageSliderPopup
-          images={images}
-          onClose={() => setShowSlider(false)}
-        />
+      
+      {isMobile && (
+        <div className="mobile-floating-cart-button">
+          <button className="mobile-add-to-bag" onClick={handleAddToCart}>
+            ADD TO BAG
+          </button>
+        </div>
       )}
-      {imageLoading && <div>Loading images...</div>}
     </div>
   );
 };

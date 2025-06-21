@@ -9,6 +9,7 @@ import {
 import { jwtDecode } from 'jwt-decode';
 import SignInSlider from '../SignInSlider/SignInSlider';
 import { clearAuthData } from '../../services/api';
+import userImage from '../../assets/user.png';
 
 interface UserDetails {
   username: string;
@@ -122,7 +123,7 @@ const ProfilePage: React.FC = () => {
 
           <div className="profile-user-info">
             <div className="profile-avatar">
-              <div className="avatar-placeholder"></div>
+              <img src={userImage} alt="Profile" className='avatar-image' />
             </div>
             <h2 className="greeting">Hello {userDetails.name}!</h2>
             <Link to="/profile/details" className="view-details-link">View Details</Link>
