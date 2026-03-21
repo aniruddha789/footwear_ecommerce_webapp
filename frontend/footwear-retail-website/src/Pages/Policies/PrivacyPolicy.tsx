@@ -1,15 +1,17 @@
 import React from 'react';
+import { useBrand } from '../../context/BrandContext';
 
 const PrivacyPolicy: React.FC = () => {
+  const { legalEntityName, publicDomain } = useBrand();
   return (
     <div style={{ padding: '2rem' }}>
       <h1>Privacy Policy</h1>
 
       <h2>Introduction</h2>
       <p>
-        This Privacy Policy describes how URBAN KICKS and its affiliates (collectively "URBAN KICKS, we, our, us")
+        This Privacy Policy describes how {legalEntityName} and its affiliates (collectively &quot;{legalEntityName}, we, our, us&quot;)
         collect, use, share, protect or otherwise process your information/personal data through our website
-        myurbankicks.in (hereinafter referred to as "Platform"). You may be able to browse certain sections of the
+        {publicDomain} (hereinafter referred to as &quot;Platform&quot;). You may be able to browse certain sections of the
         Platform without registering with us. We do not offer any product/service under this Platform outside India,
         and your personal data will primarily be stored and processed in India.
       </p>

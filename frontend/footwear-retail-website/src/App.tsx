@@ -8,6 +8,7 @@ import FilterSortBreadcrumb from "./components/FilterSortBreadcrumb/FilterSortBr
 import ProductPage from './Pages/ProductPage/ProductPage';
 import PaginatedProductGrid from "./containers/PaginatedProductGrid/PaginatedProductGrid";
 import { CartProvider } from './context/CartContext';
+import { BrandProvider } from './context/BrandContext';
 import CartPage from './Pages/Cart/CartPage';
 import CheckoutPage from './Pages/Checkout/CheckoutPage';
 import OrderSuccessPage from './Pages/OrderSuccess/OrderConfirmation';
@@ -38,6 +39,7 @@ function App() {
 
   return (
     <CartProvider>
+      <BrandProvider>
       <Router>
         <ScrollToTop />
         <div className="app-wrapper">
@@ -71,6 +73,7 @@ function App() {
         </div>
         <ToastContainer />
       </Router>
+      </BrandProvider>
     </CartProvider>
   );
 }

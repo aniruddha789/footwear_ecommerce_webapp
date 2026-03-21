@@ -3,7 +3,6 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Form from "react-bootstrap/Form";
-import ukLogo from "../../assets/UK logo png black.png";
 import cartLogo from "../../assets/travel.png";
 import wishlistLogo from "../../assets/wishlist.png";
 import { Image } from "react-bootstrap";
@@ -13,8 +12,10 @@ import SignInSlider from '../../Pages/SignInSlider/SignInSlider';
 import { isTokenValid, clearAuthData, getCartIconQuantity } from '../../services/api';
 import { jwtDecode } from "jwt-decode";
 import { useCart } from '../../context/CartContext';
+import { useBrand } from '../../context/BrandContext';
 
 function NavBar() {
+  const brand = useBrand();
   const [showSignIn, setShowSignIn] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -186,15 +187,15 @@ function NavBar() {
     <>
       <Navbar className="headerContainer">
         <Navbar.Brand href="/" className="companyBrand">
-          <img src={ukLogo} className="brandLogo" alt="Urban Kicks Logo" />
-          <span>Urban Kicks</span>
+          <img src={brand.logoUrl} className="brandLogo" alt={`${brand.brandName} logo`} />
+          <span>{brand.brandName}</span>
         </Navbar.Brand>
         <div className="dummy1"></div>
         {!isMobile && (
           <Form onSubmit={handleSearchSubmit} className="d-flex search-form">
             <Form.Control
               type="text"
-              placeholder="Search on Urban Kicks"
+              placeholder={brand.searchPlaceholder}
               className="searchBar"
               value={searchTerm}
               onChange={handleSearchChange}

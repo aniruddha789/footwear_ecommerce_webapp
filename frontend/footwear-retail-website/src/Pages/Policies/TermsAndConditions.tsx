@@ -1,7 +1,9 @@
 import React from 'react';
 import './TermsAndConditions.css'; // Import the CSS file
+import { useBrand } from '../../context/BrandContext';
 
 const TermsAndConditions: React.FC = () => {
+  const { legalEntityName, publicDomain } = useBrand();
   return (
     <div className="terms-container">
       <h1>Terms & Conditions</h1>
@@ -15,11 +17,11 @@ const TermsAndConditions: React.FC = () => {
       <p>
         This document is published in accordance with Rule 3(1) of the Information Technology (Intermediaries
         Guidelines) Rules, 2011 that requires publishing the rules and regulations, privacy policy, and Terms of Use
-        for accessing or using the domain name <strong>myurbankicks.in</strong> ("Platform").
+        for accessing or using the domain name <strong>{publicDomain}</strong> ("Platform").
       </p>
 
       <p>
-        The Platform is owned by URBAN KICKS, a company incorporated under the Companies Act, 1956 with its registered
+        The Platform is owned by {legalEntityName}, a company incorporated under the Companies Act, 1956 with its registered
         office at Sainagar, Arvi, Wardha (hereinafter referred to as "Platform Owner", "we", "us", "our").
       </p>
 
@@ -47,7 +49,7 @@ const TermsAndConditions: React.FC = () => {
         <li>
           <h2>Content Ownership</h2>
           <p>
-            All content on this Platform is either owned by or licensed to URBAN KICKS. Unauthorized use of any content
+            All content on this Platform is either owned by or licensed to {legalEntityName}. Unauthorized use of any content
             may lead to a claim for damages and/or be a criminal offense.
           </p>
         </li>
@@ -73,14 +75,14 @@ const TermsAndConditions: React.FC = () => {
           <h2>Contractual Relationship</h2>
           <p>
             Any purchase, registration, or engagement on the Platform constitutes a legally binding agreement with
-            URBAN KICKS, and you agree to the applicable policies and procedures.
+            {legalEntityName}, and you agree to the applicable policies and procedures.
           </p>
         </li>
 
         <li>
           <h2>Indemnity</h2>
           <p>
-            You agree to indemnify and hold harmless URBAN KICKS, its affiliates, officers, agents, and employees from
+            You agree to indemnify and hold harmless {legalEntityName}, its affiliates, officers, agents, and employees from
             any claims or demands arising out of your breach of these Terms or violation of any law or third-party
             rights.
           </p>

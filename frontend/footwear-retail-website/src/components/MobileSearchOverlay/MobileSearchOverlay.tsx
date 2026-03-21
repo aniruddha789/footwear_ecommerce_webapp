@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './MobileSearchOverlay.css';
+import { useBrand } from '../../context/BrandContext';
 
 interface MobileSearchOverlayProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface MobileSearchOverlayProps {
 }
 
 const MobileSearchOverlay: React.FC<MobileSearchOverlayProps> = ({ isOpen, onClose }) => {
+  const brand = useBrand();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -60,7 +62,7 @@ const MobileSearchOverlay: React.FC<MobileSearchOverlayProps> = ({ isOpen, onClo
           <Form.Control
             ref={inputRef}
             type="text"
-            placeholder="Search on Urban Kicks"
+            placeholder={brand.searchPlaceholder}
             className="mobile-search-input"
             value={searchTerm}
             onChange={handleSearchChange}

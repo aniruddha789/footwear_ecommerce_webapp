@@ -2,22 +2,23 @@ import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './Footer.css';
-import ukLogo from "../../assets/UK logo png black.png";
+import { useBrand } from '../../context/BrandContext';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  
+  const brand = useBrand();
+
   return (
     <footer className="site-footer">
       <Container>
         <Row className="footer-main">
           <Col lg={4} md={6} className="footer-brand">
             <div className="footer-logo">
-              <img src={ukLogo} alt="Urban Kicks Logo" />
-              <span>Urban Kicks</span>
+              <img src={brand.logoUrl} alt={`${brand.brandName} logo`} />
+              <span>{brand.brandName}</span>
             </div>
             <p className="footer-tagline">
-              Step into style with Urban Kicks - your destination for premium footwear and apparel.
+              {brand.tagline}
             </p>
           </Col>
           
@@ -34,21 +35,27 @@ const Footer: React.FC = () => {
           <Col lg={4} md={6} className="footer-contact">
             <h5>Contact</h5>
             <address>
-              <p>Shivaji Commercial, Amravati, Maharashtra</p>
-              <p>+91 7721906862</p>
-              <p><a href="mailto:info@myurbankicks.in">info@myurbankicks.in</a></p>
+              <p>{brand.addressLine}</p>
+              <p>{brand.phoneFooter}</p>
+              <p><a href={`mailto:${brand.contactEmail}`}>{brand.contactEmail}</a></p>
             </address>
             
             <div className="social-links">
-              <a href="https://instagram.com/urban_kicks_amt" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="https://www.facebook.com/profile.php?id=61557063887144" target="_blank" rel="noopener noreferrer">Facebook</a>
-              <a href="https://x.com/MyUrbanKicks" target="_blank" rel="noopener noreferrer">Twitter</a>
+              {brand.social.instagram && (
+                <a href={brand.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+              )}
+              {brand.social.facebook && (
+                <a href={brand.social.facebook} target="_blank" rel="noopener noreferrer">Facebook</a>
+              )}
+              {brand.social.twitter && (
+                <a href={brand.social.twitter} target="_blank" rel="noopener noreferrer">Twitter</a>
+              )}
             </div>
           </Col>
         </Row>
         
         <div className="footer-bottom">
-          <p className="copyright">&copy; {currentYear} Urban Kicks. All rights reserved.</p>
+          <p className="copyright">&copy; {currentYear} {brand.brandName}. All rights reserved.</p>
           <div className="legal-links">
             <Link to="/returns-policy">Returns Policy</Link>
             <Link to="/shipping-policy">Shipping Policy</Link>

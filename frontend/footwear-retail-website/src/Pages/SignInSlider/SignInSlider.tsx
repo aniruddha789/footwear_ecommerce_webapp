@@ -4,6 +4,7 @@ import './SignInSlider.css';
 import cancelIcon from '../../assets/cancel.png';
 import { loginUser, registerUser, clearAuthData, loginWithGoogle } from '../../services/api';
 import { FcGoogle } from 'react-icons/fc';
+import { useBrand } from '../../context/BrandContext';
 
 interface SignInSliderProps {
   show: boolean;
@@ -12,6 +13,7 @@ interface SignInSliderProps {
 }
 
 const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSuccess }) => {
+  const brand = useBrand();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
@@ -96,7 +98,7 @@ const SignInSlider: React.FC<SignInSliderProps> = ({ show, onClose, onLoginSucce
         <button className="close-button" onClick={onClose}>
           <img src={cancelIcon} alt="Close" className="close-icon" />
         </button>
-        <h2>{isSignUp ? 'Sign Up' : 'Sign In'} to Urban Kicks</h2>
+        <h2>{isSignUp ? 'Sign Up' : 'Sign In'} to {brand.brandName}</h2>
         {error && <Alert variant="danger">{error}</Alert>}
         {success && <Alert variant="success">{success}</Alert>}
         <Form onSubmit={handleSubmit}>
