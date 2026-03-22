@@ -82,9 +82,20 @@
 }
 
 .brandLogo {
-    width: 25%;
     margin-left: 30px;
     padding-bottom: 1px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.brandLogo--myurbankicks {
+    width: 50px;
+    height: 30px;
+}
+
+.brandLogo--dripshop {
+    width: 80px;
+    height: 80px;
 }
 
 .wishlistLogo,
@@ -283,11 +294,20 @@
     font-size: 1.2rem;
   }
   
-  /* Adjust the logo size */
+  /* Adjust the logo size (per-tenant classes below) */
   .brandLogo {
+    margin-left: 0;
+    margin-right: 8px;
+  }
+
+  .brandLogo--myurbankicks {
     width: 50px;
     height: 30px;
-    margin-right: 8px;
+  }
+
+  .brandLogo--dripshop {
+    width: 50px;
+    height: 50px;
   }
   
   /* Hide other elements we don't need on mobile */

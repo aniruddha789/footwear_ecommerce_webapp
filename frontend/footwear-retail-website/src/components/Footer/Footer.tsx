@@ -14,7 +14,11 @@ const Footer: React.FC = () => {
         <Row className="footer-main">
           <Col lg={4} md={6} className="footer-brand">
             <div className="footer-logo">
-              <img src={brand.logoUrl} alt={`${brand.brandName} logo`} />
+              <img
+                src={brand.logoUrl}
+                className={`footer-logo-img footer-logo-img--${brand.id}`}
+                alt={`${brand.brandName} logo`}
+              />
               <span>{brand.brandName}</span>
             </div>
             <p className="footer-tagline">

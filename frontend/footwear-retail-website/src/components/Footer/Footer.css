@@ -18,9 +18,19 @@
 }
 
 .footer-brand .footer-logo img {
-  width: 50px;
-  height: 32px;
   margin-right: 10px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.footer-brand .footer-logo img.footer-logo-img--myurbankicks {
+  width: 50px;
+  height: 30px;
+}
+
+.footer-brand .footer-logo img.footer-logo-img--dripshop {
+  width: 80px;
+  height: 80px;
 }
 
 .footer-brand .footer-logo span {

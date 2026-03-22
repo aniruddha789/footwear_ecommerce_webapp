@@ -187,7 +187,11 @@ function NavBar() {
     <>
       <Navbar className="headerContainer">
         <Navbar.Brand href="/" className="companyBrand">
-          <img src={brand.logoUrl} className="brandLogo" alt={`${brand.brandName} logo`} />
+          <img
+            src={brand.logoUrl}
+            className={`brandLogo brandLogo--${brand.id}`}
+            alt={`${brand.brandName} logo`}
+          />
           <span>{brand.brandName}</span>
         </Navbar.Brand>
         <div className="dummy1"></div>
