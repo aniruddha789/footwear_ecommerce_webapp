@@ -16,8 +16,10 @@ import { useCart } from "../../context/CartContext";
 import ImageSlider from "../../components/ImageSlider/ImageSlider";
 import { toastInfo, toastSuccess } from "../../utils/customToast";
 import ImageSliderPopup from "../../components/ImageSliderPopup/ImageSliderPopup";
+import { useBrand } from "../../context/BrandContext";
 
 const ProductPage: React.FC = () => {
+  const brand = useBrand();
   const { id } = useParams<{ id?: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -303,7 +305,7 @@ const ProductPage: React.FC = () => {
               <strong>Care Instruction:</strong> Normal Wash
             </p>
             <p>
-              <strong>Marketed By:</strong>{" "} Urban Kicks
+              <strong>Marketed By:</strong>{" "}{brand.brandName}
             </p>
             <p>
               <strong>Country Of Origin:</strong> India

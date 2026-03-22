@@ -1,14 +1,15 @@
 import React from 'react';
 import "./AboutUs.css"
+import { useBrand } from '../../context/BrandContext';
 
 const AboutUs: React.FC = () => {
+  const brand = useBrand();
   return (
     <div>
       <h1>About Us</h1>
       <div className="description">
 
-      <h2> Urban Kicks incorporated in 2023 is a fashion brand where you get latest of the trends, be it footwear, clothing
-      or accessories. </h2>
+      <h2>{brand.aboutLead}</h2>
       </div>
       
     </div>
