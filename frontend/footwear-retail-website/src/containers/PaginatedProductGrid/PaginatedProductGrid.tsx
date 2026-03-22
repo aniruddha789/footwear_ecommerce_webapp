@@ -16,7 +16,6 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const pageSize = 8;
 
@@ -25,7 +24,6 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
    
     if (isLoading) return;
     setIsLoading(true);
-    setError(null);
    
     const currentPage = resetPage ? 0 : page;
    
@@ -37,15 +35,23 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
         response = await getAllProducts(currentPage, pageSize);
       }
 
-      if (response === null || response.content.length === 0) {
+      const items = response?.content;
+      if (!items || items.length === 0) {
         setHasMore(false);
+        if (resetPage) {
+          setProducts([]);
+        }
       } else {
-        setProducts(resetPage  ? response.content : [...products, ...response.content]);
+        setProducts((prev) =>
+          resetPage ? items : [...prev, ...items],
+        );
         setPage(currentPage + 1);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-      setError('Failed to fetch products. Please try again later.');
+      // Show Coming Soon empty state instead of an error banner (browse/refresh flows).
+      setHasMore(false);
+      setProducts([]);
     } finally {
       setIsLoading(false);
       setInitialLoading(false);
@@ -58,11 +64,9 @@ const PaginatedProductGrid: React.FC<PaginatedProductGridProps> = () => {
     setHasMore(true);
     setInitialLoading(true);
     fetchProducts(true);
+    // Intentionally only re-run when category (URL segment) changes, not when fetchProducts identity changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   if (initialLoading) {
     return <div> </div>;

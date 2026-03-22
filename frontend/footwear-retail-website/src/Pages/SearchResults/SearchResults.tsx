@@ -9,7 +9,6 @@ const SearchResults: React.FC = () => {
   const query = new URLSearchParams(location.search).get('query');
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,8 +19,8 @@ const SearchResults: React.FC = () => {
         );
         setProducts(filteredProducts);
       } catch (err) {
-        setError('Failed to fetch products. Please try again later.');
         console.error('Error fetching products:', err);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -31,12 +30,15 @@ const SearchResults: React.FC = () => {
   }, [query]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div>
       <h2>Search Results for: {query}</h2>
-      <ProductGrid products={products} parentBreadcrumb="Search Results" />
+      <ProductGrid
+        products={products}
+        parentBreadcrumb="Search Results"
+        emptyVariant="noSearchResults"
+      />
     </div>
   );
 };
