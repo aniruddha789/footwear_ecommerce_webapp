@@ -26,7 +26,7 @@ const CheckoutPage: React.FC = () => {
   const addressBoxesRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
- 
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -91,7 +91,7 @@ const CheckoutPage: React.FC = () => {
 
       // Add the new address
       await addAddress(username, formData);
-      
+
       // Reset form
       setFormData({
         addressType: '',
@@ -103,10 +103,10 @@ const CheckoutPage: React.FC = () => {
         pincode: 0,
         country: ''
       });
-      
+
       // Refresh addresses list
       await fetchAddresses();
-      
+
       // Hide the form
       setShowAddressForm(false);
     } catch (error) {
@@ -146,10 +146,10 @@ const CheckoutPage: React.FC = () => {
 
       // Call the API
       const response = await placeOrder(orderRequest);
-      
+
       // Clear the cart after successful order
       clearCart();
-      
+
       // Navigate to success page with order details
       navigate('/order-confirmation', {
         state: {
@@ -171,24 +171,56 @@ const CheckoutPage: React.FC = () => {
     if (addressBoxesRef.current) {
       const container = addressBoxesRef.current;
       const scrollAmount = isMobile ? 260 : 320; // Adjust for mobile
-      const newPosition = direction === 'left' 
-        ? scrollPosition - scrollAmount 
+      const newPosition = direction === 'left'
+        ? scrollPosition - scrollAmount
         : scrollPosition + scrollAmount;
-      
+
       container.scrollTo({
         left: newPosition,
         behavior: 'smooth'
       });
-      
+
       setScrollPosition(newPosition);
     }
   };
 
   const canScrollLeft = scrollPosition > 0;
-  const canScrollRight = addressBoxesRef.current 
-    ? scrollPosition < addressBoxesRef.current.scrollWidth - addressBoxesRef.current.clientWidth 
+  const canScrollRight = addressBoxesRef.current
+    ? scrollPosition < addressBoxesRef.current.scrollWidth - addressBoxesRef.current.clientWidth
     : false;
 
+
+  const finalizeOrderPlacement = async (username: string, addressId: number) => {
+    try {
+      // Place order only after successful payment, including addressId
+      const orderResponse = await placeOrder({
+        username: username,
+        addressId: addressId,
+        items: items.map(item => ({
+          id: item.product.id,
+          quantity: item.quantity,
+          size: item.selectedSize,
+          color: item.selectedColor
+        }))
+      });
+
+      alert('Payment successful!');
+      clearCart();
+      navigate('/order-confirmation', {
+        state: {
+          orderDetails: {
+            orderId: orderResponse.id,
+            orderStatus: orderResponse.orderStatus,
+            orderDate: orderResponse.orderDate,
+            items: orderResponse.orders
+          }
+        }
+      });
+    } catch (error) {
+      console.error('Error placing order:', error);
+      alert('Payment successful but order placement failed. Please contact support.');
+    }
+  };
 
   // Add payment initiation function
   const handlePayment = async () => {
@@ -203,10 +235,10 @@ const CheckoutPage: React.FC = () => {
       }
 
       // Calculate total amount in rupees first
-      const totalInRupees = items.reduce((sum, item) => 
+      const totalInRupees = items.reduce((sum, item) =>
         sum + (item.product.listprice * item.quantity), 0
       );
-      
+
       // Convert to paise (1 rupee = 100 paise)
       const totalInPaise = Math.round(totalInRupees * 100);
 
@@ -217,44 +249,29 @@ const CheckoutPage: React.FC = () => {
       // Initiate payment with amount in paise
       const paymentResponse = await initiatePayment(cartId, totalInPaise);
 
-      // Initialize PhonePe checkout
+      // Handle cases where payment might already be confirmed or pending
+      if (paymentResponse.state === 'COMPLETED') {
+        alert('Payment for this order has already been confirmed. Finalizing your order details...');
+        // Automatically submit order after successful payment detection
+        await finalizeOrderPlacement(username, selectedAddress.id);
+        return;
+      }
+
+      // if (paymentResponse.state === 'PENDING') {
+      //   alert('Payment is still pending. Please wait for a few moments or check your transaction status.');
+      //   return;
+      // }
+
+      // Initialize PhonePe checkout only if state is not already success/pending
       if (window.PhonePeCheckout && window.PhonePeCheckout.transact) {
         window.PhonePeCheckout.transact({
           tokenUrl: paymentResponse.redirectUrl,
           callback: async (response) => {
             if (response === 'CONCLUDED') {
-              try {
-                // Place order only after successful payment, including addressId
-                const orderResponse = await placeOrder({
-                  username: username,
-                  addressId: selectedAddress.id,
-                  items: items.map(item => ({
-                    id: item.product.id,
-                    quantity: item.quantity,
-                    size: item.selectedSize,
-                    color: item.selectedColor
-                  }))
-                });
-                
-                alert('Payment successful!');
-                clearCart();
-                navigate('/order-confirmation', {
-                  state: {
-                    orderDetails: {
-                      orderId: orderResponse.id,
-                      orderStatus: orderResponse.orderStatus,
-                      orderDate: orderResponse.orderDate,
-                      items: orderResponse.orders
-                    }
-                  }
-                });
-              } catch (error) {
-                console.error('Error placing order:', error);
-                alert('Payment successful but order placement failed. Please contact support.');
-              }
+              await finalizeOrderPlacement(username, selectedAddress.id);
             } else if (response === 'USER_CANCEL') {
-              await cancelOrder(cartId);
-              alert('Payment was cancelled by the user.');
+              navigate('/orders');
+              alert('Payment session closed. You can retry from your order history.');
             }
           },
           type: 'IFRAME'
@@ -272,7 +289,7 @@ const CheckoutPage: React.FC = () => {
     return null;
   }
 
-  const total = items.reduce((sum, item) => 
+  const total = items.reduce((sum, item) =>
     sum + (item.product.listprice * item.quantity), 0
   );
 
@@ -284,7 +301,7 @@ const CheckoutPage: React.FC = () => {
             <div className="saved-addresses-header">
               <h2>Saved Addresses</h2>
               {addresses.length > 0 && (
-                <button 
+                <button
                   className="add-address-btn"
                   onClick={() => setShowAddressForm(true)}
                 >
@@ -295,7 +312,7 @@ const CheckoutPage: React.FC = () => {
             {addresses.length > 0 && (
               <div className="address-boxes-container">
                 {canScrollLeft && (
-                  <button 
+                  <button
                     className="slider-arrow left"
                     onClick={() => handleScroll('left')}
                     aria-label="Scroll left"
@@ -303,13 +320,13 @@ const CheckoutPage: React.FC = () => {
                     ←
                   </button>
                 )}
-                <div 
+                <div
                   className="address-boxes"
                   ref={addressBoxesRef}
                   onScroll={(e) => setScrollPosition(e.currentTarget.scrollLeft)}
                 >
                   {addresses.map(address => (
-                    <div 
+                    <div
                       key={address.id}
                       className={`address-box ${selectedAddress?.id === address.id ? 'selected' : ''}`}
                       onClick={() => handleAddressSelect(address)}
@@ -326,7 +343,7 @@ const CheckoutPage: React.FC = () => {
                   ))}
                 </div>
                 {canScrollRight && (
-                  <button 
+                  <button
                     className="slider-arrow right"
                     onClick={() => handleScroll('right')}
                     aria-label="Scroll right"
@@ -423,8 +440,8 @@ const CheckoutPage: React.FC = () => {
                 </div>
               </div>
               <div className="form-actions">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="cancel-btn"
                   onClick={() => {
                     if (addresses.length > 0) {
@@ -435,8 +452,8 @@ const CheckoutPage: React.FC = () => {
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="save-address-btn"
                   disabled={isAddingAddress}
                 >
@@ -449,15 +466,15 @@ const CheckoutPage: React.FC = () => {
           {selectedAddress && !showAddressForm && (
             <div className="selected-address-actions">
               <div className="button-group">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="pay-button"
                   onClick={handlePayment}
                 >
                   Pay Now
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="place-order-button"
                   onClick={handleSubmit}
                 >

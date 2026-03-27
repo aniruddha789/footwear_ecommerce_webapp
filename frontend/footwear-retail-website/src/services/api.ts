@@ -6,14 +6,14 @@ import { customAlert } from '../utils/alert';
 import { signUpWithEmailAndVerify, signInWithGoogle, firebaseSignOut } from './firebaseAuth';
 import { auth } from '../services/firebase';
 
-// const BASE_URL = 'http://localhost:8082';
-const BASE_URL = 'https://backend.myurbankicks.in';
+const BASE_URL = 'http://localhost:8082';
+// const BASE_URL = 'https://backend.myurbankicks.in';
 
 let cachedPublicKey: string | null = null;
 
 const getPublicKey = async (): Promise<string> => {
   if (cachedPublicKey) return cachedPublicKey;
-  
+
   const response = await axios.get(`${BASE_URL}/auth/public-key`);
   const newPublicKey = response.data.publicKey;
   if (!newPublicKey) {
@@ -54,7 +54,7 @@ export const registerUser = async (username: string, email: string, password: st
   try {
     // First create Firebase user for email verification
     const firebaseUid = await signUpWithEmailAndVerify(email);
-    
+
     // Then register in your Spring Boot backend
     const response = await axios.post(`${BASE_URL}/user/register`, {
       username,
@@ -90,7 +90,7 @@ export const loginUser = async (username: string, password: string): Promise<Log
   const encrypt = new JSEncrypt();
   encrypt.setPublicKey(publicKey);
   const encryptedPassword = encrypt.encrypt(password);
-  
+
   if (!encryptedPassword) {
     throw new Error('Password encryption failed');
   }
@@ -99,11 +99,11 @@ export const loginUser = async (username: string, password: string): Promise<Log
     username,
     password: encryptedPassword
   });
-  
+
   if (response.data.token) {
     localStorage.setItem('username', username);
   }
-  
+
   return response.data;
 };
 
@@ -194,14 +194,14 @@ export const getCart = async (username: string): Promise<ShopOrder> => {
 };
 
 export const updateItemQuantity = async (username: string, itemId: number, newQuantity: number): Promise<ShopOrder> => {
-    const response = await axios.post(
-      `${BASE_URL}/order/cart/updateQuantity`,
-      null,
-      {
-        params: { username, itemId, newQuantity }
-      }
-    );
-    return response.data;
+  const response = await axios.post(
+    `${BASE_URL}/order/cart/updateQuantity`,
+    null,
+    {
+      params: { username, itemId, newQuantity }
+    }
+  );
+  return response.data;
 };
 
 export const removeItemFromCart = async (username: string, itemId: number): Promise<ShopOrder> => {
@@ -269,7 +269,7 @@ axios.interceptors.response.use(
   }
 );
 
-/** Add auth token to each API Call */ 
+/** Add auth token to each API Call */
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -288,10 +288,10 @@ export const loginWithGoogle = async (): Promise<LoginResponse> => {
   try {
     // First authenticate with Firebase
     const googleUser = await signInWithGoogle();
-    
+
     // Get Firebase ID token to verify with backend (more secure approach)
     const idToken = await auth.currentUser?.getIdToken(true);
-    
+
     // Then authenticate with your backend
     const response = await axios.post(`${BASE_URL}/user/google-login`, {
       firebaseUid: googleUser.firebaseUid,
@@ -300,10 +300,10 @@ export const loginWithGoogle = async (): Promise<LoginResponse> => {
       photoURL: googleUser.photoURL,
       idToken // Send this token for verification on backend
     });
-    
+
     // Clear any existing data before setting new data
     clearAuthData();
-    
+
     // Store authentication data in localStorage
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
@@ -313,12 +313,12 @@ export const loginWithGoogle = async (): Promise<LoginResponse> => {
       // If backend didn't provide a token, sign out from Firebase
       await firebaseSignOut();
     }
-    
+
     return response.data;
   } catch (error) {
     // Sign out from Firebase on error
     await firebaseSignOut();
-    
+
     if (error instanceof Error) {
       return {
         token: null,
@@ -345,7 +345,7 @@ export const updatePassword = async (username: string, password: string): Promis
     const encrypt = new JSEncrypt();
     encrypt.setPublicKey(publicKey);
     const encryptedPassword = encrypt.encrypt(password);
-    
+
     if (!encryptedPassword) {
       throw new Error('Password encryption failed');
     }
@@ -354,7 +354,7 @@ export const updatePassword = async (username: string, password: string): Promis
       username,
       password: encryptedPassword
     });
-    
+
     return response.data;
   } catch (error) {
     if (error instanceof Error) {
@@ -384,6 +384,7 @@ export interface Order {
   id: number;
   orderDate: string;
   orderStatus: string;
+  paymentStatus: string;
   orderItems: OrderItem[];
 }
 
