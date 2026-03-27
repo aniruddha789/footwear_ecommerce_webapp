@@ -6,8 +6,8 @@ import { customAlert } from '../utils/alert';
 import { signUpWithEmailAndVerify, signInWithGoogle, firebaseSignOut } from './firebaseAuth';
 import { auth } from '../services/firebase';
 
-const BASE_URL = 'http://localhost:8082';
-// const BASE_URL = 'https://backend.myurbankicks.in';
+// const BASE_URL = 'http://localhost:8082';
+const BASE_URL = 'https://backend.myurbankicks.in';
 
 let cachedPublicKey: string | null = null;
 
