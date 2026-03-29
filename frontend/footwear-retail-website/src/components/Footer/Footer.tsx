@@ -25,7 +25,7 @@ const Footer: React.FC = () => {
               {brand.tagline}
             </p>
           </Col>
-          
+
           <Col lg={2} md={6} className="footer-links">
             <h5>Shop</h5>
             <ul>
@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
               <p>{brand.phoneFooter}</p>
               <p><a href={`mailto:${brand.contactEmail}`}>{brand.contactEmail}</a></p>
             </address>
-            
+
             <div className="social-links">
               {brand.social.instagram && (
                 <a href={brand.social.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
@@ -57,9 +57,9 @@ const Footer: React.FC = () => {
             </div>
           </Col>
         </Row>
-        
+
         <div className="footer-bottom">
-          <p className="copyright">&copy; {currentYear} {brand.brandName}. All rights reserved.</p>
+          <p className="copyright">&copy; {currentYear} Urban Kicks. All rights reserved.</p>
           <div className="legal-links">
             <Link to="/returns-policy">Returns Policy</Link>
             <Link to="/shipping-policy">Shipping Policy</Link>
