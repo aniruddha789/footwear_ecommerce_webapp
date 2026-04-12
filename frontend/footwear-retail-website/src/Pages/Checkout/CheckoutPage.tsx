@@ -26,7 +26,7 @@ const CheckoutPage: React.FC = () => {
   const addressBoxesRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
- 
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -91,7 +91,7 @@ const CheckoutPage: React.FC = () => {
 
       // Add the new address
       await addAddress(username, formData);
-      
+
       // Reset form
       setFormData({
         addressType: '',
@@ -103,10 +103,10 @@ const CheckoutPage: React.FC = () => {
         pincode: 0,
         country: ''
       });
-      
+
       // Refresh addresses list
       await fetchAddresses();
-      
+
       // Hide the form
       setShowAddressForm(false);
     } catch (error) {
@@ -146,10 +146,10 @@ const CheckoutPage: React.FC = () => {
 
       // Call the API
       const response = await placeOrder(orderRequest);
-      
+
       // Clear the cart after successful order
       clearCart();
-      
+
       // Navigate to success page with order details
       navigate('/order-confirmation', {
         state: {
@@ -171,22 +171,22 @@ const CheckoutPage: React.FC = () => {
     if (addressBoxesRef.current) {
       const container = addressBoxesRef.current;
       const scrollAmount = isMobile ? 260 : 320; // Adjust for mobile
-      const newPosition = direction === 'left' 
-        ? scrollPosition - scrollAmount 
+      const newPosition = direction === 'left'
+        ? scrollPosition - scrollAmount
         : scrollPosition + scrollAmount;
-      
+
       container.scrollTo({
         left: newPosition,
         behavior: 'smooth'
       });
-      
+
       setScrollPosition(newPosition);
     }
   };
 
   const canScrollLeft = scrollPosition > 0;
-  const canScrollRight = addressBoxesRef.current 
-    ? scrollPosition < addressBoxesRef.current.scrollWidth - addressBoxesRef.current.clientWidth 
+  const canScrollRight = addressBoxesRef.current
+    ? scrollPosition < addressBoxesRef.current.scrollWidth - addressBoxesRef.current.clientWidth
     : false;
 
 
@@ -203,10 +203,10 @@ const CheckoutPage: React.FC = () => {
       }
 
       // Calculate total amount in rupees first
-      const totalInRupees = items.reduce((sum, item) => 
+      const totalInRupees = items.reduce((sum, item) =>
         sum + (item.product.listprice * item.quantity), 0
       );
-      
+
       // Convert to paise (1 rupee = 100 paise)
       const totalInPaise = Math.round(totalInRupees * 100);
 
@@ -216,6 +216,28 @@ const CheckoutPage: React.FC = () => {
 
       // Initiate payment with amount in paise
       const paymentResponse = await initiatePayment(cartId, totalInPaise);
+
+
+      switch (paymentResponse.state) {
+        case 'COMPLETED':
+          alert('Payment already completed');
+          navigate('/order-confirmation', {
+            state: {
+              orderDetails: {
+                orderId: cartId,
+                orderStatus: 'PAYMENT_SUCCESSFULL',
+                orderDate: new Date().toISOString(),
+                items: items
+              }
+            }
+          });
+          return;
+        case 'PENDING':
+          alert('Payment is currently pending, please try again later');
+          return;
+        default:
+          break;
+      }
 
       // Initialize PhonePe checkout
       if (window.PhonePeCheckout && window.PhonePeCheckout.transact) {
@@ -235,7 +257,7 @@ const CheckoutPage: React.FC = () => {
                     color: item.selectedColor
                   }))
                 });
-                
+
                 alert('Payment successful!');
                 clearCart();
                 navigate('/order-confirmation', {
@@ -272,7 +294,7 @@ const CheckoutPage: React.FC = () => {
     return null;
   }
 
-  const total = items.reduce((sum, item) => 
+  const total = items.reduce((sum, item) =>
     sum + (item.product.listprice * item.quantity), 0
   );
 
@@ -284,7 +306,7 @@ const CheckoutPage: React.FC = () => {
             <div className="saved-addresses-header">
               <h2>Saved Addresses</h2>
               {addresses.length > 0 && (
-                <button 
+                <button
                   className="add-address-btn"
                   onClick={() => setShowAddressForm(true)}
                 >
@@ -295,7 +317,7 @@ const CheckoutPage: React.FC = () => {
             {addresses.length > 0 && (
               <div className="address-boxes-container">
                 {canScrollLeft && (
-                  <button 
+                  <button
                     className="slider-arrow left"
                     onClick={() => handleScroll('left')}
                     aria-label="Scroll left"
@@ -303,13 +325,13 @@ const CheckoutPage: React.FC = () => {
                     ←
                   </button>
                 )}
-                <div 
+                <div
                   className="address-boxes"
                   ref={addressBoxesRef}
                   onScroll={(e) => setScrollPosition(e.currentTarget.scrollLeft)}
                 >
                   {addresses.map(address => (
-                    <div 
+                    <div
                       key={address.id}
                       className={`address-box ${selectedAddress?.id === address.id ? 'selected' : ''}`}
                       onClick={() => handleAddressSelect(address)}
@@ -326,7 +348,7 @@ const CheckoutPage: React.FC = () => {
                   ))}
                 </div>
                 {canScrollRight && (
-                  <button 
+                  <button
                     className="slider-arrow right"
                     onClick={() => handleScroll('right')}
                     aria-label="Scroll right"
@@ -423,8 +445,8 @@ const CheckoutPage: React.FC = () => {
                 </div>
               </div>
               <div className="form-actions">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="cancel-btn"
                   onClick={() => {
                     if (addresses.length > 0) {
@@ -435,8 +457,8 @@ const CheckoutPage: React.FC = () => {
                 >
                   Cancel
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="save-address-btn"
                   disabled={isAddingAddress}
                 >
@@ -449,15 +471,15 @@ const CheckoutPage: React.FC = () => {
           {selectedAddress && !showAddressForm && (
             <div className="selected-address-actions">
               <div className="button-group">
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="pay-button"
                   onClick={handlePayment}
                 >
                   Pay Now
                 </button>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   className="place-order-button"
                   onClick={handleSubmit}
                 >
